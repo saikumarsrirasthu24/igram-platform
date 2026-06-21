@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>iGram Portal Login — Select Role</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+body{background:linear-gradient(135deg,#1A0F4F 0%,#26215C 60%,#1A1230 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.gate-wrap{width:100%;max-width:900px;}
+.gate-header{text-align:center;margin-bottom:40px;}
+.gate-header h1{color:#fff;font-family:'Syne',sans-serif;margin-bottom:8px;}
+.gate-header p{color:#AFA9EC;}
+.portal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px;}
+.portal-card{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:16px;padding:28px;cursor:pointer;transition:.25s;text-align:center;text-decoration:none;display:block;}
+.portal-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.1);}
+.portal-card:hover .p-arrow{transform:translateX(4px);}
+.p-icon{font-size:40px;margin-bottom:14px;}
+.p-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.p-desc{font-size:.82rem;color:#AFA9EC;margin-bottom:12px;line-height:1.5;}
+.p-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:600;font-family:'Syne',sans-serif;}
+.p-arrow{display:inline-block;transition:.25s;color:#AFA9EC;font-size:.82rem;margin-top:10px;}
+.gate-footer{text-align:center;color:#6B6B8A;font-size:.82rem;}
+.gate-footer a{color:#9FE1CB;}
+@media(max-width:560px){.portal-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="gate-wrap">
+  <div class="gate-header">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
+      <div style="width:42px;height:42px;background:#3C3489;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📡</div>
+      <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:#fff;">iGram Digital Hub</span>
+    </div>
+    <h1>Select Your Portal</h1>
+    <p>Choose your role to access your personalised dashboard</p>
+  </div>
+
+  <div class="portal-grid">
+
+    <!-- Layer 1: User -->
+    <a href="user-dashboard.html" class="portal-card">
+      <div class="p-icon">👤</div>
+      <p class="p-title">Public User</p>
+      <p class="p-desc">Access your bookings, track applications, manage documents and apply for services.</p>
+      <span class="p-tag" style="background:#EEEDFE;color:#3C3489;">Layer 01 · 100K+ users</span>
+      <div class="p-arrow">Open User Dashboard →</div>
+    </a>
+
+    <!-- Layer 2: Mitra -->
+    <a href="mitra-portal.html" class="portal-card" style="border-color:rgba(186,117,23,.4);">
+      <div class="p-icon">🤝</div>
+      <p class="p-title">iGram Mitra</p>
+      <p class="p-desc">Manage cases, track earnings, complete training and help your community go digital.</p>
+      <span class="p-tag" style="background:#FAEEDA;color:#633806;">Layer 02 · 10K+ agents</span>
+      <div class="p-arrow">Open Mitra Portal →</div>
+    </a>
+
+    <!-- Layer 3: Provider -->
+    <a href="provider-portal.html" class="portal-card" style="border-color:rgba(24,95,165,.4);">
+      <div class="p-icon">🏢</div>
+      <p class="p-title">Service Provider</p>
+      <p class="p-desc">Manage your equipment listings, accept bookings, track payments and read reviews.</p>
+      <span class="p-tag" style="background:#E6F1FB;color:#0C447C;">Layer 03 · 5K+ providers</span>
+      <div class="p-arrow">Open Provider Portal →</div>
+    </a>
+
+    <!-- Layer 4: Admin -->
+    <a href="admin-erp.html" class="portal-card" style="border-color:rgba(163,45,45,.4);">
+      <div class="p-icon">🛡️</div>
+      <p class="p-title">Admin / Main Center</p>
+      <p class="p-desc">Full platform control — ERP, CRM, analytics, user management, module control and reports.</p>
+      <span class="p-tag" style="background:#FCEBEB;color:#791F1F;">Layer 04 · 100+ admins</span>
+      <div class="p-arrow">Open Admin ERP →</div>
+    </a>
+  </div>
+
+  <div class="gate-footer">
+    <p style="margin-bottom:6px;">Not registered? <a href="signin.html">Create an account →</a></p>
+    <p>Need help? <a href="https://wa.me/918106442080" target="_blank">WhatsApp 8106442080</a> · <a href="index.html">Back to website</a></p>
+  </div>
+</div>
+</body>
+</html>

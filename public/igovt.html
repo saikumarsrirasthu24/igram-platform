@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iGovt-Service — Digital Government Services | iGram Digital Hub</title>
+  <meta name="description" content="Apply for Aadhaar, PAN, PM-Kisan, Scholarships, Land Records and 50+ government services from your village.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .service-list-item {
+      display:flex;align-items:flex-start;gap:10px;padding:10px 0;
+      border-bottom:1px solid var(--border);font-size:.88rem;color:var(--text-mid);
+      transition:var(--transition);cursor:pointer;
+    }
+    .service-list-item:hover{color:var(--gold-600);padding-left:4px;}
+    .service-list-item:last-child{border-bottom:none;}
+    .svc-dot{width:8px;height:8px;border-radius:50%;background:var(--gold-400);margin-top:6px;flex-shrink:0;}
+    .cat-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;}
+    .cat-header{padding:14px 18px;display:flex;align-items:center;gap:10px;}
+    .cat-body{padding:4px 18px 14px;}
+    .search-result{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 16px;border-radius:var(--radius-md);border:1px solid var(--border);
+      margin-bottom:8px;transition:var(--transition);cursor:pointer;
+    }
+    .search-result:hover{border-color:var(--gold-400);background:var(--gold-100);}
+    .apply-modal{
+      position:fixed;inset:0;z-index:2000;background:rgba(26,15,79,.6);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:.3s;
+    }
+    .apply-modal.open{opacity:1;pointer-events:all;}
+    .modal-box{
+      background:var(--white);border-radius:var(--radius-xl);padding:32px;
+      max-width:520px;width:90%;transform:translateY(20px) scale(.97);
+      transition:.3s;max-height:90vh;overflow-y:auto;
+    }
+    .apply-modal.open .modal-box{transform:translateY(0) scale(1);}
+    .navbar{position:sticky;top:0;z-index:1000;}
+  </style>
+</head>
+<body data-page="igovt">
+<script src="auth.js"></script>
+
+<!-- Nav injected here -->
+<div id="site-nav">
+<div class="topbar">
+  <div class="container flex-between">
+    <span>📞 8106442080 &nbsp;|&nbsp; igram.hub@gmail.com</span>
+    <a href="become-mitra.html">✨ Become iGram Mitra Partner →</a>
+  </div>
+</div>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon">📡</div>
+      iGram Digital
+    </a>
+    <ul class="navbar-nav" id="mainNav">
+      <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+      <li><a href="services.html" class="nav-link" data-page="services">All Services</a></li>
+      <li><a href="agriuber.html" class="nav-link" data-page="agriuber">AgriUber</a></li>
+      <li><a href="igovt.html" class="nav-link" data-page="igovt">iGovt-Service</a></li>
+      <li><a href="#" class="nav-link">eHealth</a></li>
+      <li><a href="#" class="nav-link">eJobs</a></li>
+      <li><a href="#" class="nav-link">iFinance</a></li>
+      <li><a href="signin.html" class="nav-link">Sign In</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="window.location='signin.html'">Sign In</button>
+      <button class="btn btn-gold btn-sm" onclick="window.location='become-mitra.html'">iGram Mitra</button>
+    </div>
+  </div>
+</nav>
+</div>
+
+<!-- Breadcrumb -->
+<div style="background:var(--gray-50);border-bottom:1px solid var(--border);padding:12px 0;">
+  <div class="container">
+    <nav style="font-size:.83rem;color:var(--text-muted);">
+      <a href="index.html" style="color:var(--purple-700);">Home</a>
+      <span style="margin:0 8px;">›</span>
+      <span style="color:var(--gold-600);">Government</span>
+      <span style="margin:0 8px;">›</span>
+      <span style="color:var(--text-dark);font-weight:500;">iGovt-Service</span>
+    </nav>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="module-hero" style="background:linear-gradient(135deg,var(--gold-100) 0%,#FDF8EE 100%);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:52px;height:52px;background:var(--gold-500);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;">🏛️</div>
+          <div>
+            <h1 style="font-size:2rem;color:var(--gold-800);margin:0;">iGovt-Service</h1>
+            <p style="margin:0;font-size:.82rem;color:var(--gold-600);">Digital Citizen Services · iGram Digital Hub</p>
+          </div>
+        </div>
+        <p style="font-size:1.05rem;color:var(--gold-800);font-weight:500;margin-bottom:10px;line-height:1.4;">"One Digital Desk for Every Village Family."</p>
+        <p style="margin-bottom:24px;color:var(--gold-700);">Apply for certificates, Aadhaar updates, PAN card services, government schemes, pension services, land records, bill payments — all at your nearest iGram Digital Hub.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+          <span class="pill pill-gold">✅ Aadhaar & PAN</span>
+          <span class="pill pill-gold">📜 Certificates</span>
+          <span class="pill pill-gold">🌾 Farmer Support</span>
+          <span class="pill pill-gold">🏦 Banking Help</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-gold btn-lg" onclick="openApply('General Government Service')">📋 Book Assistance</button>
+          <a href="#services" class="btn btn-outline btn-lg" style="border-color:var(--gold-400);color:var(--gold-700);">🔍 Browse Services</a>
+          <a href="become-mitra.html" class="btn btn-outline btn-lg" style="border-color:var(--gold-400);color:var(--gold-700);">🤝 Become Partner</a>
+        </div>
+      </div>
+      <div style="background:var(--gold-500);border-radius:var(--radius-xl);padding:28px;color:white;">
+        <h3 style="font-family:var(--font-display);margin-bottom:16px;font-size:1rem;">Services Overview</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;">✅ Aadhaar &amp; PAN Services</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;">✅ Government Certificates</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;">✅ Farmer &amp; Student Support</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;">✅ Banking &amp; Pension Help</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;">✅ Online Certificates &amp; Applications</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;">✅ Village-Level Digital Assistance</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
+          <div style="background:rgba(255,255,255,.15);border-radius:var(--radius-md);padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;font-family:var(--font-display);">50+</div>
+            <div style="font-size:.75rem;opacity:.85;">Govt schemes</div>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:var(--radius-md);padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;font-family:var(--font-display);">2</div>
+            <div style="font-size:.75rem;opacity:.85;">States covered</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICE SEARCH ══ -->
+<section class="section-sm" style="background:var(--gray-50);">
+  <div class="container">
+    <div style="max-width:560px;margin:0 auto;">
+      <h3 style="text-align:center;font-family:var(--font-display);margin-bottom:16px;color:var(--purple-800);">Find a Government Service</h3>
+      <div style="position:relative;">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;">🔍</span>
+        <input type="text" id="govtSearch" class="form-control"
+          style="padding:14px 14px 14px 42px;font-size:1rem;"
+          placeholder="Search: Aadhaar, PAN, scholarship, ration card..."
+          oninput="searchGovt(this.value)">
+      </div>
+      <div id="searchResults" style="margin-top:12px;display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ALL 8 SERVICE CATEGORIES ══ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">All services</span>
+      <h2>Main Service Categories</h2>
+      <p>50+ government services available through iGram Digital Hub</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+
+      <!-- A. Identity & Citizen -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--purple-50);">
+          <div style="width:36px;height:36px;background:var(--purple-700);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🪪</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--purple-800);margin:0;font-family:var(--font-display);">A. Identity &amp; Citizen</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('Aadhaar Enrollment & Update')"><div class="svc-dot"></div>Aadhaar Enrollment &amp; Update</div>
+          <div class="service-list-item" onclick="openApply('PAN Card Application')"><div class="svc-dot"></div>PAN Card Application</div>
+          <div class="service-list-item" onclick="openApply('Voter ID Services')"><div class="svc-dot"></div>Voter ID Services</div>
+          <div class="service-list-item" onclick="openApply('Passport Assistance')"><div class="svc-dot"></div>Passport Assistance</div>
+          <div class="service-list-item" onclick="openApply('Driving License Services')"><div class="svc-dot"></div>Driving License Services</div>
+          <div class="service-list-item" onclick="openApply('Birth Certificate')"><div class="svc-dot"></div>Birth Certificate</div>
+          <div class="service-list-item" onclick="openApply('Death Certificate')"><div class="svc-dot"></div>Death Certificate</div>
+          <div class="service-list-item" onclick="openApply('Marriage Certificate')"><div class="svc-dot"></div>Marriage Certificate</div>
+          <div class="service-list-item" onclick="openApply('Income Certificate')"><div class="svc-dot"></div>Income Certificate</div>
+          <div class="service-list-item" onclick="openApply('Caste Certificate')"><div class="svc-dot"></div>Caste Certificate</div>
+          <div class="service-list-item" onclick="openApply('Domicile Certificate')"><div class="svc-dot"></div>Domicile Certificate</div>
+          <div class="service-list-item" onclick="openApply('Senior Citizen Card')"><div class="svc-dot"></div>Senior Citizen Card</div>
+          <div class="service-list-item" onclick="openApply('Disability Certificate')"><div class="svc-dot"></div>Disability Certificate</div>
+        </div>
+      </div>
+
+      <!-- B. Farmer & Agriculture -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--green-50);">
+          <div style="width:36px;height:36px;background:var(--green-600);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🌾</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--green-800);margin:0;font-family:var(--font-display);">B. Farmer &amp; Agriculture</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('PM-Kisan Registration')"><div class="svc-dot" style="background:var(--green-400)"></div>PM-Kisan Registration</div>
+          <div class="service-list-item" onclick="openApply('Crop Insurance (PMFBY)')"><div class="svc-dot" style="background:var(--green-400)"></div>Crop Insurance (PMFBY)</div>
+          <div class="service-list-item" onclick="openApply('Soil Health Card')"><div class="svc-dot" style="background:var(--green-400)"></div>Soil Health Card</div>
+          <div class="service-list-item" onclick="openApply('Farmer ID Registration')"><div class="svc-dot" style="background:var(--green-400)"></div>Farmer ID Registration</div>
+          <div class="service-list-item" onclick="openApply('Land Record Assistance')"><div class="svc-dot" style="background:var(--green-400)"></div>Land Record Assistance</div>
+          <div class="service-list-item" onclick="openApply('Agricultural Scheme Registration')"><div class="svc-dot" style="background:var(--green-400)"></div>Agri Scheme Registration</div>
+          <div class="service-list-item" onclick="openApply('Telangana Dharani Services')"><div class="svc-dot" style="background:var(--green-400)"></div>Telangana Dharani</div>
+          <div class="service-list-item" onclick="openApply('Rythu Bandhu Assistance')"><div class="svc-dot" style="background:var(--green-400)"></div>Rythu Bandhu Assistance</div>
+          <div class="service-list-item" onclick="openApply('e-KYC for Farmers')"><div class="svc-dot" style="background:var(--green-400)"></div>e-KYC for Farmers</div>
+          <div class="service-list-item" onclick="openApply('PM Jan Dhan Yojana')"><div class="svc-dot" style="background:var(--green-400)"></div>PM Jan Dhan Yojana</div>
+          <div class="service-list-item" onclick="openApply('PM Suraksha Bima')"><div class="svc-dot" style="background:var(--green-400)"></div>PM Suraksha Bima</div>
+          <div class="service-list-item" onclick="openApply('Agri Equipment Subsidy')"><div class="svc-dot" style="background:var(--green-400)"></div>Agri Equipment Subsidy</div>
+        </div>
+      </div>
+
+      <!-- C. Student & Education -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--purple-50);">
+          <div style="width:36px;height:36px;background:var(--purple-600);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🎓</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--purple-800);margin:0;font-family:var(--font-display);">C. Student &amp; Education</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('Scholarship Application')"><div class="svc-dot" style="background:var(--purple-400)"></div>Scholarship Applications</div>
+          <div class="service-list-item" onclick="openApply('College Admission Assistance')"><div class="svc-dot" style="background:var(--purple-400)"></div>College Admission Assistance</div>
+          <div class="service-list-item" onclick="openApply('Competitive Exam Forms')"><div class="svc-dot" style="background:var(--purple-400)"></div>Competitive Exam Forms</div>
+          <div class="service-list-item" onclick="openApply('Government Hostel Application')"><div class="svc-dot" style="background:var(--purple-400)"></div>Govt Hostel Applications</div>
+          <div class="service-list-item" onclick="openApply('Student Certificates')"><div class="svc-dot" style="background:var(--purple-400)"></div>Student Certificates</div>
+          <div class="service-list-item" onclick="openApply('Online Exam Registration')"><div class="svc-dot" style="background:var(--purple-400)"></div>Online Exam Registrations</div>
+          <div class="service-list-item" onclick="openApply('DigiLocker Assistance')"><div class="svc-dot" style="background:var(--purple-400)"></div>DigiLocker Assistance</div>
+          <div class="service-list-item" onclick="openApply('Education Loan Guidance')"><div class="svc-dot" style="background:var(--purple-400)"></div>Education Loan Guidance</div>
+          <div class="service-list-item" onclick="openApply('TS/MH Scholarship')"><div class="svc-dot" style="background:var(--purple-400)"></div>TS/MH Scholarship (State)</div>
+          <div class="service-list-item" onclick="openApply('NMMS Scholarship')"><div class="svc-dot" style="background:var(--purple-400)"></div>NMMS Scholarship</div>
+        </div>
+      </div>
+
+      <!-- D. Banking & Financial -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--teal-50);">
+          <div style="width:36px;height:36px;background:var(--teal-600);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🏦</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--teal-600);margin:0;font-family:var(--font-display);">D. Banking &amp; Financial</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('Bank Account Opening')"><div class="svc-dot" style="background:var(--teal-400)"></div>Bank Account Opening Support</div>
+          <div class="service-list-item" onclick="openApply('AEPS Services')"><div class="svc-dot" style="background:var(--teal-400)"></div>AEPS Services</div>
+          <div class="service-list-item" onclick="openApply('Money Transfer Assistance')"><div class="svc-dot" style="background:var(--teal-400)"></div>Money Transfer</div>
+          <div class="service-list-item" onclick="openApply('ATM Assistance')"><div class="svc-dot" style="background:var(--teal-400)"></div>ATM Assistance</div>
+          <div class="service-list-item" onclick="openApply('Mobile Banking Activation')"><div class="svc-dot" style="background:var(--teal-400)"></div>Mobile Banking Activation</div>
+          <div class="service-list-item" onclick="openApply('UPI Registration')"><div class="svc-dot" style="background:var(--teal-400)"></div>UPI Registration</div>
+          <div class="service-list-item" onclick="openApply('Insurance Enrollment')"><div class="svc-dot" style="background:var(--teal-400)"></div>Insurance Enrollment</div>
+          <div class="service-list-item" onclick="openApply('Pension Registration')"><div class="svc-dot" style="background:var(--teal-400)"></div>Pension Registration</div>
+          <div class="service-list-item" onclick="openApply('Atal Pension Yojana')"><div class="svc-dot" style="background:var(--teal-400)"></div>Atal Pension Yojana</div>
+        </div>
+      </div>
+
+      <!-- E. Employment & Labour -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--blue-50);">
+          <div style="width:36px;height:36px;background:var(--blue-600);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">💼</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--blue-700);margin:0;font-family:var(--font-display);">E. Employment &amp; Labour</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('MGNREGA Job Card')"><div class="svc-dot" style="background:var(--blue-600)"></div>Job Card (MGNREGA)</div>
+          <div class="service-list-item" onclick="openApply('Labour Registration')"><div class="svc-dot" style="background:var(--blue-600)"></div>Labour Registration</div>
+          <div class="service-list-item" onclick="openApply('Skill India Registration')"><div class="svc-dot" style="background:var(--blue-600)"></div>Skill India Registration</div>
+          <div class="service-list-item" onclick="openApply('Government Job Form Filling')"><div class="svc-dot" style="background:var(--blue-600)"></div>Govt Job Form Filling</div>
+          <div class="service-list-item" onclick="openApply('Employment Exchange Registration')"><div class="svc-dot" style="background:var(--blue-600)"></div>Employment Exchange</div>
+          <div class="service-list-item" onclick="openApply('E-Shram Registration')"><div class="svc-dot" style="background:var(--blue-600)"></div>E-Shram Registration</div>
+          <div class="service-list-item" onclick="openApply('MSME Registration')"><div class="svc-dot" style="background:var(--blue-600)"></div>MSME Registration</div>
+          <div class="service-list-item" onclick="openApply('Startup Registration Support')"><div class="svc-dot" style="background:var(--blue-600)"></div>Startup Registration Support</div>
+        </div>
+      </div>
+
+      <!-- F. Utility & Digital -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--gold-100);">
+          <div style="width:36px;height:36px;background:var(--gold-500);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--gold-700);margin:0;font-family:var(--font-display);">F. Utility &amp; Digital</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('Electricity Bill Payment')"><div class="svc-dot" style="background:var(--gold-400)"></div>Electricity Bill Payment</div>
+          <div class="service-list-item" onclick="openApply('Water Bill Payment')"><div class="svc-dot" style="background:var(--gold-400)"></div>Water Bill Payment</div>
+          <div class="service-list-item" onclick="openApply('Mobile Recharge')"><div class="svc-dot" style="background:var(--gold-400)"></div>Mobile Recharge</div>
+          <div class="service-list-item" onclick="openApply('FASTag Recharge')"><div class="svc-dot" style="background:var(--gold-400)"></div>FASTag Recharge</div>
+          <div class="service-list-item" onclick="openApply('DTH Recharge')"><div class="svc-dot" style="background:var(--gold-400)"></div>DTH Recharge</div>
+          <div class="service-list-item" onclick="openApply('Gas Booking')"><div class="svc-dot" style="background:var(--gold-400)"></div>Gas Booking</div>
+          <div class="service-list-item" onclick="openApply('Online Ticket Booking')"><div class="svc-dot" style="background:var(--gold-400)"></div>Online Ticket Booking</div>
+          <div class="service-list-item" onclick="openApply('Document Scanning & Printing')"><div class="svc-dot" style="background:var(--gold-400)"></div>Document Scanning &amp; Printing</div>
+          <div class="service-list-item" onclick="openApply('Online Application Upload')"><div class="svc-dot" style="background:var(--gold-400)"></div>Online Application Upload</div>
+        </div>
+      </div>
+
+      <!-- G. Health & Social -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:var(--red-50);">
+          <div style="width:36px;height:36px;background:var(--red-600);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">❤️</div>
+          <p style="font-size:.9rem;font-weight:700;color:var(--red-600);margin:0;font-family:var(--font-display);">G. Health &amp; Social Welfare</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('Ayushman Bharat Registration')"><div class="svc-dot" style="background:var(--red-600)"></div>Ayushman Bharat Registration</div>
+          <div class="service-list-item" onclick="openApply('Health Card Assistance')"><div class="svc-dot" style="background:var(--red-600)"></div>Health Card Assistance</div>
+          <div class="service-list-item" onclick="openApply('Telemedicine Appointment')"><div class="svc-dot" style="background:var(--red-600)"></div>Telemedicine Appointment</div>
+          <div class="service-list-item" onclick="openApply('Government Hospital Registration')"><div class="svc-dot" style="background:var(--red-600)"></div>Govt Hospital Registrations</div>
+          <div class="service-list-item" onclick="openApply('Pension Applications')"><div class="svc-dot" style="background:var(--red-600)"></div>Pension Applications</div>
+          <div class="service-list-item" onclick="openApply('Widow Pension')"><div class="svc-dot" style="background:var(--red-600)"></div>Widow Pension</div>
+          <div class="service-list-item" onclick="openApply('Senior Citizen Welfare Scheme')"><div class="svc-dot" style="background:var(--red-600)"></div>Senior Citizen Welfare</div>
+          <div class="service-list-item" onclick="openApply('Disability Welfare Application')"><div class="svc-dot" style="background:var(--red-600)"></div>Disability Welfare</div>
+        </div>
+      </div>
+
+      <!-- H. State-Specific Telangana -->
+      <div class="cat-card">
+        <div class="cat-header" style="background:#FFF3E0;">
+          <div style="width:36px;height:36px;background:#E65100;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🕌</div>
+          <p style="font-size:.9rem;font-weight:700;color:#BF360C;margin:0;font-family:var(--font-display);">H. Telangana State Services</p>
+        </div>
+        <div class="cat-body">
+          <div class="service-list-item" onclick="openApply('Dharani Portal Services')"><div class="svc-dot" style="background:#E65100"></div>Dharani Portal Services</div>
+          <div class="service-list-item" onclick="openApply('MeeSeva Services')"><div class="svc-dot" style="background:#E65100"></div>MeeSeva Services</div>
+          <div class="service-list-item" onclick="openApply('Rythu Bandhu Assistance')"><div class="svc-dot" style="background:#E65100"></div>Rythu Bandhu Assistance</div>
+          <div class="service-list-item" onclick="openApply('TS Scholarship Services')"><div class="svc-dot" style="background:#E65100"></div>TS Scholarship Services</div>
+          <div class="service-list-item" onclick="openApply('Telangana Land Records')"><div class="svc-dot" style="background:#E65100"></div>Telangana Land Records</div>
+          <div class="service-list-item" onclick="openApply('7/12 Extract (Maharashtra)')"><div class="svc-dot" style="background:#E65100"></div>7/12 Extract (Maharashtra)</div>
+          <div class="service-list-item" onclick="openApply('MahaDBT Scholarship')"><div class="svc-dot" style="background:#E65100"></div>MahaDBT Scholarship</div>
+          <div class="service-list-item" onclick="openApply('Mahabhulekh Services')"><div class="svc-dot" style="background:#E65100"></div>Mahabhulekh Services</div>
+          <div class="service-list-item" onclick="openApply('Maha e-Seva Assistance')"><div class="svc-dot" style="background:#E65100"></div>Maha e-Seva Assistance</div>
+          <div class="service-list-item" onclick="openApply('Email & Document Services')"><div class="svc-dot" style="background:#E65100"></div>Email &amp; Document Services</div>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+
+    <!-- How It Works -->
+    <div style="margin-top:56px;">
+      <div class="section-header">
+        <span class="eyebrow">How it works</span>
+        <h2 style="color:var(--purple-800);">Simple 5-Step Process</h2>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:0;position:relative;">
+        <div style="position:absolute;top:22px;left:10%;right:10%;height:2px;background:var(--border);z-index:0;"></div>
+        <div class="step-item"><div class="step-circle" style="background:var(--purple-700);">1</div><h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;">Visit iGram Hub</h4><p style="font-size:.75rem;">Online or at your local Centre</p></div>
+        <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+        <div class="step-item"><div class="step-circle" style="background:var(--purple-600);">2</div><h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;">Submit Documents</h4><p style="font-size:.75rem;">Upload required files online</p></div>
+        <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+        <div class="step-item"><div class="step-circle" style="background:var(--gold-500);">3</div><h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;">Team Processes</h4><p style="font-size:.75rem;">iGram handles your application</p></div>
+        <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+        <div class="step-item"><div class="step-circle" style="background:var(--teal-600);">4</div><h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;">Get Updates</h4><p style="font-size:.75rem;">WhatsApp / SMS notifications</p></div>
+        <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+        <div class="step-item"><div class="step-circle" style="background:var(--green-600);">5</div><h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;">Certificate Delivered</h4><p style="font-size:.75rem;">Result or certificate issued</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ APPLY MODAL ══ -->
+<div class="apply-modal" id="applyModal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <h3 style="font-family:var(--font-display);color:var(--gold-700);">Apply for Service</h3>
+      <button onclick="closeApply()" style="width:32px;height:32px;border-radius:50%;background:var(--gray-50);border:none;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:10px 14px;background:var(--gold-100);border-radius:var(--radius-md);margin-bottom:20px;">
+      <p style="font-size:.88rem;font-weight:600;color:var(--gold-700);">📋 Service: <span id="modalServiceName"></span></p>
+    </div>
+    <form onsubmit="submitApply(event)">
+      <div class="form-group"><label class="form-label">Full name *</label><input type="text" id="apName" class="form-control" placeholder="Your full name" required></div>
+      <div class="form-group"><label class="form-label">Mobile number *</label><input type="tel" id="apPhone" class="form-control" placeholder="+91 XXXXX XXXXX" required></div>
+      <div class="form-group"><label class="form-label">Village *</label><input type="text" id="apVillage" class="form-control" placeholder="Village name" required></div>
+      <div class="form-group">
+        <label class="form-label">District / State *</label>
+        <select class="form-control" id="apDistrict" required>
+          <option value="">Select</option>
+          <option>Nalgonda, Telangana</option><option>Warangal, Telangana</option>
+          <option>Hyderabad, Telangana</option><option>Karimnagar, Telangana</option>
+          <option>Pune, Maharashtra</option><option>Aurangabad, Maharashtra</option>
+          <option>Nashik, Maharashtra</option><option>Nagpur, Maharashtra</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Additional details</label><textarea class="form-control" id="apDetails" placeholder="Any specific details about your request..." style="height:80px;resize:none;"></textarea></div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button type="submit" class="btn btn-gold btn-lg" id="apSubmitBtn" style="flex:1;justify-content:center;">Submit Application</button>
+        <button type="button" class="btn btn-outline" onclick="closeApply()">Cancel</button>
+      </div>
+      <p style="font-size:.78rem;color:var(--text-muted);text-align:center;margin-top:12px;">
+        Or WhatsApp: <a href="https://wa.me/918106442080" style="color:var(--gold-600);font-weight:600;">8106442080</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<div id="site-footer">
+<footer class="footer">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div class="brand-icon">📡</div>
+          <h3 style="font-size:1.2rem;">iGram Digital</h3>
+        </div>
+        <p style="font-size:0.85rem;line-height:1.7;margin-bottom:16px;">One Village. One Hub. Unlimited Opportunities.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:0.83rem;">
+          <span>📞 8106442080</span>
+          <span>✉️ igram.hub@gmail.com</span>
+          <span>🌐 igram.digital</span>
+        </div>
+      </div>
+      <div>
+        <p class="footer-heading">Quick Links</p>
+        <a href="become-mitra.html" class="footer-link">Apply iGram Mitra</a>
+        <a href="services.html" class="footer-link">All Services</a>
+        <a href="signin.html" class="footer-link">Sign In / Register</a>
+        <a href="portal-login.html" class="footer-link">Portal Login</a>
+      </div>
+      <div>
+        <p class="footer-heading">Our Services</p>
+        <a href="agriuber.html" class="footer-link">AgriUber</a>
+        <a href="igovt.html" class="footer-link">iGovt-Service</a>
+        <a href="#" class="footer-link">eHealth</a>
+        <a href="#" class="footer-link">iFinance</a>
+        <a href="#" class="footer-link">eJobs</a>
+      </div>
+      <div>
+        <p class="footer-heading">Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+          <button onclick="showToast('Language: English')" style="padding:5px 12px;background:var(--purple-700);color:white;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">EN</button>
+          <button onclick="showToast('Language: Telugu')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">TE</button>
+          <button onclick="showToast('Language: Hindi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">HI</button>
+          <button onclick="showToast('Language: Marathi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">MR</button>
+        </div>
+        <p class="footer-heading">Support</p>
+        <a href="https://wa.me/918106442080" target="_blank" class="footer-link">WhatsApp Us</a>
+        <a href="#" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container flex-between" style="flex-wrap:wrap;gap:8px;">
+      <span>© 2025 iGram Digital Hub. All Rights Reserved.</span>
+      <span>Made for rural India 🇮🇳</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+function showToast(msg, type) {
+  let t = document.getElementById('globalToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'globalToast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--purple-700);color:#fff;padding:14px 20px;border-radius:10px;font-size:0.88rem;font-weight:500;box-shadow:0 8px 32px rgba(60,52,137,0.3);transform:translateY(100px);opacity:0;transition:0.4s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;gap:10px;max-width:340px;font-family:inherit;';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = '✅ ' + msg;
+  t.style.background = type === 'error' ? 'var(--red-600)' : 'var(--purple-700)';
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.transform = 'translateY(100px)'; t.style.opacity = '0'; }, 3500);
+}
+
+// Active nav link
+document.addEventListener('DOMContentLoaded', function() {
+  var page = document.body.dataset.page;
+  document.querySelectorAll('.nav-link[data-page]').forEach(function(l) {
+    if (l.dataset.page === page) l.classList.add('active');
+  });
+
+  // Counter animation
+  var statsEl = document.querySelector('.stats-strip');
+  if (statsEl) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('[data-count]').forEach(function(el) {
+            var target = parseInt(el.dataset.count);
+            var suffix = el.dataset.suffix || '';
+            var start = performance.now();
+            var dur = 1800;
+            function update(now) {
+              var p = Math.min((now - start) / dur, 1);
+              var e = 1 - Math.pow(1 - p, 3);
+              el.textContent = Math.floor(e * target) + suffix;
+              if (p < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+          });
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(statsEl);
+  }
+
+  // ai.Sathi widget (safe build)
+  if (!document.getElementById('aiWidget')) {
+    var widget = document.createElement('div');
+    widget.id = 'aiWidget';
+    widget.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:998;';
+    var tip = document.createElement('div');
+    tip.id = 'aiTooltip';
+    tip.style.cssText = 'position:absolute;bottom:70px;right:0;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(60,52,137,0.16);padding:14px 16px;width:220px;border:1px solid #E8E4F0;font-size:0.83rem;color:#4A4A6A;transform:scale(0.9) translateY(8px);opacity:0;transition:0.22s ease;pointer-events:none;';
+    tip.innerHTML = '<strong style="display:block;color:#3C3489;margin-bottom:4px;">ai.Sathi Help Desk</strong><span style="color:#3B6D11;font-size:0.75rem;font-weight:500;">Online</span><p style="margin-top:6px;">Namaste! Ask anything in Telugu, Hindi, Marathi or English.</p>';
+    var btn = document.createElement('button');
+    btn.id = 'aiBtn';
+    btn.textContent = 'AI';
+    btn.style.cssText = 'width:58px;height:58px;border-radius:50%;background:#3C3489;color:#fff;font-size:18px;font-weight:700;box-shadow:0 8px 32px rgba(60,52,137,0.3);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;';
+    btn.onclick = function() {
+      var show = tip.style.opacity === '0' || !tip.style.opacity;
+      tip.style.opacity = show ? '1' : '0';
+      tip.style.transform = show ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(8px)';
+      tip.style.pointerEvents = show ? 'all' : 'none';
+    };
+    widget.appendChild(tip);
+    widget.appendChild(btn);
+    document.body.appendChild(widget);
+    setTimeout(function() {
+      tip.style.opacity = '1'; tip.style.transform = 'scale(1) translateY(0)'; tip.style.pointerEvents = 'all';
+    }, 2500);
+  }
+});
+</script>
+<script>
+const allServices = [
+  'Aadhaar Enrollment & Update','PAN Card Application','Voter ID Services','Passport Assistance',
+  'Driving License Services','Birth Certificate','Death Certificate','Marriage Certificate',
+  'Income Certificate','Caste Certificate','Domicile Certificate','Senior Citizen Card',
+  'PM-Kisan Registration','Crop Insurance','Soil Health Card','Farmer ID Registration',
+  'Land Record Assistance','Telangana Dharani','Rythu Bandhu Assistance','e-KYC for Farmers',
+  'Scholarship Application','College Admission Assistance','DigiLocker Assistance',
+  'Online Exam Registration','Education Loan Guidance','Student Certificates',
+  'Bank Account Opening','AEPS Services','Mobile Banking Activation','UPI Registration',
+  'Insurance Enrollment','Pension Registration','Atal Pension Yojana',
+  'MGNREGA Job Card','Labour Registration','Skill India Registration','E-Shram Registration',
+  'MSME Registration','Startup Registration Support','Employment Exchange Registration',
+  'Electricity Bill Payment','Water Bill Payment','Mobile Recharge','FASTag Recharge',
+  'Gas Booking','Online Ticket Booking','Document Scanning & Printing',
+  'Ayushman Bharat Registration','Health Card Assistance','Telemedicine Appointment',
+  'Widow Pension','Disability Welfare Application','MeeSeva Services','MahaDBT Scholarship'
+];
+
+function searchGovt(q) {
+  const res = document.getElementById('searchResults');
+  if (!q.trim()) { res.style.display='none'; return; }
+  const matches = allServices.filter(s => s.toLowerCase().includes(q.toLowerCase()));
+  res.style.display = matches.length ? 'block' : 'none';
+  res.innerHTML = matches.length
+    ? matches.map(s => `<div class="search-result" onclick="openApply('${s}')">
+        <span style="font-size:.88rem;">🏛️ ${s}</span>
+        <button class="btn btn-gold btn-sm">Apply →</button>
+      </div>`).join('')
+    : `<p style="text-align:center;color:var(--text-muted);padding:12px;">No services found. Try a different keyword.</p>`;
+}
+
+function openApply(service) {
+  document.getElementById('modalServiceName').textContent = service;
+  document.getElementById('applyModal').classList.add('open');
+}
+function closeApply() { document.getElementById('applyModal').classList.remove('open'); }
+function closeModal(e) { if (e.target===document.getElementById('applyModal')) closeApply(); }
+async function submitApply(e) {
+  e.preventDefault();
+  const btn = document.getElementById('apSubmitBtn');
+  btn.disabled = true; btn.textContent = '⏳ Submitting...';
+  const data = {
+    name:     document.getElementById('apName').value,
+    phone:    document.getElementById('apPhone').value,
+    village:  document.getElementById('apVillage').value,
+    district: document.getElementById('apDistrict').value,
+    service:  document.getElementById('modalServiceName').textContent,
+    details:  document.getElementById('apDetails').value
+  };
+  try {
+    const json = await igramApi('POST', '/api/applications', data);
+    closeApply();
+    showToast('✅ Application ' + json.app_ref + ' submitted! Save this reference. Our Mitra will contact you within 24 hours.');
+    e.target.reset();
+  } catch (err) {
+    showToast('Error: ' + err.message + '. Please WhatsApp 8106442080.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Submit Application';
+  }
+}
+</script>
+
+<script>
+// Public pages no longer accept bookings/applications directly — redirect to dashboard
+document.addEventListener('DOMContentLoaded', function(){
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem('igram_user')||'null'); } catch(e){}
+  // Intercept all form submits on this public page
+  document.querySelectorAll('form').forEach(function(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(user){
+        if(typeof showToast==='function') showToast('Opening your dashboard to complete this...');
+        setTimeout(function(){ window.location.href='user-dashboard.html'; }, 600);
+      } else {
+        if(typeof showToast==='function') showToast('Please sign in or create a free account to use this service.');
+        setTimeout(function(){ window.location.href='signin.html'; }, 800);
+      }
+    }, true);
+  });
+});
+</script>
+
+</body>
+</html>

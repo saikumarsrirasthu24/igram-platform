@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriUber — Google Sheets Setup Guide | iGram</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:#0F0F14;color:#E8E4F0;line-height:1.7;font-size:15px}
+    .container{max-width:860px;margin:0 auto;padding:0 24px}
+    h1,h2,h3{font-family:'Syne',sans-serif;line-height:1.2}
+    h1{font-size:2.2rem;color:#FAC775;margin-bottom:8px}
+    h2{font-size:1.3rem;color:#CECBF6;margin:36px 0 14px}
+    h3{font-size:1rem;color:#FAC775;margin:20px 0 8px}
+    p{color:#AFA9EC;margin-bottom:10px}
+    a{color:#97C459;text-decoration:none}
+    code{font-family:'JetBrains Mono',monospace;background:#1A1230;border:1px solid #3C3489;border-radius:6px;padding:2px 8px;font-size:.85rem;color:#9FE1CB}
+    pre{font-family:'JetBrains Mono',monospace;background:#1A1230;border:1px solid #3C3489;border-radius:12px;padding:20px;font-size:.82rem;color:#9FE1CB;overflow-x:auto;margin:14px 0;line-height:1.7}
+    .step{background:#1A1230;border:1px solid #3C3489;border-radius:12px;padding:22px;margin-bottom:16px;position:relative}
+    .step-num{width:36px;height:36px;border-radius:50%;background:#3C3489;color:#FAC775;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;float:left;margin:0 14px 6px 0}
+    .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;font-family:'Syne',sans-serif}
+    .badge-green{background:#EAF3DE;color:#27500A}
+    .badge-gold{background:#FAEEDA;color:#633806}
+    .badge-purple{background:#EEEDFE;color:#3C3489}
+    .highlight{background:#26215C;border:1px solid #534AB7;border-radius:8px;padding:14px 16px;margin:12px 0}
+    .highlight p{color:#CECBF6;margin:0}
+    .copy-btn{float:right;background:#3C3489;color:#FAC775;border:none;border-radius:6px;padding:4px 10px;font-size:.75rem;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600}
+    .copy-btn:hover{background:#534AB7}
+    .header{background:#1A0F4F;padding:28px 0;border-bottom:1px solid #3C3489;margin-bottom:40px}
+    .footer-note{background:#26215C;border-radius:12px;padding:20px;margin:40px 0;text-align:center}
+    .sheet-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+    .col-chip{background:#26215C;border:1px solid #534AB7;border-radius:6px;padding:6px 10px;font-size:.78rem;font-family:'JetBrains Mono',monospace;color:#CECBF6;text-align:center}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <span style="font-size:28px;">📡</span>
+      <span style="font-family:'Syne',sans-serif;font-size:1.1rem;color:#CECBF6;">iGram Digital Hub</span>
+    </div>
+    <h1>AgriUber — Google Sheets Setup</h1>
+    <p style="color:#AFA9EC;">Connect your booking forms to Google Sheets in 15 minutes. No server needed.</p>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <span class="badge badge-green">Free forever</span>
+      <span class="badge badge-gold">No server required</span>
+      <span class="badge badge-purple">3 sheets to create</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Overview -->
+  <div class="highlight">
+    <p><strong style="color:#FAC775;">What you will create:</strong></p>
+    <p>3 Google Sheets — one for Bookings, one for Farmer Registrations, one for Machine Owner Registrations. Each sheet connects to the website via a Google Apps Script Web App URL.</p>
+  </div>
+
+  <h2>PART 1 — Create the Booking Sheet</h2>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <h3>Create the Google Sheet</h3>
+    <p>Go to <a href="https://sheets.google.com" target="_blank">sheets.google.com</a> → click <code>+</code> to create new sheet.</p>
+    <p>Name it: <code>AgriUber — Bookings</code></p>
+    <p>Add these column headers in Row 1:</p>
+    <div class="sheet-cols">
+      <div class="col-chip">A: Timestamp</div>
+      <div class="col-chip">B: Farmer Name</div>
+      <div class="col-chip">C: Phone</div>
+      <div class="col-chip">D: Village</div>
+      <div class="col-chip">E: Taluka</div>
+      <div class="col-chip">F: Equipment</div>
+      <div class="col-chip">G: Booking Date</div>
+      <div class="col-chip">H: Land Size</div>
+      <div class="col-chip">I: Crop Type</div>
+      <div class="col-chip">J: Notes</div>
+      <div class="col-chip">K: Language</div>
+      <div class="col-chip">L: Source</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <h3>Open Apps Script</h3>
+    <p>In your Google Sheet: click <code>Extensions</code> → <code>Apps Script</code></p>
+    <p>Delete all existing code. Paste the code below:</p>
+    <button class="copy-btn" onclick="copyCode('bookingScript')">Copy</button>
+    <pre id="bookingScript">function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data  = e.parameter;
+
+    sheet.appendRow([
+      data.timestamp   || new Date().toLocaleString('en-IN'),
+      data.name        || '',
+      data.phone       || '',
+      data.village     || '',
+      data.taluka      || '',
+      data.equipment   || '',
+      data.date        || '',
+      data.land        || '',
+      data.crop        || '',
+      data.notes       || '',
+      data.language    || '',
+      data.source      || 'AgriUber Website'
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'error', message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Test function - run this once to verify it works
+function doGet(e) {
+  return ContentService
+    .createTextOutput('AgriUber Booking Sheet is working!')
+    .setMimeType(ContentService.MimeType.TEXT);
+}</pre>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <h3>Deploy as Web App</h3>
+    <p>Click <code>Deploy</code> → <code>New deployment</code></p>
+    <p>Set these options:</p>
+    <div style="margin:8px 0 14px;display:flex;flex-direction:column;gap:6px;">
+      <div style="background:#26215C;border-radius:8px;padding:10px 14px;font-size:.88rem;">
+        <strong style="color:#FAC775;">Type:</strong> <span style="color:#CECBF6;">Web App</span>
+      </div>
+      <div style="background:#26215C;border-radius:8px;padding:10px 14px;font-size:.88rem;">
+        <strong style="color:#FAC775;">Execute as:</strong> <span style="color:#CECBF6;">Me (your Google account)</span>
+      </div>
+      <div style="background:#26215C;border-radius:8px;padding:10px 14px;font-size:.88rem;">
+        <strong style="color:#FAC775;">Who has access:</strong> <span style="color:#CECBF6; font-weight:600;">Anyone</span> ← Very important!
+      </div>
+    </div>
+    <p>Click <code>Deploy</code> → <code>Authorize access</code> → Choose your Google account → Allow.</p>
+    <p>📋 <strong style="color:#FAC775;">COPY the Web App URL</strong> — it looks like:</p>
+    <pre>https://script.google.com/macros/s/AKfycb.../exec</pre>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <h3>Paste URL into agriuber.html</h3>
+    <p>Open <code>agriuber.html</code> in any text editor. Find this line:</p>
+    <pre>const BOOKING_SHEET_URL  = 'YOUR_BOOKING_SHEET_WEBAPP_URL';</pre>
+    <p>Replace <code>YOUR_BOOKING_SHEET_WEBAPP_URL</code> with the URL you copied. Result:</p>
+    <pre>const BOOKING_SHEET_URL  = 'https://script.google.com/macros/s/AKfycb.../exec';</pre>
+  </div>
+
+  <h2>PART 2 — Create Farmer Registration Sheet</h2>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <h3>Create the sheet + Apps Script</h3>
+    <p>Create a new Google Sheet named: <code>AgriUber — Farmer Registrations</code></p>
+    <p>Row 1 headers:</p>
+    <div class="sheet-cols">
+      <div class="col-chip">A: Timestamp</div>
+      <div class="col-chip">B: Name</div>
+      <div class="col-chip">C: Phone</div>
+      <div class="col-chip">D: WhatsApp</div>
+      <div class="col-chip">E: Village</div>
+      <div class="col-chip">F: Taluka</div>
+      <div class="col-chip">G: District</div>
+      <div class="col-chip">H: Crop</div>
+      <div class="col-chip">I: Land (acres)</div>
+      <div class="col-chip">J: Language</div>
+      <div class="col-chip">K: Type</div>
+    </div>
+    <button class="copy-btn" onclick="copyCode('farmerScript')">Copy</button>
+    <pre id="farmerScript">function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data  = e.parameter;
+    sheet.appendRow([
+      data.timestamp || new Date().toLocaleString('en-IN'),
+      data.name      || '',
+      data.phone     || '',
+      data.whatsapp  || '',
+      data.village   || '',
+      data.taluka    || '',
+      data.district  || '',
+      data.crop      || '',
+      data.land      || '',
+      data.language  || '',
+      data.type      || 'Farmer Registration'
+    ]);
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'error', message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+function doGet(e) {
+  return ContentService.createTextOutput('Farmer Sheet OK').setMimeType(ContentService.MimeType.TEXT);
+}</pre>
+    <p style="margin-top:12px;">Deploy as Web App (same steps as before). Copy URL. Paste in <code>agriuber.html</code>:</p>
+    <pre>const FARMER_SHEET_URL = 'https://script.google.com/macros/s/AKfycb.../exec';</pre>
+  </div>
+
+  <h2>PART 3 — Create Machine Owner Sheet</h2>
+
+  <div class="step">
+    <div class="step-num">6</div>
+    <h3>Create the sheet + Apps Script</h3>
+    <p>Create a new Google Sheet named: <code>AgriUber — Machine Owners</code></p>
+    <p>Row 1 headers:</p>
+    <div class="sheet-cols">
+      <div class="col-chip">A: Timestamp</div>
+      <div class="col-chip">B: Name</div>
+      <div class="col-chip">C: Phone</div>
+      <div class="col-chip">D: Village</div>
+      <div class="col-chip">E: Machine Type</div>
+      <div class="col-chip">F: Model</div>
+      <div class="col-chip">G: HP</div>
+      <div class="col-chip">H: Rate/day (₹)</div>
+      <div class="col-chip">I: Operator</div>
+      <div class="col-chip">J: Available Days</div>
+      <div class="col-chip">K: Type</div>
+    </div>
+    <button class="copy-btn" onclick="copyCode('ownerScript')">Copy</button>
+    <pre id="ownerScript">function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data  = e.parameter;
+    sheet.appendRow([
+      data.timestamp     || new Date().toLocaleString('en-IN'),
+      data.name          || '',
+      data.phone         || '',
+      data.village       || '',
+      data.machineType   || '',
+      data.model         || '',
+      data.hp            || '',
+      data.rate          || '',
+      data.operator      || '',
+      data.availableDays || '',
+      data.type          || 'Machine Owner Registration'
+    ]);
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'error', message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+function doGet(e) {
+  return ContentService.createTextOutput('Owner Sheet OK').setMimeType(ContentService.MimeType.TEXT);
+}</pre>
+    <p style="margin-top:12px;">Deploy. Copy URL. Paste:</p>
+    <pre>const OWNER_SHEET_URL = 'https://script.google.com/macros/s/AKfycb.../exec';</pre>
+  </div>
+
+  <h2>PART 4 — Upload to Your Hosting</h2>
+
+  <div class="step">
+    <div class="step-num">7</div>
+    <h3>Upload all files to your hosting</h3>
+    <p>Upload ALL files from the <code>igram-live/</code> folder to your hosting root (public_html or www folder):</p>
+    <div class="sheet-cols">
+      <div class="col-chip">agriuber.html</div>
+      <div class="col-chip">index.html</div>
+      <div class="col-chip">styles.css</div>
+      <div class="col-chip">components.js</div>
+      <div class="col-chip">igovt.html</div>
+      <div class="col-chip">services.html</div>
+      <div class="col-chip">signin.html</div>
+      <div class="col-chip">become-mitra.html</div>
+      <div class="col-chip">setup-guide.html</div>
+    </div>
+    <p style="margin-top:12px;">After uploading, visit: <code>https://igram.digital/agriuber.html</code></p>
+    <p>Test by submitting one booking — check your Google Sheet for the new row.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">8</div>
+    <h3>Set agriuber.html as default AgriUber page</h3>
+    <p>If your hosting supports URL redirects, add this in your <code>.htaccess</code>:</p>
+    <pre>RewriteRule ^agriuber/?$ /agriuber.html [L]
+RewriteRule ^agriuber-booking/?$ /agriuber.html#booking-form [L]</pre>
+  </div>
+
+  <h2>PART 5 — Notify yourself on new bookings</h2>
+
+  <div class="step">
+    <div class="step-num">9</div>
+    <h3>Get email alert for every new booking</h3>
+    <p>In your Booking Google Sheet: click <code>Tools</code> → <code>Notification rules</code></p>
+    <p>Select: <strong style="color:#FAC775;">Any changes are made</strong> → Email immediately.</p>
+    <p>You'll get an email every time a new booking is submitted. No manual checking needed.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-num">10</div>
+    <h3>Done! Test your live site</h3>
+    <p>✅ Open <code>https://igram.digital/agriuber.html</code></p>
+    <p>✅ Fill the booking form and submit</p>
+    <p>✅ Check your Google Sheet — new row should appear</p>
+    <p>✅ Check your email — notification received</p>
+    <p>✅ WhatsApp button opens chat directly</p>
+    <p style="margin-top:10px;color:#97C459;font-weight:500;">🎉 AgriUber is now LIVE!</p>
+  </div>
+
+  <!-- Summary -->
+  <div class="footer-note">
+    <p style="font-size:1rem;font-weight:600;color:#FAC775;font-family:'Syne',sans-serif;margin-bottom:8px;">Quick summary — 3 things to do</p>
+    <p style="color:#AFA9EC;">1. Create 3 Google Sheets + deploy 3 Apps Script Web Apps</p>
+    <p style="color:#AFA9EC;">2. Paste the 3 URLs into agriuber.html</p>
+    <p style="color:#AFA9EC;">3. Upload all files to igram.digital hosting</p>
+    <p style="margin-top:14px;color:#9FE1CB;font-size:.88rem;">Need help? WhatsApp: <strong>8106442080</strong> · Email: igram.hub@gmail.com</p>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+function copyCode(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Code copied to clipboard!');
+  });
+}
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#3C3489;color:#fff;padding:12px 18px;border-radius:10px;font-family:Syne;font-size:.85rem;z-index:9999;transition:.3s;box-shadow:0 4px 20px rgba(0,0,0,.4)';
+  t.textContent = '✅ ' + msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; setTimeout(() => t.remove(), 400); }, 2500);
+}
+</script>
+</body>
+</html>

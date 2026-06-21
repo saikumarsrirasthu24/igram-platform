@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGram Mitra Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dashboard.css">
+<style>
+.case-card { background:#fff; border-radius:var(--radius-lg); border:1px solid var(--border); padding:16px; margin-bottom:10px; transition:var(--transition); }
+.case-card:hover { box-shadow:var(--shadow-md); }
+.earn-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:.88rem; }
+.earn-row:last-child { border-bottom:none; }
+.training-card { background:#fff; border-radius:var(--radius-lg); border:1px solid var(--border); overflow:hidden; transition:var(--transition); }
+.training-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.prog-bar { height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-top:6px; }
+.prog-fill { height:100%; border-radius:3px; }
+</style>
+</head>
+<body class="theme-mitra">
+<script src="auth.js"></script>
+<script src="locations-ui.js"></script>
+<script>
+const IGRAM_ME = igramRequireRole('mitra');
+document.addEventListener('DOMContentLoaded', () => {
+  if (!IGRAM_ME) return;
+  // Personalise name/avatar where possible
+  document.querySelectorAll('.avatar').forEach(a => {
+    a.textContent = IGRAM_ME.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    a.title = IGRAM_ME.name + ' — click to logout';
+    a.style.cursor = 'pointer';
+    a.onclick = () => { if (confirm('Logout from iGram?')) igramLogout(); };
+  });
+});
+</script>
+
+<div class="dash-layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div style="position:absolute;top:0;bottom:0;left:0;width:3px;background:var(--gold-500);"></div>
+  <div class="sidebar-brand">
+    <div class="brand-icon" style="background:var(--gold-600);">📡</div>
+    <div>
+      <span class="brand-name">iGram Mitra</span>
+      <span class="brand-role">Field Agent Portal</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Main</div>
+  <a class="nav-item active" onclick="showPanel('dashboard')"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" onclick="showPanel('cases')"><span class="nav-icon">📋</span> My Cases<span class="nav-badge" id="caseBadge">4</span></a>
+  <a class="nav-item" onclick="showPanel('new-case')"><span class="nav-icon">➕</span> New Case</a>
+
+  <div class="sidebar-section">Earnings</div>
+  <a class="nav-item" onclick="showPanel('earnings')"><span class="nav-icon">💰</span> My Earnings</a>
+  <a class="nav-item" onclick="showPanel('commission')"><span class="nav-icon">📊</span> Commission</a>
+
+  <div class="sidebar-section">Training</div>
+  <a class="nav-item" onclick="showPanel('training')"><span class="nav-icon">🎓</span> Training Modules</a>
+  <a class="nav-item" onclick="showPanel('certificate')"><span class="nav-icon">🏆</span> My Certificate</a>
+
+  <div class="sidebar-section">Tools</div>
+  <a class="nav-item" onclick="showPanel('farmers')"><span class="nav-icon">🌾</span> My Farmers</a>
+  <a class="nav-item" onclick="showPanel('zone')"><span class="nav-icon">📍</span> My Zone</a>
+
+  <div class="sidebar-bottom">
+    <a class="nav-item" href="https://wa.me/918106442080?text=Hi iGram HQ, I am Mitra Mohammed Rafi." target="_blank"><span class="nav-icon">📱</span> Contact HQ</a>
+    <a class="nav-item" href="index.html"><span class="nav-icon">🔙</span> Website</a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="dash-main">
+  <div class="dash-topbar">
+    <span class="topbar-title" id="pageTitle">Mitra Dashboard</span>
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+      <div class="notif-btn" onclick="showPanel('cases')">🔔<div class="notif-dot"></div></div>
+      <a href="https://wa.me/918106442080" target="_blank" style="background:#25D366;color:#fff;padding:6px 14px;border-radius:var(--radius-full);font-size:.78rem;font-weight:600;font-family:var(--font-display);text-decoration:none;">📱 HQ</a>
+      <div class="avatar" style="background:var(--gold-100);color:var(--gold-700);">MR</div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="dash-panel active" id="panel-dashboard">
+      <!-- Hero -->
+      <div style="background:linear-gradient(135deg,var(--gold-600),var(--gold-800));border-radius:var(--radius-xl);padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;right:-20px;top:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.06);"></div>
+        <p style="color:var(--gold-100);font-size:.82rem;margin-bottom:4px;">Namaste 🙏</p>
+        <h2 style="color:white;font-family:var(--font-display);margin-bottom:4px;">Mohammed Rafi</h2>
+        <p style="color:var(--gold-100);font-size:.83rem;margin-bottom:16px;">📍 Warangal Zone · Mitra ID: MG-2025-047 · <span style="background:rgba(255,255,255,.15);padding:2px 8px;border-radius:20px;font-size:.75rem;">● Active</span></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-white btn-sm" onclick="showPanel('new-case')">+ Add New Case</button>
+          <a href="https://wa.me/918106442080?text=Hi iGram HQ, I am Mitra MG-2025-047" target="_blank" class="btn btn-outline-white btn-sm">📱 Contact HQ</a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="stat-row">
+            <div><p class="stat-label">Total Cases</p><p class="stat-value" style="color:var(--gold-600);">47</p></div>
+            <div class="stat-icon-wrap" style="background:var(--gold-100);">📋</div>
+          </div>
+          <p class="stat-change" style="color:var(--green-600);">↑ 8 this month</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div><p class="stat-label">This Month Earning</p><p class="stat-value" style="color:var(--green-600);">₹8,400</p></div>
+            <div class="stat-icon-wrap" style="background:var(--green-50);">💰</div>
+          </div>
+          <p class="stat-change" style="color:var(--green-600);">↑ ₹1,200 vs last month</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div><p class="stat-label">Open Cases</p><p class="stat-value" style="color:var(--blue-600);">4</p></div>
+            <div class="stat-icon-wrap" style="background:var(--blue-50);">⏳</div>
+          </div>
+          <p class="stat-change" style="color:var(--gold-600);">Action needed</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div><p class="stat-label">Families Helped</p><p class="stat-value" style="color:var(--purple-700);">53</p></div>
+            <div class="stat-icon-wrap" style="background:var(--purple-50);">👨‍👩‍👧</div>
+          </div>
+          <p class="stat-change" style="color:var(--text-muted);">In Warangal zone</p>
+        </div>
+      </div>
+
+      <!-- Quick actions + open cases -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Quick Actions</h3></div>
+          <div class="dash-card-body">
+            <div class="quick-actions" style="grid-template-columns:repeat(2,1fr);">
+              <button class="qa-btn" onclick="showPanel('new-case')"><span class="qa-icon">➕</span><span class="qa-label">New Case</span></button>
+              <button class="qa-btn" onclick="showPanel('farmers')"><span class="qa-icon">🌾</span><span class="qa-label">My Farmers</span></button>
+              <button class="qa-btn" onclick="showPanel('earnings')"><span class="qa-icon">💰</span><span class="qa-label">View Earnings</span></button>
+              <button class="qa-btn" onclick="showPanel('training')"><span class="qa-icon">🎓</span><span class="qa-label">Training</span></button>
+              <a class="qa-btn" href="agriuber.html"><span class="qa-icon">🚜</span><span class="qa-label">AgriUber</span></a>
+              <a class="qa-btn" href="https://wa.me/918106442080" target="_blank"><span class="qa-icon">📱</span><span class="qa-label">WhatsApp HQ</span></a>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Open Cases <span class="nav-badge" style="background:var(--gold-500);">4</span></h3><a onclick="showPanel('cases')" style="font-size:.8rem;color:var(--gold-600);cursor:pointer;font-weight:600;">View all →</a></div>
+          <div class="dash-card-body" style="padding:0 18px;">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--red-600);"></div>
+              <div><p class="activity-text">Priya Devi — PM-Kisan Reg.</p><p class="activity-time">Due today · <span class="status status-pending">Action needed</span></p></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--gold-400);"></div>
+              <div><p class="activity-text">Ramaiah — Aadhaar Update</p><p class="activity-time">Due 16 Jun · <span class="status status-review">In Progress</span></p></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--gold-400);"></div>
+              <div><p class="activity-text">Sita Devi — Scholarship App</p><p class="activity-time">Due 18 Jun · <span class="status status-review">In Progress</span></p></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--blue-600);"></div>
+              <div><p class="activity-text">AgriUber Booking — Tractor</p><p class="activity-time">Due 17 Jun · <span class="status status-review">Confirm machine</span></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly earnings chart -->
+      <div class="dash-card">
+        <div class="dash-card-header"><h3>Monthly Earnings (₹)</h3><span style="font-size:.8rem;color:var(--text-muted);">Last 6 months</span></div>
+        <div class="dash-card-body">
+          <div style="display:flex;align-items:flex-end;gap:10px;height:100px;margin-bottom:28px;padding-bottom:24px;position:relative;">
+            <div style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:flex-end;gap:10px;height:80px;">
+              <div style="flex:1;background:var(--purple-50);border:1.5px solid var(--purple-200);border-radius:6px 6px 0 0;" title="Jan: ₹4200">
+                <div style="background:var(--purple-600);border-radius:6px 6px 0 0;height:42%;position:relative;">
+                  <span style="position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--text-muted);">Jan</span>
+                </div>
+              </div>
+              <div style="flex:1;background:var(--purple-50);border:1.5px solid var(--purple-200);border-radius:6px 6px 0 0;" title="Feb: ₹5600">
+                <div style="background:var(--purple-600);border-radius:6px 6px 0 0;height:56%;">
+                  <span style="position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--text-muted);">Feb</span>
+                </div>
+              </div>
+              <div style="flex:1;background:var(--purple-50);border:1.5px solid var(--purple-200);border-radius:6px 6px 0 0;">
+                <div style="background:var(--purple-600);border-radius:6px 6px 0 0;height:62%;"></div>
+              </div>
+              <div style="flex:1;background:var(--purple-50);border:1.5px solid var(--purple-200);border-radius:6px 6px 0 0;">
+                <div style="background:var(--purple-600);border-radius:6px 6px 0 0;height:70%;"></div>
+              </div>
+              <div style="flex:1;background:var(--purple-50);border:1.5px solid var(--purple-200);border-radius:6px 6px 0 0;">
+                <div style="background:var(--purple-600);border-radius:6px 6px 0 0;height:72%;"></div>
+              </div>
+              <div style="flex:1;background:var(--gold-100);border:1.5px solid var(--gold-400);border-radius:6px 6px 0 0;">
+                <div style="background:var(--gold-500);border-radius:6px 6px 0 0;height:84%;"></div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:-4px;left:0;right:0;display:flex;gap:10px;">
+              <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Jan</span>
+              <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Feb</span>
+              <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Mar</span>
+              <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Apr</span>
+              <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">May</span>
+              <span style="flex:1;font-size:.65rem;color:var(--gold-600);text-align:center;font-weight:600;">Jun</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div style="text-align:center;padding:10px 20px;background:var(--green-50);border-radius:var(--radius-md);">
+              <p style="font-size:.75rem;color:var(--text-muted);">Total earned</p>
+              <p style="font-size:1.1rem;font-weight:700;color:var(--green-700);font-family:var(--font-display);">₹40,600</p>
+            </div>
+            <div style="text-align:center;padding:10px 20px;background:var(--gold-100);border-radius:var(--radius-md);">
+              <p style="font-size:.75rem;color:var(--text-muted);">This month</p>
+              <p style="font-size:1.1rem;font-weight:700;color:var(--gold-700);font-family:var(--font-display);">₹8,400</p>
+            </div>
+            <div style="text-align:center;padding:10px 20px;background:var(--purple-50);border-radius:var(--radius-md);">
+              <p style="font-size:.75rem;color:var(--text-muted);">Avg per case</p>
+              <p style="font-size:1.1rem;font-weight:700;color:var(--purple-700);font-family:var(--font-display);">₹178</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CASES ══ -->
+    <div class="dash-panel" id="panel-cases">
+      <div class="table-header">
+        <h3>All Cases</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" class="table-search" placeholder="🔍 Search cases..." oninput="filterTable('casesTable',this.value)">
+          <select class="table-search" style="min-width:120px;" onchange="filterStatus(this.value)">
+            <option value="">All status</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button class="btn btn-gold btn-sm" onclick="showPanel('new-case')">+ New Case</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="casesTable">
+          <thead><tr><th>Case ID</th><th>Client</th><th>Service</th><th>Village</th><th>Created</th><th>Due Date</th><th>Commission</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-size:.78rem;">#MC-047</code></td><td>Priya Devi</td><td>PM-Kisan Reg.</td><td>Warangal</td><td>10 Jun</td><td style="color:var(--red-600);font-weight:600;">15 Jun</td><td style="color:var(--green-600);font-weight:600;">₹150</td><td><span class="status status-pending">Pending</span></td><td><div style="display:flex;gap:4px;"><button class="btn btn-green btn-sm" onclick="markDone('#MC-047')">✓ Done</button><a href="https://wa.me/91XXXXXXXXXX?text=Hi, regarding your PM-Kisan application" target="_blank" class="btn btn-outline btn-sm">📱</a></div></td></tr>
+            <tr><td><code style="font-size:.78rem;">#MC-046</code></td><td>Ramaiah</td><td>Aadhaar Update</td><td>Hanamkonda</td><td>09 Jun</td><td>16 Jun</td><td style="color:var(--green-600);font-weight:600;">₹80</td><td><span class="status status-review">In Progress</span></td><td><div style="display:flex;gap:4px;"><button class="btn btn-green btn-sm" onclick="markDone('#MC-046')">✓ Done</button><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></div></td></tr>
+            <tr><td><code style="font-size:.78rem;">#MC-045</code></td><td>Sita Devi</td><td>Scholarship App.</td><td>Warangal</td><td>08 Jun</td><td>18 Jun</td><td style="color:var(--green-600);font-weight:600;">₹120</td><td><span class="status status-review">In Progress</span></td><td><div style="display:flex;gap:4px;"><button class="btn btn-green btn-sm" onclick="markDone('#MC-045')">✓ Done</button><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></div></td></tr>
+            <tr><td><code style="font-size:.78rem;">#MC-044</code></td><td>Raju Booking</td><td>AgriUber Tractor</td><td>Kazipet</td><td>07 Jun</td><td>17 Jun</td><td style="color:var(--green-600);font-weight:600;">₹200</td><td><span class="status status-review">Confirm machine</span></td><td><div style="display:flex;gap:4px;"><button class="btn btn-green btn-sm" onclick="markDone('#MC-044')">✓ Done</button><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></div></td></tr>
+            <tr><td><code style="font-size:.78rem;">#MC-043</code></td><td>Lakshmi</td><td>Bank Account Opening</td><td>Warangal</td><td>04 Jun</td><td>10 Jun</td><td style="color:var(--green-600);font-weight:600;">₹250</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">View</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#MC-042</code></td><td>Venkat Reddy</td><td>Soil Health Card</td><td>Hanamkonda</td><td>02 Jun</td><td>08 Jun</td><td style="color:var(--green-600);font-weight:600;">₹100</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ NEW CASE ══ -->
+    <div class="dash-panel" id="panel-new-case">
+      <div style="max-width:680px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);color:var(--gold-700);margin-bottom:20px;">Register New Case</h2>
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Client & Service Details</h3></div>
+          <div class="dash-card-body">
+            <form id="caseForm" onsubmit="submitCase(event)">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <div class="form-group"><label class="form-label">Client name *</label><input type="text" class="form-control" placeholder="Full name" required></div>
+                <div class="form-group"><label class="form-label">Mobile *</label><input type="tel" class="form-control" placeholder="+91 XXXXX XXXXX" required></div>
+                <div class="form-group"><label class="form-label">Village *</label><input type="text" class="form-control" placeholder="Village name" required></div>
+                <div class="form-group"><label class="form-label">Taluka *</label><input type="text" class="form-control" placeholder="Taluka" required></div>
+                <div class="form-group">
+                  <label class="form-label">Service requested *</label>
+                  <select class="form-control" required>
+                    <option value="">Select service</option>
+                    <optgroup label="AgriUber"><option>AgriUber — Tractor Booking</option><option>AgriUber — Harvester</option><option>AgriUber — Drone Spray</option></optgroup>
+                    <optgroup label="Government Services"><option>Aadhaar Update</option><option>PM-Kisan Registration</option><option>Crop Insurance</option><option>Soil Health Card</option><option>Land Record Assistance</option><option>Caste Certificate</option><option>Income Certificate</option></optgroup>
+                    <optgroup label="Banking"><option>Bank Account Opening</option><option>UPI Registration</option><option>AEPS Service</option></optgroup>
+                    <optgroup label="Education"><option>Scholarship Application</option><option>College Admission Help</option></optgroup>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="form-group"><label class="form-label">Due date *</label><input type="date" class="form-control" required></div>
+                <div class="form-group"><label class="form-label">Commission (₹)</label><input type="number" class="form-control" placeholder="e.g. 150"></div>
+                <div class="form-group">
+                  <label class="form-label">Priority</label>
+                  <select class="form-control">
+                    <option>Normal</option><option>High</option><option>Urgent</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" style="margin-top:6px;"><label class="form-label">Notes</label><textarea class="form-control" style="height:72px;resize:none;" placeholder="Documents needed, special requirements..."></textarea></div>
+              <div style="display:flex;gap:10px;margin-top:8px;">
+                <button type="submit" class="btn btn-gold btn-lg">+ Register Case</button>
+                <button type="reset" class="btn btn-outline">Clear</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ EARNINGS ══ -->
+    <div class="dash-panel" id="panel-earnings">
+      <h2 style="font-family:var(--font-display);color:var(--gold-700);margin-bottom:20px;">My Earnings & Commission</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">Total earned (all time)</p><p class="stat-value" style="color:var(--green-600);">₹40,600</p></div><div class="stat-icon-wrap" style="background:var(--green-50);">💰</div></div></div>
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">This month (Jun)</p><p class="stat-value" style="color:var(--gold-600);">₹8,400</p></div><div class="stat-icon-wrap" style="background:var(--gold-100);">📅</div></div></div>
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">Pending payout</p><p class="stat-value" style="color:var(--purple-700);">₹2,350</p></div><div class="stat-icon-wrap" style="background:var(--purple-50);">⏳</div></div></div>
+      </div>
+      <div class="dash-table-wrap">
+        <div class="table-header"><h3>Commission Ledger</h3></div>
+        <table class="dash-table">
+          <thead><tr><th>Date</th><th>Case</th><th>Service</th><th>Client</th><th>Commission</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>14 Jun</td><td>#MC-047</td><td>PM-Kisan Reg.</td><td>Priya Devi</td><td style="color:var(--gold-600);font-weight:600;">₹150</td><td><span class="status status-pending">Pending</span></td></tr>
+            <tr><td>04 Jun</td><td>#MC-043</td><td>Bank Account</td><td>Lakshmi</td><td style="color:var(--green-600);font-weight:600;">₹250</td><td><span class="status status-done">Paid</span></td></tr>
+            <tr><td>02 Jun</td><td>#MC-042</td><td>Soil Health Card</td><td>Venkat Reddy</td><td style="color:var(--green-600);font-weight:600;">₹100</td><td><span class="status status-done">Paid</span></td></tr>
+            <tr><td>28 May</td><td>#MC-039</td><td>Aadhaar Update</td><td>Suresh</td><td style="color:var(--green-600);font-weight:600;">₹80</td><td><span class="status status-done">Paid</span></td></tr>
+            <tr><td>25 May</td><td>#MC-038</td><td>AgriUber Tractor</td><td>Raju</td><td style="color:var(--green-600);font-weight:600;">₹200</td><td><span class="status status-done">Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ TRAINING ══ -->
+    <div class="dash-panel" id="panel-training">
+      <h2 style="font-family:var(--font-display);color:var(--gold-700);margin-bottom:6px;">Training Modules</h2>
+      <p style="color:var(--text-muted);margin-bottom:24px;">Complete all modules to earn your iGram Mitra Certification.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
+
+        <div class="training-card">
+          <div style="background:var(--green-600);padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🚜</span>
+            <div><p style="font-weight:700;color:#fff;font-family:var(--font-display);margin:0;">AgriUber Module</p><p style="font-size:.75rem;color:var(--green-100);margin:0;">Equipment booking process</p></div>
+            <span style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;">Completed</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--green-600);"></div></div>
+            <p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">100% complete · Certificate earned ✅</p>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="showToast('AgriUber training material downloaded!')">Download PDF</button>
+          </div>
+        </div>
+
+        <div class="training-card">
+          <div style="background:var(--gold-500);padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🏛️</span>
+            <div><p style="font-weight:700;color:#fff;font-family:var(--font-display);margin:0;">Government Services</p><p style="font-size:.75rem;color:var(--gold-100);margin:0;">50+ govt schemes explained</p></div>
+            <span style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;">In Progress</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div class="prog-bar"><div class="prog-fill" style="width:72%;background:var(--gold-500);"></div></div>
+            <p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">72% complete · 3 modules remaining</p>
+            <button class="btn btn-gold btn-sm" style="margin-top:10px;" onclick="showToast('Govt services training opened!')">Continue →</button>
+          </div>
+        </div>
+
+        <div class="training-card">
+          <div style="background:var(--teal-600);padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🏦</span>
+            <div><p style="font-weight:700;color:#fff;font-family:var(--font-display);margin:0;">Banking & Finance</p><p style="font-size:.75rem;color:var(--teal-100);margin:0;">AEPS, UPI, account opening</p></div>
+            <span style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;">Not started</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div class="prog-bar"><div class="prog-fill" style="width:0%;background:var(--teal-600);"></div></div>
+            <p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">0% · Start this module</p>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="showToast('Banking training will be available soon!')">Start →</button>
+          </div>
+        </div>
+
+        <div class="training-card">
+          <div style="background:var(--purple-600);padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🎓</span>
+            <div><p style="font-weight:700;color:#fff;font-family:var(--font-display);margin:0;">iGram Platform</p><p style="font-size:.75rem;color:var(--purple-100);margin:0;">All 20+ services overview</p></div>
+            <span style="margin-left:auto;background:rgba(255,255,255,.2);color:#fff;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;">Completed</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div class="prog-bar"><div class="prog-fill" style="width:100%;background:var(--purple-600);"></div></div>
+            <p style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">100% complete · Certificate earned ✅</p>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px;">Download PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overall progress -->
+      <div class="dash-card" style="margin-top:20px;">
+        <div class="dash-card-header"><h3>🏆 Mitra Certification Progress</h3></div>
+        <div class="dash-card-body">
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+            <div style="flex:1;">
+              <p style="font-size:.85rem;color:var(--text-mid);margin-bottom:8px;">Overall training progress: <strong style="color:var(--gold-600);">68% complete</strong></p>
+              <div class="prog-bar" style="height:12px;"><div class="prog-fill" style="width:68%;background:linear-gradient(90deg,var(--gold-500),var(--green-600));"></div></div>
+              <p style="font-size:.75rem;color:var(--text-muted);margin-top:6px;">Complete all 4 modules to earn your Mitra Certification</p>
+            </div>
+            <div style="text-align:center;padding:16px 24px;background:var(--gold-100);border-radius:var(--radius-lg);">
+              <div style="font-size:32px;margin-bottom:4px;">🥉</div>
+              <p style="font-size:.78rem;font-weight:600;color:var(--gold-700);">Bronze Mitra</p>
+              <p style="font-size:.72rem;color:var(--gold-600);">Current level</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FARMERS ══ -->
+    <div class="dash-panel" id="panel-farmers">
+      <div class="table-header">
+        <h3>My Farmers List</h3>
+        <input type="text" class="table-search" placeholder="🔍 Search farmers..." oninput="filterTable('farmersTable',this.value)">
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="farmersTable">
+          <thead><tr><th>Name</th><th>Village</th><th>Mobile</th><th>Crop</th><th>Land</th><th>Last Service</th><th>Contact</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Priya Devi</strong></td><td>Warangal</td><td>+91 9876XXXXXX</td><td>Paddy</td><td>4 acres</td><td>PM-Kisan (Active)</td><td><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></td></tr>
+            <tr><td><strong>Ramaiah</strong></td><td>Hanamkonda</td><td>+91 9812XXXXXX</td><td>Cotton</td><td>8 acres</td><td>Aadhaar Update</td><td><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></td></tr>
+            <tr><td><strong>Lakshmi</strong></td><td>Warangal</td><td>+91 9988XXXXXX</td><td>Vegetables</td><td>2 acres</td><td>Bank Account</td><td><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></td></tr>
+            <tr><td><strong>Venkat Reddy</strong></td><td>Hanamkonda</td><td>+91 9765XXXXXX</td><td>Paddy</td><td>10 acres</td><td>Soil Health Card</td><td><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></td></tr>
+            <tr><td><strong>Suresh</strong></td><td>Kazipet</td><td>+91 9654XXXXXX</td><td>Sugarcane</td><td>6 acres</td><td>Aadhaar Update</td><td><a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn btn-outline btn-sm">📱</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ ZONE ══ -->
+    <div class="dash-panel" id="panel-zone">
+      <h2 style="font-family:var(--font-display);color:var(--gold-700);margin-bottom:20px;">My Service Zone</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Zone Information</h3></div>
+          <div class="dash-card-body">
+            <div class="earn-row"><span style="color:var(--text-muted);">Zone name</span><strong>Warangal Urban</strong></div>
+            <div class="earn-row"><span style="color:var(--text-muted);">District</span><strong>Warangal, Telangana</strong></div>
+            <div class="earn-row"><span style="color:var(--text-muted);">Villages covered</span><strong>12 villages</strong></div>
+            <div class="earn-row"><span style="color:var(--text-muted);">Zone coordinator</span><strong>iGram HQ</strong></div>
+            <div class="earn-row"><span style="color:var(--text-muted);">Status</span><span class="status status-active">● Active</span></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Zone Coverage</h3></div>
+          <div class="dash-card-body" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;"><span>📍</span><span>Warangal</span><span class="status status-active" style="margin-left:auto;">Active</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;"><span>📍</span><span>Hanamkonda</span><span class="status status-active" style="margin-left:auto;">Active</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;"><span>📍</span><span>Kazipet</span><span class="status status-active" style="margin-left:auto;">Active</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:.85rem;"><span>📍</span><span>Narsampet</span><span class="status status-review" style="margin-left:auto;">Partial</span></div>
+            <a href="https://wa.me/918106442080?text=Hi iGram, I want to expand my zone coverage." target="_blank" class="btn btn-gold btn-sm" style="margin-top:6px;">Request zone expansion →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CERTIFICATE ══ -->
+    <div class="dash-panel" id="panel-certificate">
+      <div style="max-width:560px;margin:0 auto;text-align:center;">
+        <div class="dash-card" style="padding:32px;">
+          <div style="font-size:56px;margin-bottom:16px;">🏆</div>
+          <h2 style="font-family:var(--font-display);color:var(--gold-700);margin-bottom:4px;">iGram Mitra Certificate</h2>
+          <p style="color:var(--text-muted);margin-bottom:24px;">Complete all 4 training modules to unlock your official Mitra Certification.</p>
+          <div style="background:var(--gold-100);border:2px dashed var(--gold-400);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;">
+            <p style="font-size:.85rem;color:var(--gold-700);font-weight:600;">Training progress: 68%</p>
+            <div class="prog-bar" style="height:10px;margin:10px 0;"><div class="prog-fill" style="width:68%;background:var(--gold-500);"></div></div>
+            <p style="font-size:.78rem;color:var(--gold-600);">Complete Banking & Finance module to reach 100%</p>
+          </div>
+          <button class="btn btn-gold btn-lg" style="width:100%;justify-content:center;" onclick="showPanel('training')">Continue Training →</button>
+          <p style="font-size:.75rem;color:var(--text-muted);margin-top:12px;">Questions? <a href="https://wa.me/918106442080" target="_blank" style="color:var(--gold-600);font-weight:600;">WhatsApp iGram HQ</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<div class="toast" id="globalToast">✅ <span id="toastMsg"></span></div>
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  const titles = {dashboard:'Mitra Dashboard',cases:'My Cases',commission:'Commission',earnings:'My Earnings',training:'Training Modules',certificate:'My Certificate',farmers:'My Farmers',zone:'My Zone','new-case':'Register New Case'};
+  document.getElementById('pageTitle').textContent = titles[id] || 'Mitra Portal';
+  document.querySelector(`.nav-item[onclick="showPanel('${id}')"]`)?.classList.add('active');
+  window.scrollTo(0,0);
+}
+function filterTable(id, q) {
+  document.querySelectorAll('#'+id+' tbody tr').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+function filterStatus(v) {
+  document.querySelectorAll('#casesTable tbody tr').forEach(r => {
+    r.style.display = !v || r.textContent.includes(v) ? '' : 'none';
+  });
+}
+function markDone(caseId) {
+  showToast('Case ' + caseId + ' marked as completed!');
+  document.getElementById('caseBadge').textContent = Math.max(0, parseInt(document.getElementById('caseBadge').textContent) - 1);
+}
+function submitCase(e) {
+  e.preventDefault();
+  showToast('New case registered successfully!');
+  e.target.reset();
+  setTimeout(() => showPanel('cases'), 1200);
+}
+function showToast(msg, type) {
+  const t = document.getElementById('globalToast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.style.background = type === 'error' ? 'var(--red-600)' : 'var(--purple-700)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+
+<script>
+// ═══ MITRA PORTAL — live work queue + status pipeline ═══
+const MITRA_ME = (function(){ try { return JSON.parse(localStorage.getItem('igram_user')||'null'); } catch(e){ return null; } })();
+
+const BOOKING_STATUSES = ['pending','confirmed','in_progress','review','completed','cancelled'];
+const APP_STATUSES = ['submitted','review','in_progress','approved','completed','rejected'];
+
+function mLabel(s){
+  const map={pending:'Pending',confirmed:'Confirmed',in_progress:'In Progress',review:'Review',submitted:'Submitted',approved:'Approved',completed:'Completed',rejected:'Rejected',cancelled:'Cancelled'};
+  return map[s]||s;
+}
+function mClass(s){
+  if(s==='completed'||s==='approved') return 'status-done';
+  if(s==='pending'||s==='submitted') return 'status-pending';
+  if(s==='rejected'||s==='cancelled') return 'status-rejected';
+  return 'status-review';
+}
+
+async function loadMitraQueue(){
+  try{
+    const { bookings, applications } = await igramApi('GET','/api/mitra/queue');
+    const tb = document.querySelector('#casesTable tbody');
+    if(!tb) return;
+    let rows='';
+    bookings.forEach(b=>{
+      const opts = BOOKING_STATUSES.map(s=>`<option value="${s}" ${s===b.status?'selected':''}>${mLabel(s)}</option>`).join('');
+      rows += `<tr>
+        <td><code style="font-size:.75rem;">${b.booking_ref}</code></td>
+        <td>${b.farmer_name}</td>
+        <td>🚜 ${b.equipment}</td>
+        <td>${b.village||'-'}</td>
+        <td>${b.booking_date}</td>
+        <td><span class="status ${mClass(b.status)}">${mLabel(b.status)}</span></td>
+        <td><div style="display:flex;gap:4px;align-items:center;">
+          <select class="table-search" style="min-width:120px;" id="bk-${b.id}">${opts}</select>
+          <button class="btn btn-green btn-sm" onclick="updateBooking(${b.id})">Update</button>
+          <button class="btn btn-gold btn-sm" onclick="openAssign(${b.id}, '${b.district||''}', '${b.state||''}')">${b.provider_id?'Reassign':'Assign Provider'}</button>
+          ${b.phone?`<a href="https://wa.me/91${b.phone}" target="_blank" class="btn btn-outline btn-sm">📱</a>`:''}
+        </div></td></tr>`;
+    });
+    applications.forEach(a=>{
+      const opts = APP_STATUSES.map(s=>`<option value="${s}" ${s===a.status?'selected':''}>${mLabel(s)}</option>`).join('');
+      rows += `<tr>
+        <td><code style="font-size:.75rem;">${a.app_ref}</code></td>
+        <td>${a.applicant_name}</td>
+        <td>🏛️ ${a.service}</td>
+        <td>${a.village||'-'}</td>
+        <td>-</td>
+        <td><span class="status ${mClass(a.status)}">${mLabel(a.status)}</span></td>
+        <td><div style="display:flex;gap:4px;align-items:center;">
+          <select class="table-search" style="min-width:120px;" id="ap-${a.id}">${opts}</select>
+          <button class="btn btn-green btn-sm" onclick="updateApplication(${a.id})">Update</button>
+          ${a.phone?`<a href="https://wa.me/91${a.phone}" target="_blank" class="btn btn-outline btn-sm">📱</a>`:''}
+        </div></td></tr>`;
+    });
+    tb.innerHTML = rows || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No cases in your queue yet.</td></tr>';
+    const badge=document.getElementById('caseBadge'); if(badge) badge.textContent = bookings.length + applications.length;
+  }catch(e){ console.error(e); }
+}
+
+async function updateBooking(id){
+  const status = document.getElementById('bk-'+id).value;
+  const note = prompt('Add a note for the customer (optional):','') || '';
+  try{
+    await igramApi('PATCH','/api/mitra/booking-status',{ id, status, note });
+    showToast('Booking updated to '+mLabel(status));
+    loadMitraQueue();
+  }catch(e){ showToast(e.message,'error'); }
+}
+async function updateApplication(id){
+  const status = document.getElementById('ap-'+id).value;
+  const note = prompt('Add a note for the customer (optional):','') || '';
+  try{
+    await igramApi('PATCH','/api/mitra/application-status',{ id, status, note });
+    showToast('Application updated to '+mLabel(status));
+    loadMitraQueue();
+  }catch(e){ showToast(e.message,'error'); }
+}
+
+// Update the cases table header to match the queue columns
+document.addEventListener('DOMContentLoaded', ()=>{
+  const thead = document.querySelector('#casesTable thead tr');
+  if(thead) thead.innerHTML = '<th>Ref</th><th>Client</th><th>Service</th><th>Village</th><th>Date</th><th>Status</th><th>Update Status</th>';
+  loadMitraQueue();
+});
+
+const _mitraOrigShowPanel = window.showPanel;
+window.showPanel = function(id){
+  if(_mitraOrigShowPanel) _mitraOrigShowPanel(id);
+  if(id==='cases') loadMitraQueue();
+};
+</script>
+
+
+<div id="assignModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;">
+    <div style="background:var(--gold-600);padding:18px 24px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="color:#fff;font-family:var(--font-display);margin:0;">🏢 Assign Service Provider</h3>
+      <button onclick="document.getElementById('assignModal').style.display='none'" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <div style="padding:24px;">
+      <p id="assignLoc" style="font-size:.85rem;color:var(--text-muted);margin-bottom:14px;"></p>
+      <div id="providerList" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+</div>
+<script>
+let assignBookingId = null;
+async function openAssign(bookingId, district, state){
+  assignBookingId = bookingId;
+  document.getElementById('assignModal').style.display='flex';
+  document.getElementById('assignLoc').textContent = 'Showing providers in: ' + (district||'all areas') + (state? ', '+state : '');
+  const list = document.getElementById('providerList');
+  list.innerHTML = '<p style="color:var(--text-muted);">Loading providers...</p>';
+  try{
+    const q = district ? ('?district='+encodeURIComponent(district)) : (state?('?state='+encodeURIComponent(state)):'');
+    const { providers } = await igramApi('GET','/api/mitra/providers'+q);
+    if(!providers.length){ list.innerHTML = '<p style="color:var(--text-muted);">No providers found in this location. Try a wider area or onboard a provider here.</p>'; return; }
+    list.innerHTML = providers.map(p=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border);border-radius:10px;padding:12px;">
+        <div><p style="font-weight:600;margin:0;">${p.name}</p><p style="font-size:.78rem;color:var(--text-muted);margin:0;">${p.village||''} ${p.district||''} · ${p.phone||''}</p></div>
+        <button class="btn btn-green btn-sm" onclick="assignProvider(${p.id})">Assign</button>
+      </div>`).join('');
+  }catch(e){ list.innerHTML = '<p style="color:var(--red-600);">'+e.message+'</p>'; }
+}
+async function assignProvider(providerId){
+  try{
+    await igramApi('PATCH','/api/mitra/assign-provider',{ booking_id:assignBookingId, provider_id:providerId });
+    showToast('Provider assigned! Booking confirmed.');
+    document.getElementById('assignModal').style.display='none';
+    loadMitraQueue();
+  }catch(e){ showToast(e.message,'error'); }
+}
+</script>
+
+</body>
+</html>

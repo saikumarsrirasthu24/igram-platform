@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In / Register — iGram Digital Hub</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .auth-card { background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); overflow: hidden; max-width: 460px; width: 100%; margin: 0 auto; }
+    .auth-tabs { display: flex; background: var(--gray-50); }
+    .auth-tab { flex: 1; padding: 16px; text-align: center; font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 3px solid transparent; transition: var(--transition); }
+    .auth-tab.active { color: var(--purple-700); border-bottom-color: var(--purple-700); background: var(--white); }
+    .auth-body { padding: 28px; }
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+    .divider-text { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--text-muted); font-size: 0.8rem; }
+    .divider-text::before, .divider-text::after { content:''; flex:1; height:1px; background:var(--border); }
+    .role-card { border: 2px solid var(--border); border-radius: var(--radius-md); padding: 14px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .role-card:hover, .role-card.selected { border-color: var(--purple-600); background: var(--purple-50); }
+    .role-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .phone-row { display:flex; gap:8px; }
+    .phone-row select { width:90px; flex-shrink:0; }
+    .err { color: var(--red-600); font-size:0.78rem; margin-top:4px; display:none; }
+    .otp-box { background: var(--gold-100); border:1px dashed var(--gold-500); border-radius:var(--radius-md); padding:12px; text-align:center; margin:12px 0; }
+  </style>
+</head>
+<body data-page="signin">
+<div id="site-nav">
+<div class="topbar">
+  <div class="container flex-between">
+    <span>📞 8106442080 &nbsp;|&nbsp; igram.hub@gmail.com</span>
+    <a href="become-mitra.html">✨ Become iGram Mitra Partner →</a>
+  </div>
+</div>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon">📡</div>
+      iGram Digital
+    </a>
+    <ul class="navbar-nav" id="mainNav">
+      <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+      <li><a href="services.html" class="nav-link" data-page="services">All Services</a></li>
+      <li><a href="agriuber.html" class="nav-link" data-page="agriuber">AgriUber</a></li>
+      <li><a href="igovt.html" class="nav-link" data-page="igovt">iGovt-Service</a></li>
+      <li><a href="#" class="nav-link">eHealth</a></li>
+      <li><a href="#" class="nav-link">eJobs</a></li>
+      <li><a href="#" class="nav-link">iFinance</a></li>
+      <li><a href="signin.html" class="nav-link">Sign In</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="window.location='signin.html'">Sign In</button>
+      <button class="btn btn-gold btn-sm" onclick="window.location='become-mitra.html'">iGram Mitra</button>
+    </div>
+  </div>
+</nav>
+</div>
+</div>
+
+<section style="padding:48px 0 64px;background:linear-gradient(135deg,var(--purple-50) 0%, #E8F5E8 100%);min-height:100vh;">
+  <div class="container">
+    <div class="auth-card">
+      <div style="background:var(--purple-700);padding:24px;text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px;">📡</div>
+        <h2 style="font-family:var(--font-display);color:var(--white);font-size:1.2rem;margin-bottom:4px;">iGram Digital Hub</h2>
+        <p style="color:var(--purple-100);font-size:0.82rem;">Sign in or create your account</p>
+      </div>
+
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-signin" onclick="switchAuth('signin')">Sign In</div>
+        <div class="auth-tab" id="tab-register" onclick="switchAuth('register')">Register</div>
+      </div>
+
+      <div class="auth-body">
+
+        <!-- ── SIGN IN ── -->
+        <div class="auth-panel active" id="panel-signin">
+          <!-- OTP method -->
+          <div id="signin-step1">
+            <div class="form-group">
+              <label class="form-label">Mobile number</label>
+              <div class="phone-row">
+                <select class="form-control" id="siCountry">
+                  <option value="+91" selected>🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+971">🇦🇪 +971</option>
+                </select>
+                <input type="tel" class="form-control" id="siMobile" placeholder="10-digit number" maxlength="10" oninput="onlyDigits(this)">
+              </div>
+              <p class="err" id="siMobileErr">Enter a valid 10-digit mobile number</p>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px;" onclick="sendOTP()">📱 Send OTP</button>
+
+            <div class="divider-text">or sign in with password</div>
+
+            <div class="form-group">
+              <label class="form-label">Mobile or Email</label>
+              <input type="text" class="form-control" id="siLogin" placeholder="Mobile number or your@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <div style="position:relative;">
+                <input type="password" class="form-control" id="siPass" placeholder="Enter password">
+                <button type="button" onclick="togglePass('siPass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;">👁️</button>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitSignin()">Sign In →</button>
+          </div>
+
+          <!-- OTP verify -->
+          <div id="signin-step2" style="display:none;text-align:center;">
+            <div style="font-size:40px;margin-bottom:12px;">📱</div>
+            <h3 style="font-family:var(--font-display);margin-bottom:6px;">Enter OTP</h3>
+            <p style="font-size:0.85rem;color:var(--text-muted);">6-digit code sent to <span id="otpPhone"></span></p>
+            <div class="otp-box" id="otpDemoBox">Demo OTP: <strong id="otpDemo" style="font-size:1.2rem;letter-spacing:2px;"></strong></div>
+            <div class="form-group">
+              <input type="tel" class="form-control" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6" oninput="onlyDigits(this)" style="text-align:center;font-size:1.3rem;letter-spacing:6px;">
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="verifyOTP()">Verify & Sign In</button>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-top:12px;">Didn't receive? <a href="#" onclick="sendOTP();return false;" style="color:var(--purple-700);font-weight:500;">Resend OTP</a></p>
+            <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:0.82rem;margin-top:8px;" onclick="backToStep1()">← Back</button>
+          </div>
+        </div>
+
+        <!-- ── REGISTER ── -->
+        <div class="auth-panel" id="panel-register">
+          <p style="font-size:0.88rem;color:var(--text-mid);margin-bottom:16px;font-weight:500;">Register as:</p>
+          <div class="role-card selected" id="role-user" onclick="selectRole('user')">
+            <div class="role-icon" style="background:var(--purple-50);">👤</div>
+            <div><p style="font-weight:600;margin:0;font-size:0.9rem;">Public User</p><p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Access all services from your village</p></div>
+          </div>
+          <div class="role-card" id="role-mitra" onclick="selectRole('mitra')">
+            <div class="role-icon" style="background:var(--gold-100);">🤝</div>
+            <div><p style="font-weight:600;margin:0;font-size:0.9rem;">iGram Mitra</p><p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Run a digital centre & earn commissions</p></div>
+          </div>
+          <div class="role-card" id="role-provider" onclick="selectRole('provider')">
+            <div class="role-icon" style="background:var(--blue-50);">🏢</div>
+            <div><p style="font-weight:600;margin:0;font-size:0.9rem;">Service Provider</p><p style="font-size:0.78rem;color:var(--text-muted);margin:0;">List and offer services on iGram</p></div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group"><label class="form-label">First name *</label><input type="text" class="form-control" id="rgFirst" placeholder="First name"></div>
+              <div class="form-group"><label class="form-label">Last name</label><input type="text" class="form-control" id="rgLast" placeholder="Last name"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile number *</label>
+              <div class="phone-row">
+                <select class="form-control" id="rgCountry">
+                  <option value="+91" selected>🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+971">🇦🇪 +971</option>
+                </select>
+                <input type="tel" class="form-control" id="rgMobile" placeholder="10-digit number" maxlength="10" oninput="onlyDigits(this)">
+              </div>
+              <p class="err" id="rgMobileErr">Enter a valid 10-digit mobile number</p>
+            </div>
+            <div class="form-group"><label class="form-label">Email address</label><input type="email" class="form-control" id="rgEmail" placeholder="your@email.com"></div>
+            <div class="form-group"><label class="form-label">State *</label>
+              <select class="form-control" id="rgState"><option value="">Select state</option></select>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group"><label class="form-label">District *</label>
+                <select class="form-control" id="rgDistrict"><option value="">Select district</option></select>
+              </div>
+              <div class="form-group"><label class="form-label">Taluka *</label>
+                <select class="form-control" id="rgTaluka"><option value="">Select taluka</option></select>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Village *</label><input type="text" class="form-control" id="rgVillage" placeholder="Village name"></div>
+            <div class="form-group">
+              <label class="form-label">Password *</label>
+              <div style="position:relative;">
+                <input type="password" class="form-control" id="rgPass" placeholder="Create a password (min 4 chars)">
+                <button type="button" onclick="togglePass('rgPass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;">👁️</button>
+              </div>
+            </div>
+            <label style="display:flex;align-items:flex-start;gap:8px;font-size:0.82rem;color:var(--text-mid);cursor:pointer;margin-bottom:14px;">
+              <input type="checkbox" id="rgTerms" style="margin-top:2px;accent-color:var(--purple-700);">
+              I agree to the Terms of Service and Privacy Policy
+            </label>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="submitRegister()">Create Account →</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;padding:16px 28px;border-top:1px solid var(--border);background:var(--gray-50);">
+        <p style="font-size:0.8rem;color:var(--text-muted);">Need help? WhatsApp us: <a href="https://wa.me/918106442080" style="color:var(--purple-700);font-weight:600;">8106442080</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer">
+<footer class="footer">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div class="brand-icon">📡</div>
+          <h3 style="font-size:1.2rem;">iGram Digital</h3>
+        </div>
+        <p style="font-size:0.85rem;line-height:1.7;margin-bottom:16px;">One Village. One Hub. Unlimited Opportunities.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:0.83rem;">
+          <span>📞 8106442080</span>
+          <span>✉️ igram.hub@gmail.com</span>
+          <span>🌐 igram.digital</span>
+        </div>
+      </div>
+      <div>
+        <p class="footer-heading">Quick Links</p>
+        <a href="become-mitra.html" class="footer-link">Apply iGram Mitra</a>
+        <a href="services.html" class="footer-link">All Services</a>
+        <a href="signin.html" class="footer-link">Sign In / Register</a>
+        <a href="portal-login.html" class="footer-link">Portal Login</a>
+      </div>
+      <div>
+        <p class="footer-heading">Our Services</p>
+        <a href="agriuber.html" class="footer-link">AgriUber</a>
+        <a href="igovt.html" class="footer-link">iGovt-Service</a>
+        <a href="#" class="footer-link">eHealth</a>
+        <a href="#" class="footer-link">iFinance</a>
+        <a href="#" class="footer-link">eJobs</a>
+      </div>
+      <div>
+        <p class="footer-heading">Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+          <button onclick="showToast('Language: English')" style="padding:5px 12px;background:var(--purple-700);color:white;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">EN</button>
+          <button onclick="showToast('Language: Telugu')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">TE</button>
+          <button onclick="showToast('Language: Hindi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">HI</button>
+          <button onclick="showToast('Language: Marathi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">MR</button>
+        </div>
+        <p class="footer-heading">Support</p>
+        <a href="https://wa.me/918106442080" target="_blank" class="footer-link">WhatsApp Us</a>
+        <a href="#" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container flex-between" style="flex-wrap:wrap;gap:8px;">
+      <span>© 2025 iGram Digital Hub. All Rights Reserved.</span>
+      <span>Made for rural India 🇮🇳</span>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
+
+<script src="locations-ui.js"></script>
+<script>
+// ── Self-contained auth helpers (no external file dependency) ──
+const IGRAM_DASHBOARDS = { user:'user-dashboard.html', mitra:'mitra-portal.html', provider:'provider-portal.html', admin:'admin-erp.html' };
+function igramSaveSession(token, user){ try{ localStorage.setItem('igram_token', token); localStorage.setItem('igram_user', JSON.stringify(user)); }catch(e){} }
+function gotoDashboard(role){ window.location.href = IGRAM_DASHBOARDS[role] || 'user-dashboard.html'; }
+
+let selectedRole = 'user';
+let otpPhoneNumber = '';
+
+function showToast(msg, type) {
+  let t = document.getElementById('globalToast');
+  if (!t) { t = document.createElement('div'); t.id='globalToast';
+    t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;color:#fff;padding:14px 20px;border-radius:10px;font-size:0.88rem;font-weight:500;box-shadow:0 8px 32px rgba(60,52,137,0.3);transition:0.3s;max-width:340px;';
+    document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.background = type==='error' ? 'var(--red-600)' : 'var(--purple-700)';
+  t.style.opacity='1';
+  setTimeout(()=>{ t.style.opacity='0'; }, 3500);
+}
+
+function switchAuth(which){
+  document.getElementById('tab-signin').classList.toggle('active', which==='signin');
+  document.getElementById('tab-register').classList.toggle('active', which==='register');
+  document.getElementById('panel-signin').classList.toggle('active', which==='signin');
+  document.getElementById('panel-register').classList.toggle('active', which==='register');
+}
+function selectRole(r){
+  selectedRole = r;
+  ['user','mitra','provider'].forEach(x=>document.getElementById('role-'+x).classList.toggle('selected', x===r));
+}
+function togglePass(id, btn){
+  const el = document.getElementById(id);
+  el.type = el.type==='password' ? 'text' : 'password';
+}
+function onlyDigits(el){ el.value = el.value.replace(/[^0-9]/g, ''); }
+function backToStep1(){ document.getElementById('signin-step1').style.display=''; document.getElementById('signin-step2').style.display='none'; }
+
+// ── OTP login ──
+async function sendOTP(){
+  const phone = document.getElementById('siMobile').value;
+  const err = document.getElementById('siMobileErr');
+  if (phone.length !== 10){ err.style.display='block'; return; }
+  err.style.display='none';
+  try{
+    const res = await fetch('/api/auth/send-otp', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});
+    const j = await res.json();
+    if(!res.ok) throw new Error(j.error||'Failed');
+    otpPhoneNumber = phone;
+    document.getElementById('otpPhone').textContent = document.getElementById('siCountry').value+' '+phone;
+    document.getElementById('otpDemo').textContent = j.demo_code || '------';
+    document.getElementById('signin-step1').style.display='none';
+    document.getElementById('signin-step2').style.display='';
+  }catch(e){ showToast(e.message,'error'); }
+}
+
+async function verifyOTP(){
+  const code = document.getElementById('otpInput').value;
+  if (code.length !== 6){ showToast('Enter the 6-digit OTP','error'); return; }
+  try{
+    const res = await fetch('/api/auth/verify-otp', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:otpPhoneNumber, code})});
+    const j = await res.json();
+    if(!res.ok) throw new Error(j.error||'Failed');
+    igramSaveSession(j.token, j.user);
+    showToast('Welcome, '+j.user.name+'!');
+    setTimeout(()=>gotoDashboard(j.user.role), 700);
+  }catch(e){ showToast(e.message,'error'); }
+}
+
+// ── Password sign in ──
+async function submitSignin(){
+  const login = document.getElementById('siLogin').value.trim();
+  const password = document.getElementById('siPass').value;
+  if(!login || !password){ showToast('Enter mobile/email and password','error'); return; }
+  const body = login.includes('@') ? {email:login, password} : {phone:login, password};
+  try{
+    const res = await fetch('/api/auth/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const j = await res.json();
+    if(!res.ok) throw new Error(j.error||'Login failed');
+    igramSaveSession(j.token, j.user);
+    showToast('Welcome back, '+j.user.name+'!');
+    const params = new URLSearchParams(location.search);
+    setTimeout(()=>{ window.location.href = params.get('next') || IGRAM_DASHBOARDS[j.user.role] || 'user-dashboard.html'; }, 700);
+  }catch(e){ showToast(e.message,'error'); }
+}
+
+// ── Register ──
+async function submitRegister(){
+  const first = document.getElementById('rgFirst').value.trim();
+  const last = document.getElementById('rgLast').value.trim();
+  const mobile = document.getElementById('rgMobile').value;
+  const email = document.getElementById('rgEmail').value.trim();
+  const village = document.getElementById('rgVillage').value.trim();
+  const state = document.getElementById('rgState').value;
+  const district = document.getElementById('rgDistrict').value;
+  const taluka = document.getElementById('rgTaluka').value;
+  const password = document.getElementById('rgPass').value;
+  const terms = document.getElementById('rgTerms').checked;
+  const err = document.getElementById('rgMobileErr');
+
+  if(!first){ showToast('Enter your first name','error'); return; }
+  if(mobile.length !== 10){ err.style.display='block'; return; }
+  err.style.display='none';
+  if(password.length < 4){ showToast('Password must be at least 4 characters','error'); return; }
+  if(!terms){ showToast('Please accept the Terms to continue','error'); return; }
+
+  try{
+    const res = await fetch('/api/auth/register', {method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ name:(first+' '+last).trim(), phone:mobile, email, password, role:selectedRole, village, taluka, district, state })});
+    const j = await res.json();
+    if(!res.ok) throw new Error(j.error||'Registration failed');
+    igramSaveSession(j.token, j.user);
+    showToast('Account created! Opening your dashboard...');
+    setTimeout(()=>gotoDashboard(j.user.role), 800);
+  }catch(e){ showToast(e.message,'error'); }
+}
+
+// If already logged in, offer to go to dashboard
+document.addEventListener('DOMContentLoaded', ()=>{
+  try{
+    const params = new URLSearchParams(location.search);
+    if(params.get('role')) selectRole(params.get('role'));
+  }catch(e){}
+  // Setup location cascade for register
+  if (typeof igramSetupCascade === 'function') igramSetupCascade('rgState','rgDistrict','rgTaluka');
+});
+</script>
+</body>
+</html>
