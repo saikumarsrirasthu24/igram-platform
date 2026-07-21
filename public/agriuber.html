@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriUber — Book Farm Equipment | iGram Digital Hub</title>
+  <meta name="description" content="Book tractors, harvesters, sprayers and 25+ farm machines near your village. Register your machine and earn. iGram AgriUber — instant farm equipment booking.">
+  <meta name="keywords" content="tractor booking, farm equipment hire, AgriUber, iGram, Telangana farmer, Maharashtra farmer">
+  <meta property="og:title" content="AgriUber — Book Farm Equipment | iGram Digital Hub">
+  <meta property="og:description" content="Book tractors & farm equipment instantly near your village. ₹200/day starting rate.">
+  <meta property="og:image" content="https://igram.digital/og-agriuber.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ── Page-specific styles ── */
+    .eq-card {
+      background:#fff; border-radius:var(--radius-lg);
+      border:1px solid var(--border); padding:16px;
+      text-align:center; transition:var(--transition); cursor:pointer;
+    }
+    .eq-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px); border-color:var(--green-200); }
+    .eq-icon-wrap {
+      width:52px;height:52px;background:var(--green-50);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;margin:0 auto 10px;
+    }
+    .eq-price { font-size:.85rem;font-weight:600;color:var(--green-600);margin-bottom:10px; }
+    .tab-btn {
+      padding:8px 18px;border-radius:var(--radius-full);font-size:.82rem;
+      font-weight:600;font-family:var(--font-display);
+      border:1.5px solid var(--border);color:var(--text-mid);
+      background:#fff;cursor:pointer;transition:var(--transition);
+    }
+    .tab-btn.active,.tab-btn:hover { background:var(--green-600);color:#fff;border-color:var(--green-600); }
+    .eq-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px; }
+    @media(max-width:900px){.eq-grid{grid-template-columns:repeat(2,1fr);}}
+    .lang-btn {
+      padding:7px 16px;border-radius:var(--radius-md);
+      font-family:var(--font-display);font-size:.82rem;font-weight:600;
+      cursor:pointer;transition:var(--transition);border:1.5px solid var(--border);
+      background:#fff;color:var(--text-mid);
+    }
+    .lang-btn.active { background:var(--green-600);color:#fff;border-color:var(--green-600); }
+    .form-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+    @media(max-width:600px){.form-grid-2{grid-template-columns:1fr;}}
+    .reg-tab {
+      padding:12px 20px;font-family:var(--font-display);font-size:.9rem;
+      font-weight:600;cursor:pointer;color:var(--text-muted);
+      border-bottom:3px solid transparent;margin-bottom:-2px;transition:var(--transition);
+    }
+    .reg-tab.active { color:var(--green-600);border-bottom-color:var(--green-600); }
+    .reg-panel { display:none; }
+    .reg-panel.active { display:block; }
+    .day-btn {
+      padding:6px 12px;border-radius:var(--radius-sm);font-size:.8rem;
+      font-weight:600;border:1.5px solid var(--border);cursor:pointer;
+      transition:var(--transition);background:#fff;color:var(--text-mid);
+      font-family:var(--font-display);
+    }
+    .day-btn.active { background:var(--green-600);color:#fff;border-color:var(--green-600); }
+    .op-btn {
+      padding:8px 20px;border-radius:var(--radius-md);font-size:.85rem;
+      font-weight:600;cursor:pointer;transition:var(--transition);
+      border:1.5px solid var(--border);background:#fff;color:var(--text-mid);
+      font-family:var(--font-display);
+    }
+    .op-btn.active { background:var(--green-600);color:#fff;border-color:var(--green-600); }
+
+    /* Status overlay */
+    .form-overlay {
+      display:none;position:fixed;inset:0;z-index:3000;
+      background:rgba(26,15,79,.7);align-items:center;justify-content:center;
+    }
+    .form-overlay.show { display:flex; }
+    .overlay-box {
+      background:#fff;border-radius:var(--radius-xl);padding:36px;
+      max-width:440px;width:90%;text-align:center;
+    }
+
+    /* WhatsApp sticky */
+    .wa-sticky {
+      position:fixed;bottom:100px;right:28px;z-index:997;
+    }
+    .wa-btn {
+      display:flex;align-items:center;gap:8px;
+      background:#25D366;color:#fff;padding:10px 18px;
+      border-radius:var(--radius-full);font-weight:600;font-family:var(--font-display);
+      font-size:.85rem;box-shadow:0 4px 20px rgba(37,211,102,.4);
+      transition:var(--transition);white-space:nowrap;text-decoration:none;
+    }
+    .wa-btn:hover { background:#1DAA53;transform:translateY(-2px); }
+
+    /* Steps grid */
+    .steps-grid {
+      display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+      position:relative;
+    }
+    .step-dot {
+      width:44px;height:44px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-family:var(--font-display);font-weight:700;
+      font-size:1rem;margin:0 auto 12px;
+      border:3px solid var(--green-50);position:relative;z-index:1;
+    }
+    .steps-line {
+      position:absolute;top:22px;
+      left:calc(12.5% + 4px);right:calc(12.5% + 4px);
+      height:2px;background:var(--green-200);z-index:0;
+    }
+  </style>
+</head>
+<body data-page="agriuber">
+<script src="auth.js"></script>
+
+<!-- ══ NAV (injected) ══ -->
+<div id="site-nav">
+<div class="topbar">
+  <div class="container flex-between">
+    <span>📞 8106442080 &nbsp;|&nbsp; igram.hub@gmail.com</span>
+    <a href="become-mitra.html">✨ Become iGram Mitra Partner →</a>
+  </div>
+</div>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon">📡</div>
+      iGram Digital
+    </a>
+    <ul class="navbar-nav" id="mainNav">
+      <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+      <li><a href="services.html" class="nav-link" data-page="services">All Services</a></li>
+      <li><a href="agriuber.html" class="nav-link" data-page="agriuber">AgriUber</a></li>
+      <li><a href="igovt.html" class="nav-link" data-page="igovt">iGovt-Service</a></li>
+      <li><a href="#" class="nav-link">eHealth</a></li>
+      <li><a href="#" class="nav-link">eJobs</a></li>
+      <li><a href="#" class="nav-link">iFinance</a></li>
+      <li><a href="signin.html" class="nav-link">Sign In</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="window.location='signin.html'">Sign In</button>
+      <button class="btn btn-gold btn-sm" onclick="window.location='become-mitra.html'">iGram Mitra</button>
+    </div>
+  </div>
+</nav>
+</div>
+
+<!-- ══ BREADCRUMB ══ -->
+<div style="background:var(--gray-50);border-bottom:1px solid var(--border);padding:10px 0;">
+  <div class="container">
+    <nav style="font-size:.82rem;color:var(--text-muted);">
+      <a href="index.html" style="color:var(--purple-700);">Home</a>
+      <span style="margin:0 8px;">›</span>
+      <span style="color:var(--green-700);">Agriculture</span>
+      <span style="margin:0 8px;">›</span>
+      <strong style="color:var(--text-dark);">AgriUber</strong>
+    </nav>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section style="background:linear-gradient(135deg,#EAF3DE 0%,#F0F7E8 100%);padding:56px 0;">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+
+      <!-- Left copy -->
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:52px;height:52px;background:var(--green-600);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;">🚜</div>
+          <div>
+            <h1 style="font-size:2rem;color:var(--green-800);margin:0;line-height:1.1;">AgriUber</h1>
+            <p style="margin:0;font-size:.8rem;color:var(--green-600);">by iGram Digital Hub</p>
+          </div>
+        </div>
+        <p style="font-size:1.05rem;color:var(--green-800);font-weight:500;margin-bottom:8px;line-height:1.35;">
+          Book farm equipment instantly.<br>Earn by listing your machine.
+        </p>
+        <p style="margin-bottom:22px;color:var(--green-700);line-height:1.65;">
+          Tractors, harvesters, sprayers, drones &amp; 25+ machines near your village.
+          No middlemen — direct booking, transparent pricing, WhatsApp confirmation.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
+          <span class="pill pill-green">📍 Village-level</span>
+          <span class="pill pill-green">💰 ₹200/day starting</span>
+          <span class="pill pill-green">⚡ Instant booking</span>
+          <span class="pill pill-green">📱 WhatsApp confirm</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="#booking-form" class="btn btn-green btn-lg">📅 Book Equipment Now</a>
+          <a href="#register" class="btn btn-outline btn-lg" style="border-color:var(--green-400);color:var(--green-700);">➕ List My Machine</a>
+        </div>
+      </div>
+
+      <!-- Right stats card -->
+      <div style="background:var(--green-600);border-radius:var(--radius-xl);padding:28px;color:#fff;">
+        <p style="font-weight:600;font-family:var(--font-display);margin-bottom:6px;">Equipment for every need</p>
+        <p style="font-size:.85rem;opacity:.85;margin-bottom:20px;">Tractor · Harvester · Drone · Sprayer · Pump &amp; more</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:rgba(255,255,255,.15);border-radius:var(--radius-md);padding:14px;text-align:center;">
+            <div style="font-size:1.5rem;font-weight:800;font-family:var(--font-display);">25+</div>
+            <div style="font-size:.76rem;opacity:.85;">Equipment types</div>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:var(--radius-md);padding:14px;text-align:center;">
+            <div style="font-size:1.5rem;font-weight:800;font-family:var(--font-display);">₹200</div>
+            <div style="font-size:.76rem;opacity:.85;">Starting rate/day</div>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:var(--radius-md);padding:14px;text-align:center;">
+            <div style="font-size:1.5rem;font-weight:800;font-family:var(--font-display);">2 hrs</div>
+            <div style="font-size:.76rem;opacity:.85;">WhatsApp confirm</div>
+          </div>
+          <div style="background:rgba(255,255,255,.15);border-radius:var(--radius-md);padding:14px;text-align:center;">
+            <div style="font-size:1.5rem;font-weight:800;font-family:var(--font-display);">4 langs</div>
+            <div style="font-size:.76rem;opacity:.85;">TE · HI · MR · EN</div>
+          </div>
+        </div>
+        <!-- Direct WhatsApp CTA -->
+        <a href="https://wa.me/918106442080?text=Hi%20iGram%2C%20I%20want%20to%20book%20farm%20equipment%20via%20AgriUber"
+           target="_blank" rel="noopener"
+           style="display:flex;align-items:center;justify-content:center;gap:8px;
+                  margin-top:18px;padding:12px;border-radius:var(--radius-md);
+                  background:#25D366;color:#fff;font-weight:600;font-family:var(--font-display);
+                  font-size:.88rem;text-decoration:none;transition:var(--transition);">
+          📱 WhatsApp us directly: 8106442080
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS STRIP ══ -->
+<div class="stats-strip">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,.1);padding:8px 0;">
+        <div class="stat-num" data-count="25" data-suffix="+">25+</div>
+        <div class="stat-lbl">Equipment types</div>
+      </div>
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,.1);padding:8px 0;">
+        <div class="stat-num" data-count="100" data-suffix="+">100+</div>
+        <div class="stat-lbl">Villages covered</div>
+      </div>
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,.1);padding:8px 0;">
+        <div class="stat-num">₹200</div>
+        <div class="stat-lbl">Starting rate / day</div>
+      </div>
+      <div class="stat-item" style="padding:8px 0;">
+        <div class="stat-num">2 hrs</div>
+        <div class="stat-lbl">WhatsApp confirmation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EQUIPMENT CATALOGUE ══ -->
+<section class="section" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Full inventory</span>
+      <h2>Equipment Catalogue</h2>
+      <p>Browse 25+ farm machines. Click <strong>Book Now</strong> to jump to the booking form.</p>
+    </div>
+
+    <!-- Filter tabs + search -->
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px;">
+      <div style="position:relative;flex:1;min-width:180px;max-width:280px;">
+        <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);">🔍</span>
+        <input type="text" id="eqSearch" class="form-control" style="padding-left:34px;"
+          placeholder="Search equipment..." oninput="searchEq(this.value)">
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="tab-btn active" onclick="filterEq(this,'all')">All</button>
+        <button class="tab-btn" onclick="filterEq(this,'tillage')">Tillage</button>
+        <button class="tab-btn" onclick="filterEq(this,'sowing')">Sowing</button>
+        <button class="tab-btn" onclick="filterEq(this,'spraying')">Spraying</button>
+        <button class="tab-btn" onclick="filterEq(this,'harvesting')">Harvesting</button>
+        <button class="tab-btn" onclick="filterEq(this,'water')">Water / Pumps</button>
+      </div>
+    </div>
+
+    <div class="eq-grid" id="eqGrid">
+      <!-- Equipment cards — data-cat used for filtering -->
+      <div class="eq-card" data-cat="tillage" data-name="tractor"><div class="eq-icon-wrap">🚜</div><h4>Tractor</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Tractor')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="rotavator"><div class="eq-icon-wrap">⚙️</div><h4>Rotavator</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Rotavator')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="cultivator"><div class="eq-icon-wrap">🔧</div><h4>Cultivator</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Cultivator')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="plough"><div class="eq-icon-wrap">⛏️</div><h4>Plough / MB Plough</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Plough')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="disc harrow"><div class="eq-icon-wrap">🌀</div><h4>Disc Harrow</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Disc Harrow')">Book Now</button></div>
+      <div class="eq-card" data-cat="sowing" data-name="seed drill"><div class="eq-icon-wrap">🌱</div><h4>Seed Drill</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Seed Drill')">Book Now</button></div>
+      <div class="eq-card" data-cat="sowing" data-name="zero till drill"><div class="eq-icon-wrap">🌾</div><h4>Zero Till Drill</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Zero Till Drill')">Book Now</button></div>
+      <div class="eq-card" data-cat="sowing" data-name="paddy transplanter"><div class="eq-icon-wrap">🌿</div><h4>Paddy Transplanter</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Paddy Transplanter')">Book Now</button></div>
+      <div class="eq-card" data-cat="sowing" data-name="maize planter sugarcane"><div class="eq-icon-wrap">🌽</div><h4>Maize / Sugarcane Planter</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Maize Planter')">Book Now</button></div>
+      <div class="eq-card" data-cat="spraying" data-name="sprayer knapsack"><div class="eq-icon-wrap">💧</div><h4>Knapsack Sprayer</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Knapsack Sprayer')">Book Now</button></div>
+      <div class="eq-card" data-cat="spraying" data-name="boom sprayer"><div class="eq-icon-wrap">🚿</div><h4>Boom Sprayer</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Boom Sprayer')">Book Now</button></div>
+      <div class="eq-card" data-cat="spraying" data-name="drone spray"><div class="eq-icon-wrap">🚁</div><h4>Drone Spray</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Drone Spray')">Book Now</button></div>
+      <div class="eq-card" data-cat="harvesting" data-name="combine harvester"><div class="eq-icon-wrap">🌟</div><h4>Combine Harvester</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Combine Harvester')">Book Now</button></div>
+      <div class="eq-card" data-cat="harvesting" data-name="power reaper"><div class="eq-icon-wrap">✂️</div><h4>Power Reaper</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Power Reaper')">Book Now</button></div>
+      <div class="eq-card" data-cat="harvesting" data-name="thresher"><div class="eq-icon-wrap">🌾</div><h4>Thresher</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Thresher')">Book Now</button></div>
+      <div class="eq-card" data-cat="harvesting" data-name="baler straw reaper"><div class="eq-icon-wrap">📦</div><h4>Baler / Straw Reaper</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Baler')">Book Now</button></div>
+      <div class="eq-card" data-cat="harvesting" data-name="mulcher brush cutter"><div class="eq-icon-wrap">🔪</div><h4>Mulcher / Brush Cutter</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Mulcher')">Book Now</button></div>
+      <div class="eq-card" data-cat="water" data-name="water pump"><div class="eq-icon-wrap">⛽</div><h4>Water Pump</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Water Pump')">Book Now</button></div>
+      <div class="eq-card" data-cat="water" data-name="water pipe"><div class="eq-icon-wrap">🔩</div><h4>Water Pipe 4 inch</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Water Pipe 4 inch')">Book Now</button></div>
+      <div class="eq-card" data-cat="water" data-name="sprinkler drip irrigation"><div class="eq-icon-wrap">🌊</div><h4>Sprinkler / Drip Irrigation</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Sprinkler Set')">Book Now</button></div>
+      <div class="eq-card" data-cat="water" data-name="diesel pump electric pump"><div class="eq-icon-wrap">⚡</div><h4>Diesel / Electric Pump</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Diesel Pump')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="laser leveller gps survey"><div class="eq-icon-wrap">📡</div><h4>Laser Leveller</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Laser Leveller')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="power weeder"><div class="eq-icon-wrap">🌀</div><h4>Power Weeder</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Power Weeder')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="soil testing kit"><div class="eq-icon-wrap">🧪</div><h4>Soil Testing Kit</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Soil Testing Kit')">Book Now</button></div>
+      <div class="eq-card" data-cat="tillage" data-name="tractor trolley transport"><div class="eq-icon-wrap">🚛</div><h4>Tractor Trolley</h4><div class="eq-price">₹200 / day</div><button class="btn btn-green btn-sm" style="width:100%;justify-content:center;" onclick="bookEq('Tractor Trolley')">Book Now</button></div>
+    </div>
+
+    <p style="text-align:center;font-size:.8rem;color:var(--text-muted);margin-top:16px;">
+      Don't see what you need? <a href="https://wa.me/918106442080?text=Hi%20iGram%2C%20I%20need%20equipment%20not%20listed%20on%20AgriUber" target="_blank" style="color:var(--green-600);font-weight:600;">WhatsApp us</a> — we'll find it for you.
+    </p>
+  </div>
+</section>
+
+<!-- ══ BOOKING FORM (Google Sheets connected) ══ -->
+<section class="section" id="booking-form">
+  <div class="container">
+    <div style="max-width:720px;margin:0 auto;">
+      <div class="section-header">
+        <span class="eyebrow">Book equipment</span>
+        <h2>Hire Equipment — Book Now</h2>
+        <p>Fill in details below. We confirm via WhatsApp within 2 hours.</p>
+      </div>
+
+      <!-- WhatsApp quick-book banner -->
+      <div style="background:#E8F9EE;border:1.5px solid #25D366;border-radius:var(--radius-md);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:22px;">📱</span>
+          <div>
+            <p style="font-weight:600;color:#1A7336;margin:0;font-size:.9rem;">Prefer instant WhatsApp booking?</p>
+            <p style="color:#2D8C4A;margin:0;font-size:.8rem;">Message us directly — fastest response guaranteed.</p>
+          </div>
+        </div>
+        <a href="https://wa.me/918106442080?text=Hi%20iGram%2C%20I%20want%20to%20book%20farm%20equipment.%20Please%20help%20me." target="_blank" rel="noopener"
+           style="background:#25D366;color:#fff;padding:10px 18px;border-radius:var(--radius-md);font-weight:600;font-family:var(--font-display);font-size:.85rem;white-space:nowrap;text-decoration:none;">
+          WhatsApp Now →
+        </a>
+      </div>
+
+      <div class="card card-p" style="border-color:var(--green-200);">
+        <!-- 
+          ════════════════════════════════════════════════════
+          GOOGLE SHEETS SETUP INSTRUCTIONS (for iGram team):
+          ════════════════════════════════════════════════════
+          1. Go to: script.google.com → New project
+          2. Paste the Apps Script code from setup-guide.html
+          3. Deploy as Web App → Anyone can access
+          4. Copy the Web App URL
+          5. Replace BOOKING_SHEET_URL below with your URL
+          6. Do same for FARMER_SHEET_URL and OWNER_SHEET_URL
+          ════════════════════════════════════════════════════
+        -->
+        <form id="bookingForm" onsubmit="submitBooking(event)">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Farmer name *</label>
+              <input type="text" class="form-control" id="bName" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile number *</label>
+              <input type="tel" class="form-control" id="bPhone" placeholder="+91 XXXXX XXXXX" pattern="[0-9]{10,13}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Village *</label>
+              <input type="text" class="form-control" id="bVillage" placeholder="Your village name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Taluka / District *</label>
+              <input type="text" class="form-control" id="bTaluka" placeholder="e.g. Nalgonda, Telangana" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Equipment needed *</label>
+              <select class="form-control" id="bEquipment" required>
+                <option value="">Select equipment</option>
+                <option>Tractor</option><option>Tractor Trolley</option>
+                <option>Rotavator</option><option>Cultivator</option><option>Plough</option>
+                <option>MB Plough</option><option>Disc Harrow</option>
+                <option>Seed Drill</option><option>Zero Till Drill</option>
+                <option>Paddy Transplanter</option><option>Maize Planter</option>
+                <option>Sugarcane Planter</option><option>Knapsack Sprayer</option>
+                <option>Boom Sprayer</option><option>Drone Spray</option>
+                <option>Combine Harvester</option><option>Power Reaper</option>
+                <option>Thresher</option><option>Baler</option><option>Straw Reaper</option>
+                <option>Mulcher</option><option>Brush Cutter</option>
+                <option>Water Pump</option><option>Water Pipe 4 inch</option>
+                <option>Sprinkler Set</option><option>Drip Irrigation System</option>
+                <option>Diesel Pump</option><option>Electric Pump</option>
+                <option>Laser Leveller</option><option>Power Weeder</option>
+                <option>Soil Testing Kit</option><option>Portable Generator</option>
+                <option>Other (describe below)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Booking date *</label>
+              <input type="date" class="form-control" id="bDate" required
+                min="" style="cursor:pointer;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Land size (acres)</label>
+              <input type="text" class="form-control" id="bLand" placeholder="e.g. 5 acres">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Crop type</label>
+              <input type="text" class="form-control" id="bCrop" placeholder="e.g. Paddy, Cotton, Sugarcane">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:4px;">
+            <label class="form-label">Additional notes</label>
+            <textarea class="form-control" id="bNotes" placeholder="Any specific requirements or details..." style="height:72px;resize:none;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preferred confirmation language</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+              <button type="button" class="lang-btn active" id="lang-te" onclick="selectLang(this)">తెలుగు</button>
+              <button type="button" class="lang-btn" id="lang-hi" onclick="selectLang(this)">हिंदी</button>
+              <button type="button" class="lang-btn" id="lang-mr" onclick="selectLang(this)">मराठी</button>
+              <button type="button" class="lang-btn" id="lang-en" onclick="selectLang(this)">English</button>
+            </div>
+            <input type="hidden" id="bLang" value="Telugu">
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="submit" class="btn btn-green btn-lg" id="bookingSubmitBtn">
+              ✅ Submit Booking
+            </button>
+            <button type="reset" class="btn btn-outline" onclick="document.getElementById('bEquipment').value=''">
+              Clear form
+            </button>
+            <a href="https://wa.me/918106442080?text=Hi%20iGram%2C%20I%20want%20to%20book%20farm%20equipment%20via%20AgriUber"
+               target="_blank" rel="noopener"
+               style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.83rem;color:#25D366;font-weight:600;text-decoration:none;">
+              📱 Or WhatsApp: 8106442080
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="section-sm" style="background:var(--green-50);">
+  <div class="container">
+    <h3 style="text-align:center;font-family:var(--font-display);margin-bottom:28px;color:var(--green-800);">
+      How AgriUber booking works
+    </h3>
+    <div class="steps-grid">
+      <div class="steps-line"></div>
+      <div style="text-align:center;position:relative;z-index:1;">
+        <div class="step-dot" style="background:var(--green-600);">1</div>
+        <h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;color:var(--green-800);">Fill booking form</h4>
+        <p style="font-size:.77rem;color:var(--text-muted);">Select equipment, date &amp; village</p>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1;">
+        <div class="step-dot" style="background:var(--green-400);">2</div>
+        <h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;color:var(--green-800);">iGram confirms</h4>
+        <p style="font-size:.77rem;color:var(--text-muted);">WhatsApp confirm in 2 hours</p>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1;">
+        <div class="step-dot" style="background:var(--gold-500);">3</div>
+        <h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;color:var(--green-800);">Machine arrives</h4>
+        <p style="font-size:.77rem;color:var(--text-muted);">Operator + machine at your field</p>
+      </div>
+      <div style="text-align:center;position:relative;z-index:1;">
+        <div class="step-dot" style="background:var(--teal-600);">4</div>
+        <h4 style="font-family:var(--font-display);font-size:.85rem;margin-bottom:4px;color:var(--green-800);">Pay &amp; review</h4>
+        <p style="font-size:.77rem;color:var(--text-muted);">Pay on-site or UPI · Rate service</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REGISTRATION TABS ══ -->
+<section class="section" id="register">
+  <div class="container">
+    <div style="max-width:800px;margin:0 auto;">
+      <div class="section-header">
+        <span class="eyebrow">Join AgriUber</span>
+        <h2>Register &amp; Get Started</h2>
+      </div>
+      <div style="display:flex;border-bottom:2px solid var(--border);margin-bottom:28px;">
+        <div class="reg-tab active" onclick="switchTab(this,'farmer')">👨‍🌾 Register as Farmer</div>
+        <div class="reg-tab" onclick="switchTab(this,'owner')">🚜 Register My Machine &amp; Earn</div>
+      </div>
+
+      <!-- Farmer Registration -->
+      <div class="reg-panel active" id="panel-farmer">
+        <div class="card card-p" style="border-color:var(--green-200);">
+          <form id="farmerForm" onsubmit="submitFarmer(event)">
+            <div class="form-grid-2">
+              <div class="form-group"><label class="form-label">Farmer name *</label><input type="text" class="form-control" id="fName" placeholder="Full name" required></div>
+              <div class="form-group"><label class="form-label">Mobile number *</label><input type="tel" class="form-control" id="fPhone" placeholder="+91 XXXXX XXXXX" required></div>
+              <div class="form-group"><label class="form-label">WhatsApp number</label><input type="tel" class="form-control" id="fWA" placeholder="+91 XXXXX XXXXX"></div>
+              <div class="form-group"><label class="form-label">Village *</label><input type="text" class="form-control" id="fVillage" placeholder="Village name" required></div>
+              <div class="form-group"><label class="form-label">Taluka *</label><input type="text" class="form-control" id="fTaluka" placeholder="Taluka" required></div>
+              <div class="form-group"><label class="form-label">District / State *</label><input type="text" class="form-control" id="fDistrict" placeholder="e.g. Nalgonda, Telangana" required></div>
+              <div class="form-group"><label class="form-label">Crop type</label><input type="text" class="form-control" id="fCrop" placeholder="e.g. Paddy, Cotton"></div>
+              <div class="form-group"><label class="form-label">Land size (acres)</label><input type="text" class="form-control" id="fLand" placeholder="e.g. 5 acres"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Preferred language</label>
+              <select class="form-control" id="fLang">
+                <option>Telugu</option><option>Hindi</option><option>Marathi</option><option>English</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-green btn-lg" style="margin-top:8px;">
+              👨‍🌾 Register as Farmer
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Machine Owner Registration -->
+      <div class="reg-panel" id="panel-owner">
+        <div class="card card-p" style="border-color:var(--gold-400);">
+          <form id="ownerForm" onsubmit="submitOwner(event)">
+            <div class="form-grid-2">
+              <div class="form-group"><label class="form-label">Owner name *</label><input type="text" class="form-control" id="oName" placeholder="Full name" required></div>
+              <div class="form-group"><label class="form-label">Mobile number *</label><input type="tel" class="form-control" id="oPhone" placeholder="+91 XXXXX XXXXX" required></div>
+              <div class="form-group"><label class="form-label">Village *</label><input type="text" class="form-control" id="oVillage" placeholder="Village name" required></div>
+              <div class="form-group">
+                <label class="form-label">Machine type *</label>
+                <select class="form-control" id="oMachineType" required>
+                  <option value="">Select type</option>
+                  <option>Tractor</option><option>Combine Harvester</option><option>Rotavator</option>
+                  <option>Sprayer</option><option>Drone Sprayer</option><option>Water Pump</option>
+                  <option>Seed Drill</option><option>Thresher</option><option>Baler</option><option>Other</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Machine brand / model</label><input type="text" class="form-control" id="oModel" placeholder="e.g. Mahindra 475 DI"></div>
+              <div class="form-group"><label class="form-label">Tractor HP (if applicable)</label><input type="text" class="form-control" id="oHP" placeholder="e.g. 45 HP"></div>
+              <div class="form-group"><label class="form-label">Rental rate per day (₹) *</label><input type="number" class="form-control" id="oRate" placeholder="e.g. 200" min="100" required></div>
+              <div class="form-group">
+                <label class="form-label">Operator available?</label>
+                <div style="display:flex;gap:10px;margin-top:6px;">
+                  <button type="button" class="op-btn active" id="op-yes" onclick="selectOp(true)">Yes</button>
+                  <button type="button" class="op-btn" id="op-no" onclick="selectOp(false)">No</button>
+                </div>
+                <input type="hidden" id="oOperator" value="Yes">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Available days</label>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+                <button type="button" class="day-btn active" onclick="toggleDay(this)">Mon</button>
+                <button type="button" class="day-btn active" onclick="toggleDay(this)">Tue</button>
+                <button type="button" class="day-btn active" onclick="toggleDay(this)">Wed</button>
+                <button type="button" class="day-btn active" onclick="toggleDay(this)">Thu</button>
+                <button type="button" class="day-btn active" onclick="toggleDay(this)">Fri</button>
+                <button type="button" class="day-btn active" onclick="toggleDay(this)">Sat</button>
+                <button type="button" class="day-btn" onclick="toggleDay(this)">Sun</button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gold btn-lg" style="margin-top:8px;">
+              🚜 Register My Machine
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING TABLE ══ -->
+<section class="section" style="background:var(--gray-50);">
+  <div class="container">
+    <div style="max-width:640px;margin:0 auto;">
+      <div class="section-header">
+        <span class="eyebrow">Transparent pricing</span>
+        <h2>Rental Price List</h2>
+        <p>All prices are base rates per day in ₹. Final pricing confirmed by iGram Mitra.</p>
+      </div>
+      <div class="card" style="overflow:hidden;">
+        <div style="background:var(--green-600);padding:11px 18px;display:grid;grid-template-columns:1fr 80px 80px;gap:10px;">
+          <span style="font-size:.82rem;font-weight:700;color:#fff;font-family:var(--font-display);">Equipment</span>
+          <span style="font-size:.82rem;font-weight:700;color:#fff;font-family:var(--font-display);text-align:right;">Rate/day</span>
+          <span style="font-size:.82rem;font-weight:700;color:#fff;font-family:var(--font-display);text-align:center;">Book</span>
+        </div>
+        <div id="priceList"></div>
+      </div>
+      <p style="font-size:.77rem;color:var(--text-muted);margin-top:10px;text-align:center;">
+        * Prices subject to change based on location and availability. Contact us for bulk bookings.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ iFARM-TRACK CROSS-SELL ══ -->
+<section class="section-sm">
+  <div class="container">
+    <div style="background:var(--green-50);border:1.5px solid var(--green-200);border-radius:var(--radius-xl);padding:22px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:48px;height:48px;background:var(--green-600);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📊</div>
+        <div>
+          <p style="font-size:.9rem;font-weight:600;color:var(--green-800);margin-bottom:3px;">Also explore iFarm-Track</p>
+          <p style="font-size:.83rem;color:var(--green-700);">Monitor crop health, soil data &amp; farm activities — your digital farm diary. Coming soon.</p>
+        </div>
+      </div>
+      <a href="services.html" class="btn btn-green" style="white-space:nowrap;">View All Services →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER (injected) ══ -->
+<div id="site-footer">
+<footer class="footer">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div class="brand-icon">📡</div>
+          <h3 style="font-size:1.2rem;">iGram Digital</h3>
+        </div>
+        <p style="font-size:0.85rem;line-height:1.7;margin-bottom:16px;">One Village. One Hub. Unlimited Opportunities.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:0.83rem;">
+          <span>📞 8106442080</span>
+          <span>✉️ igram.hub@gmail.com</span>
+          <span>🌐 igram.digital</span>
+        </div>
+      </div>
+      <div>
+        <p class="footer-heading">Quick Links</p>
+        <a href="become-mitra.html" class="footer-link">Apply iGram Mitra</a>
+        <a href="services.html" class="footer-link">All Services</a>
+        <a href="signin.html" class="footer-link">Sign In / Register</a>
+        <a href="signin.html" class="footer-link">Portal Login</a>
+      </div>
+      <div>
+        <p class="footer-heading">Our Services</p>
+        <a href="agriuber.html" class="footer-link">AgriUber</a>
+        <a href="igovt.html" class="footer-link">iGovt-Service</a>
+        <a href="#" class="footer-link">eHealth</a>
+        <a href="#" class="footer-link">iFinance</a>
+        <a href="#" class="footer-link">eJobs</a>
+      </div>
+      <div>
+        <p class="footer-heading">Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+          <button onclick="showToast('Language: English')" style="padding:5px 12px;background:var(--purple-700);color:white;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">EN</button>
+          <button onclick="showToast('Language: Telugu')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">TE</button>
+          <button onclick="showToast('Language: Hindi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">HI</button>
+          <button onclick="showToast('Language: Marathi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">MR</button>
+        </div>
+        <p class="footer-heading">Support</p>
+        <a href="https://wa.me/918106442080" target="_blank" class="footer-link">WhatsApp Us</a>
+        <a href="#" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container flex-between" style="flex-wrap:wrap;gap:8px;">
+      <span>© 2025 iGram Digital Hub. All Rights Reserved.</span>
+      <span>Made for rural India 🇮🇳</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ══ WhatsApp Sticky Button ══ -->
+<div class="wa-sticky">
+  <a href="https://wa.me/918106442080?text=Hi%20iGram%2C%20I%20want%20to%20book%20farm%20equipment%20via%20AgriUber" target="_blank" rel="noopener" class="wa-btn">
+    📱 Book on WhatsApp
+  </a>
+</div>
+
+<!-- ══ Success Overlay ══ -->
+<div class="form-overlay" id="successOverlay">
+  <div class="overlay-box">
+    <div style="font-size:52px;margin-bottom:14px;">✅</div>
+    <h2 style="font-family:var(--font-display);color:var(--green-700);margin-bottom:8px;" id="overlayTitle">Booking Submitted!</h2>
+    <p style="color:var(--text-mid);margin-bottom:20px;" id="overlayMsg">Our team will contact you on WhatsApp within 2 hours to confirm your booking.</p>
+    <a id="overlayWA" href="#" target="_blank" rel="noopener"
+       style="display:block;background:#25D366;color:#fff;padding:12px;border-radius:var(--radius-md);font-weight:600;font-family:var(--font-display);font-size:.9rem;text-decoration:none;margin-bottom:10px;">
+      📱 Message us on WhatsApp too
+    </a>
+    <button onclick="document.getElementById('successOverlay').classList.remove('show')"
+      class="btn btn-outline" style="width:100%;justify-content:center;">Close</button>
+  </div>
+</div>
+
+<!-- ══ Scripts ══ -->
+
+<script>
+function showToast(msg, type) {
+  let t = document.getElementById('globalToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'globalToast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--purple-700);color:#fff;padding:14px 20px;border-radius:10px;font-size:0.88rem;font-weight:500;box-shadow:0 8px 32px rgba(60,52,137,0.3);transform:translateY(100px);opacity:0;transition:0.4s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;gap:10px;max-width:340px;font-family:inherit;';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = '✅ ' + msg;
+  t.style.background = type === 'error' ? 'var(--red-600)' : 'var(--purple-700)';
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.transform = 'translateY(100px)'; t.style.opacity = '0'; }, 3500);
+}
+
+// Active nav link
+document.addEventListener('DOMContentLoaded', function() {
+  var page = document.body.dataset.page;
+  document.querySelectorAll('.nav-link[data-page]').forEach(function(l) {
+    if (l.dataset.page === page) l.classList.add('active');
+  });
+
+  // Counter animation
+  var statsEl = document.querySelector('.stats-strip');
+  if (statsEl) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('[data-count]').forEach(function(el) {
+            var target = parseInt(el.dataset.count);
+            var suffix = el.dataset.suffix || '';
+            var start = performance.now();
+            var dur = 1800;
+            function update(now) {
+              var p = Math.min((now - start) / dur, 1);
+              var e = 1 - Math.pow(1 - p, 3);
+              el.textContent = Math.floor(e * target) + suffix;
+              if (p < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+          });
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(statsEl);
+  }
+
+  // ai.Sathi widget (safe build)
+  if (!document.getElementById('aiWidget')) {
+    var widget = document.createElement('div');
+    widget.id = 'aiWidget';
+    widget.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:998;';
+    var tip = document.createElement('div');
+    tip.id = 'aiTooltip';
+    tip.style.cssText = 'position:absolute;bottom:70px;right:0;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(60,52,137,0.16);padding:14px 16px;width:220px;border:1px solid #E8E4F0;font-size:0.83rem;color:#4A4A6A;transform:scale(0.9) translateY(8px);opacity:0;transition:0.22s ease;pointer-events:none;';
+    tip.innerHTML = '<strong style="display:block;color:#3C3489;margin-bottom:4px;">ai.Sathi Help Desk</strong><span style="color:#3B6D11;font-size:0.75rem;font-weight:500;">Online</span><p style="margin-top:6px;">Namaste! Ask anything in Telugu, Hindi, Marathi or English.</p>';
+    var btn = document.createElement('button');
+    btn.id = 'aiBtn';
+    btn.textContent = 'AI';
+    btn.style.cssText = 'width:58px;height:58px;border-radius:50%;background:#3C3489;color:#fff;font-size:18px;font-weight:700;box-shadow:0 8px 32px rgba(60,52,137,0.3);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;';
+    btn.onclick = function() {
+      var show = tip.style.opacity === '0' || !tip.style.opacity;
+      tip.style.opacity = show ? '1' : '0';
+      tip.style.transform = show ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(8px)';
+      tip.style.pointerEvents = show ? 'all' : 'none';
+    };
+    widget.appendChild(tip);
+    widget.appendChild(btn);
+    document.body.appendChild(widget);
+    setTimeout(function() {
+      tip.style.opacity = '1'; tip.style.transform = 'scale(1) translateY(0)'; tip.style.pointerEvents = 'all';
+    }, 2500);
+  }
+});
+</script>
+<script>
+// ─── Google Sheets Web App URLs ──────────────────────────────────
+// REPLACE these with your actual deployed Google Apps Script URLs
+// See setup-guide.html for exact instructions
+// ─── iGram Backend API ────────────────────────────────────────────
+// Forms post to the Node.js backend. If the API is unreachable,
+// users are guided to WhatsApp as a fallback.
+const API_BASE = '';   // same origin — backend serves this page
+
+// Set min date to today
+document.getElementById('bDate').min = new Date().toISOString().split('T')[0];
+
+// Equipment filter
+function filterEq(btn, cat) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#eqGrid .eq-card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// Equipment search
+function searchEq(q) {
+  document.querySelectorAll('#eqGrid .eq-card').forEach(c => {
+    c.style.display = c.dataset.name.includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+
+// Pre-fill equipment in booking form
+function bookEq(name) {
+  document.getElementById('bEquipment').value = name;
+  document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => document.getElementById('bName').focus(), 600);
+}
+
+// Language select
+function selectLang(btn) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const map = {'lang-te':'Telugu','lang-hi':'Hindi','lang-mr':'Marathi','lang-en':'English'};
+  document.getElementById('bLang').value = map[btn.id] || 'Telugu';
+}
+
+// Tab switch
+function switchTab(tab, panel) {
+  document.querySelectorAll('.reg-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.reg-panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('panel-' + panel).classList.add('active');
+}
+
+// Day toggle
+function toggleDay(btn) { btn.classList.toggle('active'); }
+
+// Operator toggle
+function selectOp(yes) {
+  document.getElementById('op-yes').classList.toggle('active', yes);
+  document.getElementById('op-no').classList.toggle('active', !yes);
+  document.getElementById('oOperator').value = yes ? 'Yes' : 'No';
+}
+
+// Show success overlay
+function showSuccess(title, msg, phone, type) {
+  document.getElementById('overlayTitle').textContent = title;
+  document.getElementById('overlayMsg').textContent   = msg;
+  const waMessages = {
+    booking: `Hi iGram, I just submitted an AgriUber booking. Please confirm.`,
+    farmer:  `Hi iGram, I just registered as a farmer on AgriUber. Please confirm.`,
+    owner:   `Hi iGram, I just registered my machine on AgriUber. Please confirm.`
+  };
+  document.getElementById('overlayWA').href =
+    `https://wa.me/918106442080?text=${encodeURIComponent(waMessages[type])}`;
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+// POST JSON to backend API
+async function apiPost(url, data) {
+  return igramApi('POST', API_BASE + url, data);   // auto-attaches login token; redirects to signin if not logged in
+}
+
+// ─── Booking form submit ──────────────────────────────────────────
+async function submitBooking(e) {
+  e.preventDefault();
+  const btn = document.getElementById('bookingSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Submitting...';
+  const data = {
+    name:      document.getElementById('bName').value,
+    phone:     document.getElementById('bPhone').value,
+    village:   document.getElementById('bVillage').value,
+    taluka:    document.getElementById('bTaluka').value,
+    equipment: document.getElementById('bEquipment').value,
+    date:      document.getElementById('bDate').value,
+    land:      document.getElementById('bLand').value,
+    crop:      document.getElementById('bCrop').value,
+    notes:     document.getElementById('bNotes').value,
+    language:  document.getElementById('bLang').value
+  };
+  try {
+    const r = await apiPost('/api/bookings', data);
+    document.getElementById('bookingForm').reset();
+    showSuccess('✅ Booking ' + r.booking_ref + ' Confirmed!',
+      `Thank you ${data.name}! Your booking reference is ${r.booking_ref}. We will confirm your ${data.equipment} on WhatsApp (${data.phone}) within 2 hours. Save your reference number to track status.`,
+      data.phone, 'booking');
+  } catch (err) {
+    showToast('Could not reach server: ' + err.message + '. Please WhatsApp us at 8106442080.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✅ Submit Booking';
+  }
+}
+
+// ─── Farmer registration submit ───────────────────────────────────
+async function submitFarmer(e) {
+  e.preventDefault();
+  const data = {
+    name:     document.getElementById('fName').value,
+    phone:    document.getElementById('fPhone').value,
+    whatsapp: document.getElementById('fWA').value,
+    village:  document.getElementById('fVillage').value,
+    taluka:   document.getElementById('fTaluka').value,
+    district: document.getElementById('fDistrict').value,
+    crop:     document.getElementById('fCrop').value,
+    land:     document.getElementById('fLand').value,
+    language: document.getElementById('fLang').value
+  };
+  try {
+    const r = await apiPost('/api/farmers', data);
+    document.getElementById('farmerForm').reset();
+    showSuccess('👨‍🌾 Registration Successful!', r.message, data.phone, 'farmer');
+  } catch (err) {
+    showToast('Error: ' + err.message + '. Please WhatsApp us at 8106442080.', 'error');
+  }
+}
+
+// ─── Machine owner submit ─────────────────────────────────────────
+async function submitOwner(e) {
+  e.preventDefault();
+  const days = [...document.querySelectorAll('#panel-owner .day-btn.active')].map(b => b.textContent).join(', ');
+  const data = {
+    name:          document.getElementById('oName').value,
+    phone:         document.getElementById('oPhone').value,
+    village:       document.getElementById('oVillage').value,
+    machineType:   document.getElementById('oMachineType').value,
+    model:         document.getElementById('oModel').value,
+    hp:            document.getElementById('oHP').value,
+    rate:          document.getElementById('oRate').value,
+    operator:      document.getElementById('oOperator').value,
+    availableDays: days
+  };
+  try {
+    const r = await apiPost('/api/owners', data);
+    document.getElementById('ownerForm').reset();
+    showSuccess('🚜 Machine Registered!', r.message, data.phone, 'owner');
+  } catch (err) {
+    showToast('Error: ' + err.message + '. Please WhatsApp us at 8106442080.', 'error');
+  }
+}
+
+// ─── Price list ───────────────────────────────────────────────────
+const priceItems = [
+  'Tractor','Tractor Trolley','Rotavator','Cultivator','Plough',
+  'Seed Drill','Zero Till Drill','Paddy Transplanter',
+  'Knapsack Sprayer','Boom Sprayer','Drone Spray',
+  'Combine Harvester','Power Reaper','Thresher','Baler',
+  'Water Pump','Water Pipe 4 inch','Sprinkler Set',
+  'Laser Leveller','Power Weeder','Soil Testing Kit','Portable Generator'
+];
+const pl = document.getElementById('priceList');
+priceItems.forEach((name, i) => {
+  pl.insertAdjacentHTML('beforeend', `
+    <div style="padding:10px 18px;display:grid;grid-template-columns:1fr 80px 80px;gap:10px;align-items:center;background:${i%2?'#fff':'var(--gray-50)'};border-top:1px solid var(--border);">
+      <span style="font-size:.88rem;color:var(--text-dark);">🌿 ${name}</span>
+      <span style="font-size:.9rem;font-weight:700;color:var(--green-600);text-align:right;">₹200</span>
+      <button class="btn btn-green btn-sm" style="padding:5px 8px;font-size:.78rem;justify-content:center;" onclick="bookEq('${name}')">Book</button>
+    </div>`);
+});
+</script>
+
+<script>
+// Public pages no longer accept bookings/applications directly — redirect to dashboard
+document.addEventListener('DOMContentLoaded', function(){
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem('igram_user')||'null'); } catch(e){}
+  // Intercept all form submits on this public page
+  document.querySelectorAll('form').forEach(function(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(user){
+        if(typeof showToast==='function') showToast('Opening your dashboard to complete this...');
+        setTimeout(function(){ window.location.href='user-dashboard.html'; }, 600);
+      } else {
+        if(typeof showToast==='function') showToast('Please sign in or create a free account to use this service.');
+        setTimeout(function(){ window.location.href='signin.html'; }, 800);
+      }
+    }, true);
+  });
+});
+</script>
+
+</body>
+</html>

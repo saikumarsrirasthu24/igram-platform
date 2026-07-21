@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Service Provider Portal — iGram Digital Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="theme-provider">
+<script src="auth.js"></script>
+<script>
+const IGRAM_ME = igramRequireRole('provider');
+document.addEventListener('DOMContentLoaded', () => {
+  if (!IGRAM_ME) return;
+  // Personalise name/avatar where possible
+  document.querySelectorAll('.avatar').forEach(a => {
+    a.textContent = IGRAM_ME.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    a.title = IGRAM_ME.name + ' — click to logout';
+    a.style.cursor = 'pointer';
+    a.onclick = () => { if (confirm('Logout from iGram?')) igramLogout(); };
+  });
+});
+</script>
+
+<div class="dash-layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div style="position:absolute;top:0;bottom:0;left:0;width:3px;background:var(--blue-600);"></div>
+  <div class="sidebar-brand">
+    <div class="brand-icon" style="background:var(--blue-600);">📡</div>
+    <div>
+      <span class="brand-name">Provider Portal</span>
+      <span class="brand-role">Service Provider</span>
+    </div>
+  </div>
+  <div class="sidebar-section">Main</div>
+  <a class="nav-item active" onclick="showPanel('dashboard')"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" onclick="showPanel('bookings')"><span class="nav-icon">📋</span> Bookings<span class="nav-badge" id="bBadge">5</span></a>
+  <a class="nav-item" onclick="showPanel('listings')"><span class="nav-icon">📦</span> My Listings</a>
+  <div class="sidebar-section">Business</div>
+  <a class="nav-item" onclick="showPanel('calendar')"><span class="nav-icon">📅</span> Availability</a>
+  <a class="nav-item" onclick="showPanel('payments')"><span class="nav-icon">💰</span> Payments</a>
+  <a class="nav-item" onclick="showPanel('reviews')"><span class="nav-icon">⭐</span> Reviews</a>
+  <div class="sidebar-section">Account</div>
+  <a class="nav-item" onclick="showPanel('profile')"><span class="nav-icon">🏢</span> My Profile</a>
+  <div class="sidebar-bottom">
+    <a class="nav-item" href="https://wa.me/918106442080" target="_blank"><span class="nav-icon">📱</span> iGram Support</a>
+    <a class="nav-item" href="index.html"><span class="nav-icon">🔙</span> Website</a>
+  </div>
+</aside>
+
+<main class="dash-main">
+  <div class="dash-topbar">
+    <span class="topbar-title" id="pageTitle">Provider Dashboard</span>
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+      <div class="notif-btn" onclick="showPanel('bookings')">🔔<div class="notif-dot"></div></div>
+      <div class="avatar" style="background:var(--blue-50);color:var(--blue-700);">SP</div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <!-- DASHBOARD -->
+    <div class="dash-panel active" id="panel-dashboard">
+      <div style="background:linear-gradient(135deg,var(--blue-600),var(--blue-700));border-radius:var(--radius-xl);padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+        <p style="color:rgba(255,255,255,.75);font-size:.82rem;margin-bottom:4px;">Welcome back</p>
+        <h2 style="color:white;font-family:var(--font-display);margin-bottom:4px;">Sharma Tractor Services</h2>
+        <p style="color:rgba(255,255,255,.75);font-size:.83rem;margin-bottom:14px;">📍 Nalgonda, Telangana · Provider ID: SP-2025-012 · <span style="background:rgba(255,255,255,.15);padding:2px 8px;border-radius:20px;font-size:.75rem;">● Verified</span></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="showPanel('listings')" class="btn btn-white btn-sm">+ Add Listing</button>
+          <button onclick="showPanel('calendar')" class="btn btn-outline-white btn-sm">📅 Update Availability</button>
+        </div>
+      </div>
+      <div class="stat-grid" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">Total Bookings</p><p class="stat-value" style="color:var(--blue-600);">34</p></div><div class="stat-icon-wrap" style="background:var(--blue-50);">📋</div></div><p class="stat-change" style="color:var(--green-600);">↑ 5 this month</p></div>
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">Revenue (Jun)</p><p class="stat-value" style="color:var(--green-600);">₹6,800</p></div><div class="stat-icon-wrap" style="background:var(--green-50);">💰</div></div><p class="stat-change" style="color:var(--green-600);">↑ ₹900 vs May</p></div>
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">Active Listings</p><p class="stat-value" style="color:var(--gold-600);">3</p></div><div class="stat-icon-wrap" style="background:var(--gold-100);">📦</div></div><p class="stat-change" style="color:var(--text-muted);">Tractor, Rotavator, Sprayer</p></div>
+        <div class="stat-card"><div class="stat-row"><div><p class="stat-label">Rating</p><p class="stat-value" style="color:var(--gold-500);">4.8 ⭐</p></div><div class="stat-icon-wrap" style="background:var(--gold-100);">⭐</div></div><p class="stat-change" style="color:var(--text-muted);">27 reviews</p></div>
+      </div>
+      <!-- Pending bookings -->
+      <div class="dash-card" style="margin-bottom:20px;">
+        <div class="dash-card-header"><h3>Pending Bookings — Need Confirmation</h3><span class="nav-badge" style="background:var(--gold-500);">5 new</span></div>
+        <div style="overflow-x:auto;">
+          <table class="dash-table">
+            <thead><tr><th>ID</th><th>Equipment</th><th>Farmer</th><th>Date</th><th>Village</th><th>Amount</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><code style="font-size:.78rem;">#AG-014</code></td><td>🚜 Tractor (3 days)</td><td>Ravi Kumar</td><td>17 Jun</td><td>Nalgonda</td><td>₹600</td><td><div style="display:flex;gap:4px;"><button class="btn btn-green btn-sm" onclick="confirm_booking('#AG-014')">✓ Accept</button><button class="btn" style="background:var(--red-50);color:var(--red-600);font-size:.75rem;padding:5px 8px;border-radius:var(--radius-md);" onclick="showToast('Booking declined. Farmer notified.')">✗</button></div></td></tr>
+              <tr><td><code style="font-size:.78rem;">#AG-013</code></td><td>⚙️ Rotavator (1 day)</td><td>Suresh</td><td>16 Jun</td><td>Suryapet</td><td>₹200</td><td><div style="display:flex;gap:4px;"><button class="btn btn-green btn-sm" onclick="confirm_booking('#AG-013')">✓ Accept</button><button class="btn" style="background:var(--red-50);color:var(--red-600);font-size:.75rem;padding:5px 8px;border-radius:var(--radius-md);">✗</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Revenue chart placeholder -->
+      <div class="dash-card">
+        <div class="dash-card-header"><h3>Monthly Revenue (₹)</h3></div>
+        <div class="dash-card-body">
+          <div style="display:flex;align-items:flex-end;gap:10px;height:80px;margin-bottom:20px;">
+            <div style="flex:1;background:var(--blue-600);border-radius:4px 4px 0 0;height:55%;opacity:.7;"></div>
+            <div style="flex:1;background:var(--blue-600);border-radius:4px 4px 0 0;height:62%;opacity:.8;"></div>
+            <div style="flex:1;background:var(--blue-600);border-radius:4px 4px 0 0;height:48%;opacity:.75;"></div>
+            <div style="flex:1;background:var(--blue-600);border-radius:4px 4px 0 0;height:71%;opacity:.85;"></div>
+            <div style="flex:1;background:var(--blue-600);border-radius:4px 4px 0 0;height:68%;opacity:.9;"></div>
+            <div style="flex:1;background:var(--gold-500);border-radius:4px 4px 0 0;height:85%;"></div>
+          </div>
+          <div style="display:flex;gap:0;">
+            <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Jan</span>
+            <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Feb</span>
+            <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Mar</span>
+            <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">Apr</span>
+            <span style="flex:1;font-size:.65rem;color:var(--text-muted);text-align:center;">May</span>
+            <span style="flex:1;font-size:.65rem;color:var(--gold-600);text-align:center;font-weight:600;">Jun</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="dash-panel" id="panel-bookings">
+      <div class="table-header"><h3>All Bookings</h3><input type="text" class="table-search" placeholder="🔍 Search..." oninput="filterTable('bookTable',this.value)"></div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="bookTable">
+          <thead><tr><th>ID</th><th>Equipment</th><th>Farmer</th><th>Date</th><th>Village</th><th>Days</th><th>Revenue</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-size:.78rem;">#AG-014</code></td><td>🚜 Tractor</td><td>Ravi Kumar</td><td>17 Jun</td><td>Nalgonda</td><td>3</td><td>₹600</td><td><span class="status status-pending">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="confirm_booking('#AG-014')">Accept</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-013</code></td><td>⚙️ Rotavator</td><td>Suresh</td><td>16 Jun</td><td>Suryapet</td><td>1</td><td>₹200</td><td><span class="status status-pending">Pending</span></td><td><button class="btn btn-green btn-sm" onclick="confirm_booking('#AG-013')">Accept</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-011</code></td><td>💧 Sprayer</td><td>Lakshmi</td><td>10 Jun</td><td>Nalgonda</td><td>2</td><td>₹400</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-009</code></td><td>🚜 Tractor</td><td>Venkat</td><td>05 Jun</td><td>Miryalaguda</td><td>1</td><td>₹200</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LISTINGS -->
+    <div class="dash-panel" id="panel-listings">
+      <div class="table-header"><h3>My Equipment Listings</h3><button class="btn btn-primary btn-sm" onclick="showToast('Add listing form coming in next update!')">+ Add New Listing</button></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px;">
+        <div class="dash-card" style="overflow:hidden;">
+          <div style="background:var(--green-50);padding:16px;text-align:center;"><div style="font-size:36px;">🚜</div></div>
+          <div style="padding:14px;">
+            <p style="font-weight:600;font-family:var(--font-display);margin-bottom:4px;">Mahindra 475 DI Tractor</p>
+            <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:8px;">45 HP · With operator</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-weight:700;color:var(--green-600);">₹200/day</span>
+              <span class="status status-live">● Live</span>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;" onclick="showToast('Edit listing coming soon!')">Edit Listing</button>
+          </div>
+        </div>
+        <div class="dash-card" style="overflow:hidden;">
+          <div style="background:var(--purple-50);padding:16px;text-align:center;"><div style="font-size:36px;">⚙️</div></div>
+          <div style="padding:14px;">
+            <p style="font-weight:600;font-family:var(--font-display);margin-bottom:4px;">Rotavator (6 feet)</p>
+            <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:8px;">Standard · With tractor</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-weight:700;color:var(--green-600);">₹200/day</span>
+              <span class="status status-live">● Live</span>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;" onclick="showToast('Edit listing coming soon!')">Edit Listing</button>
+          </div>
+        </div>
+        <div class="dash-card" style="overflow:hidden;">
+          <div style="background:var(--blue-50);padding:16px;text-align:center;"><div style="font-size:36px;">💧</div></div>
+          <div style="padding:14px;">
+            <p style="font-weight:600;font-family:var(--font-display);margin-bottom:4px;">Boom Sprayer</p>
+            <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:8px;">500L tank · With operator</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-weight:700;color:var(--green-600);">₹200/day</span>
+              <span class="status status-live">● Live</span>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;" onclick="showToast('Edit listing coming soon!')">Edit Listing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="dash-panel" id="panel-calendar">
+      <h2 style="font-family:var(--font-display);color:var(--blue-700);margin-bottom:20px;">Availability Calendar — June 2025</h2>
+      <div class="dash-card" style="padding:20px;">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;margin-bottom:8px;">
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Mon</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Tue</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Wed</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Thu</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Fri</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Sat</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);">Sun</div>
+        </div>
+        <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"></div>
+        <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:5px;font-size:.78rem;"><div style="width:12px;height:12px;border-radius:3px;background:var(--green-50);border:1px solid var(--green-200);"></div>Available</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:.78rem;"><div style="width:12px;height:12px;border-radius:3px;background:var(--red-50);border:1px solid var(--red-600);"></div>Booked</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:.78rem;"><div style="width:12px;height:12px;border-radius:3px;background:var(--gold-100);border:1px solid var(--gold-400);"></div>Today</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="dash-panel" id="panel-payments">
+      <div class="table-header"><h3>Payment History</h3></div>
+      <div class="stat-grid" style="margin-bottom:20px;">
+        <div class="stat-card"><p class="stat-label">Total received</p><p class="stat-value" style="color:var(--green-600);">₹34,200</p></div>
+        <div class="stat-card"><p class="stat-label">This month</p><p class="stat-value" style="color:var(--blue-600);">₹6,800</p></div>
+        <div class="stat-card"><p class="stat-label">Pending</p><p class="stat-value" style="color:var(--gold-600);">₹800</p></div>
+        <div class="stat-card"><p class="stat-label">Mode</p><p class="stat-value" style="font-size:1rem;color:var(--text-dark);">Cash + UPI</p></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Date</th><th>Booking</th><th>Farmer</th><th>Equipment</th><th>Amount</th><th>Mode</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>10 Jun</td><td>#AG-011</td><td>Lakshmi</td><td>Sprayer</td><td>₹400</td><td>UPI</td><td><span class="status status-done">Received</span></td></tr>
+            <tr><td>05 Jun</td><td>#AG-009</td><td>Venkat</td><td>Tractor</td><td>₹200</td><td>Cash</td><td><span class="status status-done">Received</span></td></tr>
+            <tr><td>28 May</td><td>#AG-008</td><td>Raju</td><td>Tractor</td><td>₹400</td><td>UPI</td><td><span class="status status-done">Received</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="dash-panel" id="panel-reviews">
+      <div class="table-header"><h3>Customer Reviews — 4.8 ⭐ (27 reviews)</h3></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;">
+        <div class="dash-card" style="padding:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong style="font-size:.88rem;">Ravi Kumar</strong><span style="color:var(--gold-400);">★★★★★</span></div><p style="font-size:.82rem;color:var(--text-mid);font-style:italic;">"Tractor was on time. Operator was skilled. Will book again next season!"</p><p style="font-size:.72rem;color:var(--text-muted);margin-top:6px;">AgriUber Tractor · 02 Jun 2025</p></div>
+        <div class="dash-card" style="padding:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong style="font-size:.88rem;">Lakshmi</strong><span style="color:var(--gold-400);">★★★★★</span></div><p style="font-size:.82rem;color:var(--text-mid);font-style:italic;">"Sprayer worked perfectly on all 3 acres. Very happy with the service."</p><p style="font-size:.72rem;color:var(--text-muted);margin-top:6px;">Boom Sprayer · 10 Jun 2025</p></div>
+        <div class="dash-card" style="padding:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong style="font-size:.88rem;">Venkat Reddy</strong><span style="color:var(--gold-400);">★★★★☆</span></div><p style="font-size:.82rem;color:var(--text-mid);font-style:italic;">"Good service. Tractor arrived 30 minutes late but overall good work."</p><p style="font-size:.72rem;color:var(--text-muted);margin-top:6px;">Tractor · 05 Jun 2025</p></div>
+        <div class="dash-card" style="padding:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><strong style="font-size:.88rem;">Suresh</strong><span style="color:var(--gold-400);">★★★★★</span></div><p style="font-size:.82rem;color:var(--text-mid);font-style:italic;">"Quick booking via iGram. WhatsApp confirmation was fast. 5 stars!"</p><p style="font-size:.72rem;color:var(--text-muted);margin-top:6px;">Rotavator · 12 May 2025</p></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="dash-panel" id="panel-profile">
+      <div style="max-width:600px;margin:0 auto;">
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Business Profile</h3><button class="btn btn-outline btn-sm" onclick="showToast('Profile saved!')">Save Changes</button></div>
+          <div class="dash-card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group"><label class="form-label">Business name *</label><input type="text" class="form-control" value="Sharma Tractor Services"></div>
+              <div class="form-group"><label class="form-label">Owner name *</label><input type="text" class="form-control" value="Ramesh Sharma"></div>
+              <div class="form-group"><label class="form-label">Mobile *</label><input type="tel" class="form-control" value="+91 98765 43210"></div>
+              <div class="form-group"><label class="form-label">Village / Town *</label><input type="text" class="form-control" value="Nalgonda"></div>
+              <div class="form-group"><label class="form-label">District</label><input type="text" class="form-control" value="Nalgonda, Telangana"></div>
+              <div class="form-group"><label class="form-label">Service radius (km)</label><input type="number" class="form-control" value="30"></div>
+            </div>
+            <div style="margin-top:10px;padding:10px 14px;background:var(--green-50);border-radius:var(--radius-md);border:1px solid var(--green-200);">
+              <p style="font-size:.82rem;color:var(--green-700);">✅ Verified provider · Provider ID: SP-2025-012 · Active since Feb 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<div class="toast" id="globalToast">✅ <span id="toastMsg"></span></div>
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const t={dashboard:'Provider Dashboard',bookings:'My Bookings',listings:'My Listings',calendar:'Availability',payments:'Payment History',reviews:'Customer Reviews',profile:'My Profile'};
+  document.getElementById('pageTitle').textContent=t[id]||'Portal';
+  document.querySelector(`.nav-item[onclick="showPanel('${id}')"]`)?.classList.add('active');
+  window.scrollTo(0,0);
+}
+function filterTable(id,q){document.querySelectorAll('#'+id+' tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});}
+function confirm_booking(id){showToast('Booking '+id+' accepted! Farmer will be notified via WhatsApp.');document.getElementById('bBadge').textContent=Math.max(0,parseInt(document.getElementById('bBadge').textContent)-1);}
+function showToast(msg,type){const t=document.getElementById('globalToast');document.getElementById('toastMsg').textContent=msg;t.style.background=type==='error'?'var(--red-600)':'var(--purple-700)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+// Build calendar
+const booked=[10,11,13,17,24,25];
+const today=15;
+const grid=document.getElementById('calGrid');
+if(grid){
+  for(let d=1;d<=30;d++){
+    const el=document.createElement('div');
+    el.style.cssText=`padding:8px 0;border-radius:var(--radius-sm);text-align:center;font-size:.82rem;cursor:pointer;font-weight:${d===today?'700':'400'};`;
+    if(booked.includes(d)){el.style.background='var(--red-50)';el.style.color='var(--red-600)';el.style.border='1px solid var(--red-600)';}
+    else if(d===today){el.style.background='var(--gold-100)';el.style.color='var(--gold-700)';el.style.border='1.5px solid var(--gold-500)';}
+    else if(d<today){el.style.background='var(--border)';el.style.color='var(--text-muted)';}
+    else{el.style.background='var(--green-50)';el.style.color='var(--green-700)';el.style.border='1px solid var(--green-200)';}
+    el.textContent=d;
+    el.onclick=()=>{if(!booked.includes(d)&&d>=today)showToast('Day '+d+' Jun marked as unavailable');};
+    grid.appendChild(el);
+  }
+}
+</script>
+
+<script>
+// ═══ PROVIDER PORTAL — live jobs assigned by Mitras ═══
+const PROV_ME = (function(){ try { return JSON.parse(localStorage.getItem('igram_user')||'null'); } catch(e){ return null; } })();
+function pLabel(s){ const m={confirmed:'Confirmed',in_progress:'In Progress',completed:'Completed',cancelled:'Cancelled'}; return m[s]||s; }
+function pClass(s){ if(s==='completed')return'status-done'; if(s==='cancelled')return'status-rejected'; return 'status-review'; }
+
+async function loadProviderJobs(){
+  try{
+    const { jobs } = await igramApi('GET','/api/provider/jobs');
+    const tb = document.querySelector('#bookTable tbody');
+    if(tb){
+      tb.innerHTML = jobs.length ? jobs.map(j=>`
+        <tr><td><code style="font-size:.78rem;">${j.booking_ref}</code></td>
+        <td>${j.equipment}</td><td>${j.farmer_name}</td><td>${j.booking_date}</td>
+        <td>${j.village||'-'}, ${j.district||''}</td><td>1</td><td>₹200</td>
+        <td><span class="status ${pClass(j.status)}">${pLabel(j.status)}</span></td>
+        <td><div style="display:flex;gap:4px;">
+          <button class="btn btn-green btn-sm" onclick="provUpdate(${j.id},'in_progress')">Start</button>
+          <button class="btn btn-outline btn-sm" onclick="provUpdate(${j.id},'completed')">Done</button>
+          ${j.phone?`<a href="https://wa.me/91${j.phone}" target="_blank" class="btn btn-outline btn-sm">📱</a>`:''}
+        </div></td></tr>`).join('') : '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:20px;">No jobs assigned yet. Mitras will assign bookings in your area.</td></tr>';
+    }
+    const badge=document.getElementById('bBadge'); if(badge) badge.textContent=jobs.filter(j=>j.status!=='completed').length;
+  }catch(e){ console.error(e); }
+}
+async function provUpdate(id, status){
+  const note = prompt('Add a note (optional):','')||'';
+  try{
+    await igramApi('PATCH','/api/provider/job-status',{ id, status, note });
+    showToast('Job updated to '+pLabel(status));
+    loadProviderJobs();
+  }catch(e){ showToast(e.message,'error'); }
+}
+const _provOrigShowPanel = window.showPanel;
+window.showPanel = function(id){ if(_provOrigShowPanel) _provOrigShowPanel(id); if(id==='bookings'||id==='dashboard') loadProviderJobs(); };
+document.addEventListener('DOMContentLoaded', loadProviderJobs);
+</script>
+
+</body>
+</html>

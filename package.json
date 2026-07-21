@@ -1,0 +1,15 @@
+{
+  "name": "igram-digital-platform",
+  "version": "1.0.0",
+  "description": "iGram Digital Hub - Full-stack platform. ZERO dependencies - pure Node.js built-ins. Just: node server.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node tests/api.test.js"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=22.5"
+  }
+}

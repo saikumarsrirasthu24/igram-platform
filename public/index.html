@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iGram Digital Hub — One Village. One Hub. Unlimited Opportunities.</title>
+  <meta name="description" content="iGram connects education, healthcare, agriculture, jobs, banking, government services and digital opportunities through a single platform for every village.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ── Homepage Specific ── */
+    .hero { padding: 72px 0 80px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--purple-50); border: 1px solid var(--purple-200);
+      border-radius: var(--radius-full); padding: 6px 16px;
+      font-size: 0.78rem; font-weight: 600; color: var(--purple-700);
+      font-family: var(--font-display); letter-spacing: 0.5px;
+      margin-bottom: 24px; animation: fadeUp 0.5s ease both;
+    }
+    .hero-title { color: var(--purple-800); margin-bottom: 20px; animation: fadeUp 0.6s 0.1s ease both; }
+    .hero-title span { color: var(--gold-500); }
+    .hero-desc { font-size: 1.05rem; max-width: 500px; margin-bottom: 32px; animation: fadeUp 0.6s 0.2s ease both; }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+    .hero-trust {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 32px; animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.82rem; color: var(--text-mid); font-weight: 500;
+    }
+    .trust-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+    .hero-visual-wrap { position: relative; animation: fadeUp 0.8s 0.2s ease both; }
+    .hub-graphic {
+      background: linear-gradient(135deg, var(--purple-700) 0%, var(--purple-900) 100%);
+      border-radius: var(--radius-xl); padding: 32px;
+      position: relative; overflow: hidden; min-height: 380px;
+    }
+    .hub-graphic::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .hub-center {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      font-family: var(--font-display); font-weight: 700; color: white;
+      font-size: 0.7rem; text-align: center; z-index: 2;
+    }
+    .hub-orbit {
+      position: absolute; border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,0.12);
+    }
+    .hub-o1 { width: 200px; height: 200px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .hub-o2 { width: 310px; height: 310px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .hub-node {
+      position: absolute; background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-md);
+      padding: 7px 10px; font-size: 0.7rem; font-weight: 600;
+      color: white; font-family: var(--font-display);
+      display: flex; align-items: center; gap: 5px; white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+    .hub-node-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* Services Grid */
+    .services-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+    @media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2,1fr); } }
+
+    /* Testimonials */
+    .testimonial-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow-sm); }
+    .t-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
+    .stars { color: var(--gold-400); font-size: 0.85rem; letter-spacing: 1px; }
+
+    /* Why iGram */
+    .why-card { padding: 24px; }
+    .why-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+  </style>
+</head>
+<body data-page="index">
+
+<!-- Nav injected here -->
+<div id="site-nav">
+<div class="topbar">
+  <div class="container flex-between">
+    <span>📞 8106442080 &nbsp;|&nbsp; igram.hub@gmail.com</span>
+    <a href="become-mitra.html">✨ Become iGram Mitra Partner →</a>
+  </div>
+</div>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon">📡</div>
+      iGram Digital
+    </a>
+    <ul class="navbar-nav" id="mainNav">
+      <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+      <li><a href="services.html" class="nav-link" data-page="services">All Services</a></li>
+      <li><a href="agriuber.html" class="nav-link" data-page="agriuber">AgriUber</a></li>
+      <li><a href="igovt.html" class="nav-link" data-page="igovt">iGovt-Service</a></li>
+      <li><a href="#" class="nav-link">eHealth</a></li>
+      <li><a href="#" class="nav-link">eJobs</a></li>
+      <li><a href="#" class="nav-link">iFinance</a></li>
+      <li><a href="signin.html" class="nav-link">Sign In</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="window.location='signin.html'">Sign In</button>
+      <button class="btn btn-gold btn-sm" onclick="window.location='become-mitra.html'">iGram Mitra</button>
+    </div>
+  </div>
+</nav>
+</div>
+
+<!-- ══ HERO ══════════════════════════════════ -->
+<section class="hero hero-gradient">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div>
+        <div class="hero-eyebrow">
+          📍 Telangana · Maharashtra · Rural India
+        </div>
+        <h1 class="hero-title">
+          One Village.<br>
+          One Hub.<br>
+          <span>Unlimited Opportunities.</span>
+        </h1>
+        <p class="hero-desc">
+          iGram connects education, healthcare, agriculture, jobs, banking, government services and digital opportunities through a single trusted platform for every village.
+        </p>
+        <div class="hero-ctas">
+          <a href="igovt.html" class="btn btn-primary btn-lg">🔍 Explore Services</a>
+          <a href="become-mitra.html" class="btn btn-gold btn-lg">🤝 Become iGram Mitra</a>
+          <a href="#" class="btn btn-outline btn-lg">🏢 Visit Centre</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item">
+            <div class="trust-icon" style="background:var(--green-50);">✅</div>
+            Govt Verified
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" style="background:var(--purple-50);">🌐</div>
+            4 Languages
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" style="background:var(--blue-50);">📱</div>
+            Mobile Ready
+          </div>
+        </div>
+      </div>
+
+      <!-- Hub Graphic -->
+      <div class="hero-visual-wrap hero-visual">
+        <div class="hub-graphic">
+          <div class="hub-orbit hub-o1"></div>
+          <div class="hub-orbit hub-o2"></div>
+          <div class="hub-center">📡<br>iGram<br>Digital Hub</div>
+
+          <!-- Nodes positioned around hub -->
+          <div class="hub-node" style="top:12%;left:50%;transform:translateX(-50%);">
+            <div class="hub-node-dot" style="background:#97C459;"></div>Agriculture
+          </div>
+          <div class="hub-node" style="top:28%;right:2%;">
+            <div class="hub-node-dot" style="background:#85B7EB;"></div>Employment
+          </div>
+          <div class="hub-node" style="top:50%;right:-2%;transform:translateY(-50%);">
+            <div class="hub-node-dot" style="background:#FAC775;"></div>Finance
+          </div>
+          <div class="hub-node" style="bottom:28%;right:2%;">
+            <div class="hub-node-dot" style="background:#F09595;"></div>Healthcare
+          </div>
+          <div class="hub-node" style="bottom:10%;left:50%;transform:translateX(-50%);">
+            <div class="hub-node-dot" style="background:#EF9F27;"></div>Government
+          </div>
+          <div class="hub-node" style="bottom:28%;left:2%;">
+            <div class="hub-node-dot" style="background:#AFA9EC;"></div>Education
+          </div>
+          <div class="hub-node" style="top:50%;left:-2%;transform:translateY(-50%);">
+            <div class="hub-node-dot" style="background:#9FE1CB;"></div>eMarket
+          </div>
+          <div class="hub-node" style="top:28%;left:2%;">
+            <div class="hub-node-dot" style="background:#CECBF6;"></div>Travel
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS STRIP ════════════════════════════ -->
+<div class="stats-strip">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;">
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,0.1);padding:8px 0;">
+        <div class="stat-num" data-count="20" data-suffix="+">20+</div>
+        <div class="stat-lbl">Services</div>
+      </div>
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,0.1);padding:8px 0;">
+        <div class="stat-num" data-count="100" data-suffix="+">100+</div>
+        <div class="stat-lbl">Villages Targeted</div>
+      </div>
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,0.1);padding:8px 0;">
+        <div class="stat-num" data-count="350" data-suffix="+">350+</div>
+        <div class="stat-lbl">Students Supported</div>
+      </div>
+      <div class="stat-item" style="border-right:1px solid rgba(255,255,255,0.1);padding:8px 0;">
+        <div class="stat-num" data-count="7">7</div>
+        <div class="stat-lbl">Study Clubs</div>
+      </div>
+      <div class="stat-item" style="padding:8px 0;">
+        <div class="stat-num" data-count="1000" data-suffix="+">1000+</div>
+        <div class="stat-lbl">Future iGram Mitras</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SERVICES GRID ══════════════════════════ -->
+<section class="section" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">All services in one place</span>
+      <h2>20+ Service Modules Across 8 Categories</h2>
+      <p>Click any category to explore available services in your area</p>
+    </div>
+    <div class="services-grid">
+      <a href="agriuber.html" class="service-card" style="--card-color:var(--green-600);">
+        <div class="service-icon" style="background:var(--green-50);">🌾</div>
+        <h4>Agriculture</h4>
+        <p>AgriUber · iFarm-Track</p>
+      </a>
+      <a href="#" class="service-card" style="--card-color:var(--blue-600);">
+        <div class="service-icon" style="background:var(--blue-50);">💼</div>
+        <h4>Employment</h4>
+        <p>eJobs · Prof-Services</p>
+      </a>
+      <a href="#" class="service-card" style="--card-color:var(--purple-600);">
+        <div class="service-icon" style="background:var(--purple-50);">🎓</div>
+        <h4>Education</h4>
+        <p>eCoaching · Student-Hub</p>
+      </a>
+      <a href="#" class="service-card" style="--card-color:var(--red-600);">
+        <div class="service-icon" style="background:var(--red-50);">❤️</div>
+        <h4>Healthcare</h4>
+        <p>eHealth · Telemedicine</p>
+      </a>
+      <a href="igovt.html" class="service-card" style="--card-color:var(--gold-500);">
+        <div class="service-icon" style="background:var(--gold-100);">🏛️</div>
+        <h4>Government</h4>
+        <p>iGovt-Service · eGovtJob</p>
+      </a>
+      <a href="#" class="service-card" style="--card-color:#993556;">
+        <div class="service-icon" style="background:#FBEAF0;">🛒</div>
+        <h4>Commerce</h4>
+        <p>eMarket · iSell · Bulk</p>
+      </a>
+      <a href="#" class="service-card" style="--card-color:var(--teal-600);">
+        <div class="service-icon" style="background:var(--teal-50);">💰</div>
+        <h4>Finance</h4>
+        <p>iFinance · iPay · iFinSvc</p>
+      </a>
+      <a href="#" class="service-card" style="--card-color:var(--purple-600);">
+        <div class="service-icon" style="background:var(--purple-50);">✈️</div>
+        <h4>Travel</h4>
+        <p>iTravel · iBus · CorpTour</p>
+      </a>
+    </div>
+    <div class="text-center" style="margin-top:32px;">
+      <a href="services.html" class="btn btn-outline">View all 20+ services →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ═══════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Simple process</span>
+      <h2>Simple Process for Every Villager</h2>
+      <p>Get any service done from your village — no need to travel to cities</p>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0;position:relative;">
+      <div style="position:absolute;top:22px;left:10%;right:10%;height:2px;background:var(--border);z-index:0;"></div>
+      <div class="step-item">
+        <div class="step-circle" style="background:var(--purple-700);">1</div>
+        <h4 style="font-family:var(--font-display);font-size:0.88rem;margin-bottom:4px;">Visit iGram Hub</h4>
+        <p style="font-size:0.78rem;">Online or at your local iGram Centre</p>
+      </div>
+      <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+      <div class="step-item">
+        <div class="step-circle" style="background:var(--purple-600);">2</div>
+        <h4 style="font-family:var(--font-display);font-size:0.88rem;margin-bottom:4px;">Submit Documents</h4>
+        <p style="font-size:0.78rem;">Upload required files online</p>
+      </div>
+      <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+      <div class="step-item">
+        <div class="step-circle" style="background:var(--gold-500);">3</div>
+        <h4 style="font-family:var(--font-display);font-size:0.88rem;margin-bottom:4px;">Team Processes</h4>
+        <p style="font-size:0.78rem;">Our team handles your application</p>
+      </div>
+      <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+      <div class="step-item">
+        <div class="step-circle" style="background:var(--teal-600);">4</div>
+        <h4 style="font-family:var(--font-display);font-size:0.88rem;margin-bottom:4px;">Get Updates</h4>
+        <p style="font-size:0.78rem;">WhatsApp / SMS notifications</p>
+      </div>
+      <div style="flex:1;height:2px;background:var(--border);margin-top:22px;z-index:0;"></div>
+      <div class="step-item">
+        <div class="step-circle" style="background:var(--green-600);">5</div>
+        <h4 style="font-family:var(--font-display);font-size:0.88rem;margin-bottom:4px;">Service Delivered</h4>
+        <p style="font-size:0.78rem;">Certificate or result issued</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURED SERVICES ═══════════════════════ -->
+<section class="section" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Featured modules</span>
+      <h2>Most Used Services</h2>
+    </div>
+    <div class="grid-3">
+      <!-- AgriUber -->
+      <div class="card" style="overflow:hidden;">
+        <div style="background:var(--green-50);padding:20px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:8px;">🚜</div>
+          <span class="pill pill-green">Agriculture</span>
+        </div>
+        <div class="card-p">
+          <h3 style="color:var(--green-700);margin-bottom:8px;">AgriUber</h3>
+          <p style="margin-bottom:14px;">Book tractors, harvesters & farm equipment instantly. Hire or list your machine.</p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+            <span class="pill pill-green" style="font-size:0.72rem;">Book Equipment</span>
+            <span class="pill pill-green" style="font-size:0.72rem;">Register Machine</span>
+          </div>
+          <a href="agriuber.html" class="btn btn-green" style="width:100%;justify-content:center;">Explore AgriUber →</a>
+        </div>
+      </div>
+      <!-- iGovt -->
+      <div class="card" style="overflow:hidden;">
+        <div style="background:var(--gold-100);padding:20px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:8px;">🏛️</div>
+          <span class="pill pill-gold">Government</span>
+        </div>
+        <div class="card-p">
+          <h3 style="color:var(--gold-600);margin-bottom:8px;">iGovt-Service</h3>
+          <p style="margin-bottom:14px;">PM-Kisan, Aadhaar, ration card, land records, scholarships & 20+ govt schemes.</p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+            <span class="pill pill-gold" style="font-size:0.72rem;">Telangana</span>
+            <span class="pill pill-gold" style="font-size:0.72rem;">Maharashtra</span>
+          </div>
+          <a href="igovt.html" class="btn btn-gold" style="width:100%;justify-content:center;">Apply for Services →</a>
+        </div>
+      </div>
+      <!-- eHealth -->
+      <div class="card" style="overflow:hidden;">
+        <div style="background:var(--red-50);padding:20px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:8px;">🏥</div>
+          <span class="pill pill-red">Healthcare</span>
+        </div>
+        <div class="card-p">
+          <h3 style="color:var(--red-600);margin-bottom:8px;">eHealth</h3>
+          <p style="margin-bottom:14px;">Telemedicine, Ayushman Bharat, health card, hospital appointment booking.</p>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+            <span class="pill pill-red" style="font-size:0.72rem;">Teleconsult</span>
+            <span class="pill pill-red" style="font-size:0.72rem;">Health Card</span>
+          </div>
+          <a href="#" class="btn" style="background:var(--red-600);color:white;width:100%;justify-content:center;">Book Appointment →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MITRA CTA ═══════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;position:relative;z-index:1;">
+        <div>
+          <span style="font-size:0.72rem;font-weight:700;color:var(--gold-200);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:8px;">EARN & GROW</span>
+          <h2 style="color:var(--white);margin-bottom:12px;font-size:1.8rem;">Become an iGram Mitra</h2>
+          <p style="color:var(--purple-100);max-width:500px;margin-bottom:20px;">
+            Start your own village digital service centre. Help farmers, students & families access government services, banking and education — while earning a commission on every service.
+          </p>
+          <div style="display:flex;gap:20px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.83rem;color:var(--teal-100);">✅ No upfront investment</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.83rem;color:var(--teal-100);">✅ Training provided</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.83rem;color:var(--teal-100);">✅ Earn every service</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;min-width:180px;">
+          <a href="become-mitra.html" class="btn btn-gold btn-lg" style="justify-content:center;">Apply as Mitra</a>
+          <a href="#" class="btn btn-outline-white btn-lg" style="justify-content:center;">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY iGRAM ═══════════════════════════════ -->
+<section class="section" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Why iGram?</span>
+      <h2>Why Choose iGram Digital Hub?</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card why-card">
+        <div class="why-icon" style="background:var(--blue-50);">📍</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:6px;">Village-level access</h4>
+        <p style="font-size:0.85rem;">No need to travel to cities. Services delivered at your local iGram Centre.</p>
+      </div>
+      <div class="card why-card">
+        <div class="why-icon" style="background:var(--purple-50);">🌐</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:6px;">Local language support</h4>
+        <p style="font-size:0.85rem;">Telugu, Hindi, Marathi & English — serving every citizen comfortably.</p>
+      </div>
+      <div class="card why-card">
+        <div class="why-icon" style="background:var(--green-50);">🛡️</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:6px;">Government-backed trust</h4>
+        <p style="font-size:0.85rem;">Verified workflows ensuring authentic, government-compliant service delivery.</p>
+      </div>
+      <div class="card why-card">
+        <div class="why-icon" style="background:var(--gold-100);">💰</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:6px;">Affordable pricing</h4>
+        <p style="font-size:0.85rem;">Transparent, economical charges accessible to every income level.</p>
+      </div>
+      <div class="card why-card">
+        <div class="why-icon" style="background:var(--purple-50);">🤖</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:6px;">AI helpdesk (ai.Sathi)</h4>
+        <p style="font-size:0.85rem;">24/7 AI assistant in your language for every service query.</p>
+      </div>
+      <div class="card why-card">
+        <div class="why-icon" style="background:var(--blue-50);">📱</div>
+        <h4 style="font-family:var(--font-display);margin-bottom:6px;">Mobile-first design</h4>
+        <p style="font-size:0.85rem;">Works on any smartphone, even on low-bandwidth village networks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Real stories</span>
+      <h2>What People Are Saying</h2>
+    </div>
+    <div class="grid-3">
+      <div class="testimonial-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div class="t-avatar" style="background:var(--green-50);color:var(--green-700);">RK</div>
+          <div>
+            <p style="font-size:0.9rem;font-weight:600;color:var(--text-dark);margin:0;">Ravi Kumar</p>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Farmer · Nalgonda</p>
+          </div>
+        </div>
+        <p style="font-size:0.88rem;font-style:italic;margin-bottom:12px;">"Booked a tractor within minutes using AgriUber. Saved half a day of travel to town. Very easy to use even on my basic phone."</p>
+        <div class="stars">★★★★★</div>
+      </div>
+      <div class="testimonial-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div class="t-avatar" style="background:var(--purple-50);color:var(--purple-700);">PS</div>
+          <div>
+            <p style="font-size:0.9rem;font-weight:600;color:var(--text-dark);margin:0;">Priya Shinde</p>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Student · Pune District</p>
+          </div>
+        </div>
+        <p style="font-size:0.88rem;font-style:italic;margin-bottom:12px;">"Got my scholarship application submitted without visiting any office. iGram Mitra helped me every step of the way in Marathi."</p>
+        <div class="stars">★★★★★</div>
+      </div>
+      <div class="testimonial-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div class="t-avatar" style="background:var(--gold-100);color:var(--gold-700);">MR</div>
+          <div>
+            <p style="font-size:0.9rem;font-weight:600;color:var(--text-dark);margin:0;">Mohammed Rafi</p>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">iGram Mitra · Warangal</p>
+          </div>
+        </div>
+        <p style="font-size:0.88rem;font-style:italic;margin-bottom:12px;">"Running my own iGram Centre for 6 months. Earning more than my previous job and helping 50+ families every month."</p>
+        <div class="stars">★★★★★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer injected here -->
+
+<!-- ══ PUBLIC REQUEST & CONTACT (no account needed) ══ -->
+<section class="section" id="request-contact" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">No account needed</span>
+      <h2>Request a Service or Contact Us</h2>
+      <p>Anyone can send a request or message — no signup needed. To book equipment, apply for services and track everything, <a href="signin.html" style="color:var(--purple-700);font-weight:600;">create a free account</a>.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;" class="grid-2">
+
+      <!-- Service Request Form -->
+      <div class="card card-p" style="border-color:var(--purple-200);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <div style="width:40px;height:40px;background:var(--purple-50);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📋</div>
+          <h3 style="font-family:var(--font-display);color:var(--purple-800);">Service Request Form</h3>
+        </div>
+        <form id="publicRequestForm" onsubmit="submitPublicRequest(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group"><label class="form-label">Your name *</label><input type="text" id="rqName" class="form-control" placeholder="Full name" required></div>
+            <div class="form-group"><label class="form-label">Mobile *</label><input type="tel" id="rqPhone" class="form-control" placeholder="+91 XXXXX XXXXX" required></div>
+            <div class="form-group"><label class="form-label">Village</label><input type="text" id="rqVillage" class="form-control" placeholder="Village"></div>
+            <div class="form-group"><label class="form-label">District</label><input type="text" id="rqDistrict" class="form-control" placeholder="District, State"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Which service do you need? *</label>
+            <select class="form-control" id="rqService" required>
+              <option value="">Select service</option>
+              <option>AgriUber — Equipment Booking</option>
+              <option>iGovt — Government Service</option>
+              <option>eHealth — Healthcare</option>
+              <option>Banking / Finance Help</option>
+              <option>Education / Scholarship</option>
+              <option>Become iGram Mitra</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Message</label><textarea class="form-control" id="rqMessage" placeholder="Tell us what you need..." style="height:70px;resize:none;"></textarea></div>
+          <button type="submit" class="btn btn-primary btn-lg" id="rqBtn" style="width:100%;justify-content:center;">📨 Send Request</button>
+        </form>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="card card-p" style="border-color:var(--gold-400);">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <div style="width:40px;height:40px;background:var(--gold-100);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">✉️</div>
+          <h3 style="font-family:var(--font-display);color:var(--gold-700);">Contact Us</h3>
+        </div>
+        <form id="publicContactForm" onsubmit="submitPublicContact(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group"><label class="form-label">Your name *</label><input type="text" id="ctName" class="form-control" placeholder="Full name" required></div>
+            <div class="form-group"><label class="form-label">Mobile *</label><input type="tel" id="ctPhone" class="form-control" placeholder="+91 XXXXX XXXXX" required></div>
+          </div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" id="ctEmail" class="form-control" placeholder="your@email.com"></div>
+          <div class="form-group"><label class="form-label">Subject</label><input type="text" id="ctSubject" class="form-control" placeholder="What is this about?"></div>
+          <div class="form-group"><label class="form-label">Message *</label><textarea class="form-control" id="ctMessage" placeholder="Your message..." style="height:70px;resize:none;" required></textarea></div>
+          <button type="submit" class="btn btn-gold btn-lg" id="ctBtn" style="width:100%;justify-content:center;">✉️ Send Message</button>
+          <p style="font-size:.78rem;color:var(--text-muted);text-align:center;margin-top:10px;">Or WhatsApp directly: <a href="https://wa.me/918106442080" target="_blank" style="color:var(--green-600);font-weight:600;">8106442080</a></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Account required banner -->
+    <div style="margin-top:28px;background:var(--purple-800);border-radius:var(--radius-xl);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+      <div>
+        <p style="font-weight:700;color:white;font-family:var(--font-display);font-size:1.05rem;margin-bottom:4px;">🔐 Full services need a free account</p>
+        <p style="font-size:.85rem;color:var(--purple-100);">Booking equipment, applying for government services, and all dashboards require sign in — as Public User, iGram Mitra, Service Provider or Admin.</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a href="signin.html" class="btn btn-gold">Create Free Account</a>
+        <a href="signin.html" class="btn btn-outline-white">Portal Login</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+async function submitPublicRequest(e) {
+  e.preventDefault();
+  const btn = document.getElementById('rqBtn');
+  btn.disabled = true; btn.textContent = '⏳ Sending...';
+  try {
+    const res = await fetch('/api/requests', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: document.getElementById('rqName').value,
+        phone: document.getElementById('rqPhone').value,
+        village: document.getElementById('rqVillage').value,
+        district: document.getElementById('rqDistrict').value,
+        service: document.getElementById('rqService').value,
+        message: document.getElementById('rqMessage').value
+      })
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Failed');
+    showToast('✅ ' + json.message);
+    e.target.reset();
+  } catch (err) { showToast('Error: ' + err.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = '📨 Send Request'; }
+}
+
+async function submitPublicContact(e) {
+  e.preventDefault();
+  const btn = document.getElementById('ctBtn');
+  btn.disabled = true; btn.textContent = '⏳ Sending...';
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: document.getElementById('ctName').value,
+        phone: document.getElementById('ctPhone').value,
+        email: document.getElementById('ctEmail').value,
+        subject: document.getElementById('ctSubject').value,
+        message: document.getElementById('ctMessage').value
+      })
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Failed');
+    showToast('✅ ' + json.message);
+    e.target.reset();
+  } catch (err) { showToast('Error: ' + err.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = '✉️ Send Message'; }
+}
+</script>
+
+<div id="site-footer">
+<footer class="footer">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div class="brand-icon">📡</div>
+          <h3 style="font-size:1.2rem;">iGram Digital</h3>
+        </div>
+        <p style="font-size:0.85rem;line-height:1.7;margin-bottom:16px;">One Village. One Hub. Unlimited Opportunities.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:0.83rem;">
+          <span>📞 8106442080</span>
+          <span>✉️ igram.hub@gmail.com</span>
+          <span>🌐 igram.digital</span>
+        </div>
+      </div>
+      <div>
+        <p class="footer-heading">Quick Links</p>
+        <a href="become-mitra.html" class="footer-link">Apply iGram Mitra</a>
+        <a href="services.html" class="footer-link">All Services</a>
+        <a href="signin.html" class="footer-link">Sign In / Register</a>
+        <a href="signin.html" class="footer-link">Portal Login</a>
+      </div>
+      <div>
+        <p class="footer-heading">Our Services</p>
+        <a href="agriuber.html" class="footer-link">AgriUber</a>
+        <a href="igovt.html" class="footer-link">iGovt-Service</a>
+        <a href="#" class="footer-link">eHealth</a>
+        <a href="#" class="footer-link">iFinance</a>
+        <a href="#" class="footer-link">eJobs</a>
+      </div>
+      <div>
+        <p class="footer-heading">Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+          <button onclick="showToast('Language: English')" style="padding:5px 12px;background:var(--purple-700);color:white;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">EN</button>
+          <button onclick="showToast('Language: Telugu')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">TE</button>
+          <button onclick="showToast('Language: Hindi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">HI</button>
+          <button onclick="showToast('Language: Marathi')" style="padding:5px 12px;background:rgba(255,255,255,0.08);color:#9988CC;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;font-family:inherit;">MR</button>
+        </div>
+        <p class="footer-heading">Support</p>
+        <a href="https://wa.me/918106442080" target="_blank" class="footer-link">WhatsApp Us</a>
+        <a href="#" class="footer-link">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container flex-between" style="flex-wrap:wrap;gap:8px;">
+      <span>© 2025 iGram Digital Hub. All Rights Reserved.</span>
+      <span>Made for rural India 🇮🇳</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+
+<script>
+function showToast(msg, type) {
+  let t = document.getElementById('globalToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'globalToast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--purple-700);color:#fff;padding:14px 20px;border-radius:10px;font-size:0.88rem;font-weight:500;box-shadow:0 8px 32px rgba(60,52,137,0.3);transform:translateY(100px);opacity:0;transition:0.4s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;gap:10px;max-width:340px;font-family:inherit;';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = '✅ ' + msg;
+  t.style.background = type === 'error' ? 'var(--red-600)' : 'var(--purple-700)';
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.transform = 'translateY(100px)'; t.style.opacity = '0'; }, 3500);
+}
+
+// Active nav link
+document.addEventListener('DOMContentLoaded', function() {
+  var page = document.body.dataset.page;
+  document.querySelectorAll('.nav-link[data-page]').forEach(function(l) {
+    if (l.dataset.page === page) l.classList.add('active');
+  });
+
+  // Counter animation
+  var statsEl = document.querySelector('.stats-strip');
+  if (statsEl) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('[data-count]').forEach(function(el) {
+            var target = parseInt(el.dataset.count);
+            var suffix = el.dataset.suffix || '';
+            var start = performance.now();
+            var dur = 1800;
+            function update(now) {
+              var p = Math.min((now - start) / dur, 1);
+              var e = 1 - Math.pow(1 - p, 3);
+              el.textContent = Math.floor(e * target) + suffix;
+              if (p < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+          });
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    obs.observe(statsEl);
+  }
+
+  // ai.Sathi widget (safe build)
+  if (!document.getElementById('aiWidget')) {
+    var widget = document.createElement('div');
+    widget.id = 'aiWidget';
+    widget.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:998;';
+    var tip = document.createElement('div');
+    tip.id = 'aiTooltip';
+    tip.style.cssText = 'position:absolute;bottom:70px;right:0;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(60,52,137,0.16);padding:14px 16px;width:220px;border:1px solid #E8E4F0;font-size:0.83rem;color:#4A4A6A;transform:scale(0.9) translateY(8px);opacity:0;transition:0.22s ease;pointer-events:none;';
+    tip.innerHTML = '<strong style="display:block;color:#3C3489;margin-bottom:4px;">ai.Sathi Help Desk</strong><span style="color:#3B6D11;font-size:0.75rem;font-weight:500;">Online</span><p style="margin-top:6px;">Namaste! Ask anything in Telugu, Hindi, Marathi or English.</p>';
+    var btn = document.createElement('button');
+    btn.id = 'aiBtn';
+    btn.textContent = 'AI';
+    btn.style.cssText = 'width:58px;height:58px;border-radius:50%;background:#3C3489;color:#fff;font-size:18px;font-weight:700;box-shadow:0 8px 32px rgba(60,52,137,0.3);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;';
+    btn.onclick = function() {
+      var show = tip.style.opacity === '0' || !tip.style.opacity;
+      tip.style.opacity = show ? '1' : '0';
+      tip.style.transform = show ? 'scale(1) translateY(0)' : 'scale(0.9) translateY(8px)';
+      tip.style.pointerEvents = show ? 'all' : 'none';
+    };
+    widget.appendChild(tip);
+    widget.appendChild(btn);
+    document.body.appendChild(widget);
+    setTimeout(function() {
+      tip.style.opacity = '1'; tip.style.transform = 'scale(1) translateY(0)'; tip.style.pointerEvents = 'all';
+    }, 2500);
+  }
+});
+</script>
+</body>
+</html>

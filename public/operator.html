@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGram Operator Portal</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dashboard.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--purple-700:#3C3489;--gold-600:#BA7517;}
+body{margin:0;font-family:'DM Sans',sans-serif;background:#F4F3FA;display:flex;min-height:100vh;}
+.side{width:230px;background:var(--purple-700);color:#fff;flex-shrink:0;display:flex;flex-direction:column;}
+.side h1{font-family:'Syne',sans-serif;font-size:1.05rem;padding:18px 16px;margin:0;border-bottom:1px solid rgba(255,255,255,.15);}
+.menu{flex:1;overflow-y:auto;padding:8px 0;}
+.mi{display:block;padding:11px 16px;color:#D9D5F2;cursor:pointer;font-size:.9rem;border-left:3px solid transparent;}
+.mi:hover,.mi.on{background:rgba(255,255,255,.08);color:#fff;border-left-color:#BA7517;}
+.mcap{padding:12px 16px 4px;font-size:.68rem;letter-spacing:1px;color:#9B94D6;text-transform:uppercase;}
+.main{flex:1;padding:22px;overflow-x:hidden;}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.top h2{font-family:'Syne',sans-serif;color:#2A2550;margin:0;font-size:1.25rem;}
+.card{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(60,52,137,.07);padding:18px;margin-bottom:16px;}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+.kpi{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 10px rgba(60,52,137,.07);}
+.kpi .v{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;color:var(--purple-700);}
+.kpi .l{font-size:.78rem;color:#777;}
+table{width:100%;border-collapse:collapse;font-size:.84rem;}
+th{text-align:left;padding:9px 10px;color:#777;font-weight:600;border-bottom:2px solid #EEE;font-size:.75rem;text-transform:uppercase;}
+td{padding:9px 10px;border-bottom:1px solid #F2F0FA;}
+.btn{border:none;border-radius:8px;padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.bp{background:var(--purple-700);color:#fff;}.bg{background:#3B6D11;color:#fff;}.bo{background:#fff;border:1.5px solid var(--purple-700);color:var(--purple-700);}.bgo{background:var(--gold-600);color:#fff;}.br{background:#FDECEC;color:#C0392B;}
+.btn.sm{padding:5px 10px;font-size:.75rem;}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600;}
+.st-open{background:#FFF4E0;color:#B07207;}.st-run{background:#E8F0FE;color:#2456C4;}.st-done{background:#E8F5E8;color:#2E7D32;}.st-bad{background:#FDECEC;color:#C0392B;}
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.svc-btn{background:#fff;border:1.5px solid #E6E2F5;border-radius:12px;padding:14px 12px;cursor:pointer;text-align:left;transition:.15s;}
+.svc-btn:hover{border-color:var(--purple-700);box-shadow:0 4px 14px rgba(60,52,137,.12);}
+.svc-btn .code{font-size:.68rem;color:var(--gold-600);font-weight:700;}
+.svc-btn .nm{font-weight:600;font-size:.86rem;color:#2A2550;margin-top:2px;}
+.catcap{font-family:'Syne',sans-serif;color:#2A2550;font-size:.95rem;margin:18px 0 8px;}
+.modal{display:none;position:fixed;inset:0;background:rgba(20,15,50,.55);z-index:999;align-items:center;justify-content:center;padding:16px;}
+.mbox{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;}
+.mhead{background:var(--purple-700);color:#fff;padding:16px 22px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;}
+.mhead h3{margin:0;font-family:'Syne',sans-serif;font-size:1rem;}
+.mbody{padding:20px 22px;}
+.fg{margin-bottom:12px;}
+.fl{display:block;font-size:.78rem;font-weight:600;color:#555;margin-bottom:5px;}
+.fc{width:100%;padding:9px 12px;border:1.5px solid #E0DCF0;border-radius:8px;font-size:.87rem;font-family:'DM Sans',sans-serif;box-sizing:border-box;}
+.fc:focus{outline:none;border-color:var(--purple-700);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.toast{position:fixed;bottom:22px;right:22px;z-index:9999;color:#fff;padding:13px 18px;border-radius:10px;font-size:.86rem;font-weight:500;box-shadow:0 8px 30px rgba(60,52,137,.35);opacity:0;transition:.3s;max-width:340px;background:var(--purple-700);}
+@media(max-width:820px){.side{width:64px;}.side h1{font-size:.7rem;padding:12px 6px;}.mi{padding:11px 8px;font-size:.68rem;}.mcap{display:none;}}
+</style>
+</head>
+<body>
+<script src="auth.js"></script>
+<script src="locations-ui.js"></script>
+
+<div class="side">
+  <h1>📡 iGram Operator</h1>
+  <div class="menu" id="menu"></div>
+  <div style="padding:14px 16px;border-top:1px solid rgba(255,255,255,.15);font-size:.78rem;">
+    <div id="whoami" style="margin-bottom:8px;color:#D9D5F2;"></div>
+    <button class="btn bo" style="width:100%;background:transparent;color:#fff;border-color:rgba(255,255,255,.4);" onclick="igramLogout()">Logout</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="top"><h2 id="ptitle">Dashboard</h2><span id="hubTag" class="pill st-run" style="display:none;"></span></div>
+  <div id="content"></div>
+</div>
+
+<!-- Universal Service Request modal -->
+<div class="modal" id="reqModal"><div class="mbox">
+  <div class="mhead"><h3 id="reqTitle">New Service Request</h3><button onclick="hide('reqModal')" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">×</button></div>
+  <div class="mbody">
+    <div class="fg"><label class="fl">Customer *</label>
+      <div style="display:flex;gap:8px;"><input class="fc" id="rqCustQ" placeholder="Search name / phone / CUST-ID"><button class="btn bp" onclick="searchCustForReq()">Search</button></div>
+      <div id="rqCustList" style="margin-top:8px;"></div>
+      <input type="hidden" id="rqCustId">
+      <p id="rqCustSel" style="font-size:.8rem;color:#2E7D32;margin:6px 0 0;display:none;"></p>
+    </div>
+    <div id="rqFields"></div>
+    <div class="row2">
+      <div class="fg"><label class="fl">Amount (₹)</label><input class="fc" id="rqAmount" type="number" value="0"></div>
+      <div class="fg"><label class="fl">Priority</label><select class="fc" id="rqPriority"><option>Normal</option><option>High</option><option>Urgent</option></select></div>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fc" id="rqNotes" style="height:54px;"></textarea></div>
+    <button class="btn bg" style="width:100%;" id="rqSubmit" onclick="submitRequest()">Submit Request</button>
+  </div>
+</div></div>
+
+<!-- New Customer modal -->
+<div class="modal" id="custModal"><div class="mbox">
+  <div class="mhead"><h3>➕ Register Customer</h3><button onclick="hide('custModal')" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">×</button></div>
+  <div class="mbody">
+    <div class="row2">
+      <div class="fg"><label class="fl">Full name *</label><input class="fc" id="ncName"></div>
+      <div class="fg"><label class="fl">Mobile *</label><input class="fc" id="ncPhone" maxlength="10"></div>
+      <div class="fg"><label class="fl">State</label><select class="fc" id="ncState"></select></div>
+      <div class="fg"><label class="fl">District</label><select class="fc" id="ncDistrict"></select></div>
+      <div class="fg"><label class="fl">Taluka</label><select class="fc" id="ncTaluka"></select></div>
+      <div class="fg"><label class="fl">Village</label><input class="fc" id="ncVillage"></div>
+    </div>
+    <button class="btn bp" style="width:100%;" onclick="createCustomer()">Register Customer</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ Role-gated unified portal (GR-01: ONE portal, menus by role) ═══
+const ME = igramRequireRole ? (function(){
+  const u = igramUser(); const t = igramToken();
+  if(!t||!u){ location.replace('signin.html?next=operator.html'); return null; }
+  if(u.role==='user'){ location.replace('user-dashboard.html'); return null; }
+  return u;
+})() : null;
+
+const IS_HUB = ME && (ME.role==='hub_manager'||ME.role==='admin');
+const IS_HQ  = ME && ME.role==='admin';
+
+// ── Service-specific form fields per M08.1 register ──
+const SVC_FIELDS = {
+  'AGR-01':[['equipment','Equipment','select',['Tractor','Rotavator','Drone Spray','Harvester','Boom Sprayer','Thresher','Seed Drill','Power Tiller']],['date','Service date','date'],['land','Land size','text'],['crop','Crop','text']],
+  'AGR-02':[['crop','Crop','text'],['area','Area (acres)','text'],['stage','Crop stage','text']],
+  'AGR-03':[['purpose','Purpose','select',['Spraying','Survey','Mapping']],['date','Date','date'],['area','Area','text']],
+  'AGR-04':[['sample_type','Sample type','select',['Soil','Water']],['plots','No. of plots','text']],
+  'HLT-01':[['symptom','Symptoms','text'],['pref_time','Preferred time','text'],['doctor_type','Doctor type','select',['General','Gynae','Child','Skin','Ortho']]],
+  'HLT-02':[['record_type','Record type','select',['New record','Update','View request']]],
+  'HLT-03':[['test','Test required','text'],['home_pickup','Home sample pickup','select',['Yes','No']]],
+  'HLT-04':[['medicines','Medicines / Rx details','text'],['delivery','Delivery','select',['Hub pickup','Home delivery']]],
+  'JOB-01':[['qualification','Qualification','text'],['experience','Experience (yrs)','text'],['sector','Preferred sector','text']],
+  'JOB-02':[['job_ref','Job / vacancy ref','text'],['resume','Resume available','select',['Yes','Need help']]],
+  'JOB-03':[['company','Company name','text'],['openings','No. of openings','text'],['role_title','Role','text']],
+  'EDU-01':[['student_name','Student name','text'],['class','Class / Course','text'],['school','School / College','text']],
+  'EDU-02':[['course','Course applying','text'],['institute','Institute','text']],
+  'EDU-03':[['scheme','Scholarship scheme','text'],['class','Class / Year','text']],
+  'EDU-04':[['subject','Subject / Course','text'],['mode','Mode','select',['Online','At hub','Home']]],
+  'FIN-01':[['txn_type','Transaction','select',['Cash withdrawal (AePS)','Deposit','Balance enquiry','Money transfer']],['amount_req','Amount','text']],
+  'FIN-02':[['policy_type','Insurance type','select',['Crop','Health','Life','Vehicle']],['details','Details','text']],
+  'FIN-03':[['scheme','Pension scheme','text'],['id_no','ID number','text']],
+  'FIN-04':[['loan_type','Loan type','select',['KCC','Mudra','Personal','SHG']],['amount_req','Amount needed','text']],
+  'GOV-01':[['service','Service','select',['PM-Kisan','Aadhaar Update','Ration Card','Pension','Caste Certificate','Income Certificate','Land Records']],['id_details','ID details','text']],
+  'GOV-02':[['certificate','Certificate','select',['Caste','Income','Residence','Birth','Death']],['purpose','Purpose','text']],
+  'MKT-01':[['items','Items to order','text'],['delivery','Delivery','select',['Hub pickup','Home delivery']]],
+  'WHS-01':[['items','Bulk items','text'],['qty','Quantity','text'],['shop','Shop name','text']],
+  'LOG-01':[['pickup','Pickup address','text'],['drop','Drop address','text'],['weight','Approx weight','text']],
+  'TEL-01':[['tel_service','Service','select',['New SIM','Recharge','Port','DTH recharge']],['operator','Operator','text']],
+  'TRV-01':[['from_place','From','text'],['to_place','To','text'],['travel_date','Date','date'],['mode','Mode','select',['Bus','Train','Flight']]],
+  'PRT-01':[['job_type','Job','select',['Print','Scan','Xerox','Lamination','Photo']],['pages','Pages / copies','text']],
+  'PRO-01':[['profession','Professional needed','select',['Advocate','CA','Engineer','Architect','Consultant']],['brief','Work brief','text']],
+  'CNT-01':[['work_type','Work','select',['Design','Content writing','Data entry','Translation','Video']],['brief','Brief','text']],
+  'AIH-01':[['query','Question / help needed','text'],['language','Language','select',['Telugu','Hindi','Marathi','English']]]
+};
+
+let SERVICES = [], curService = null;
+
+function toast(m,err){const t=document.getElementById('toast');t.textContent=m;t.style.background=err?'#C0392B':'var(--purple-700)';t.style.opacity=1;setTimeout(()=>t.style.opacity=0,3200);}
+function show(id){document.getElementById(id).style.display='flex';}
+function hide(id){document.getElementById(id).style.display='none';}
+function stPill(s){const done=['COMPLETED','PAID','CLOSED','APPROVED'],bad=['REJECTED','CANCELLED','FAILED'],run=['IN_PROGRESS','ASSIGNED','VALIDATED'];const c=done.includes(s)?'st-done':bad.includes(s)?'st-bad':run.includes(s)?'st-run':'st-open';return `<span class="pill ${c}">${s}</span>`;}
+
+// ── Menu (role-gated) ──
+const MENUS = [
+  ['cap','Operations'],
+  ['dashboard','📊 Dashboard'],
+  ['customers','👥 Customers'],
+  ['newservice','🧭 New Service'],
+  ['requests','🗂️ Requests'],
+  ['payments','💰 Payments'],
+];
+if (IS_HUB) MENUS.push(['cap','Hub Manager'],['hub','🏢 Hub Overview'],['approvals','✅ Approvals']);
+if (IS_HQ) MENUS.push(['cap','HQ Admin'],['webhooks','🤖 AI Agent / n8n'],['audit','📜 Audit Log'],['adminerp','🛠️ Admin ERP →']);
+
+function renderMenu(){
+  document.getElementById('menu').innerHTML = MENUS.map(m =>
+    m[0]==='cap' ? `<div class="mcap">${m[1]}</div>` :
+    `<a class="mi" id="mi-${m[0]}" onclick="go('${m[0]}')">${m[1]}</a>`).join('');
+}
+function go(p){
+  if(p==='adminerp'){ location.href='admin-erp.html'; return; }
+  document.querySelectorAll('.mi').forEach(e=>e.classList.remove('on'));
+  const mi=document.getElementById('mi-'+p); if(mi) mi.classList.add('on');
+  PAGES[p]();
+}
+const C = () => document.getElementById('content');
+const T = t => document.getElementById('ptitle').textContent = t;
+
+// ═══ PAGES ═══
+const PAGES = {
+
+async dashboard(){
+  T('Dashboard');
+  C().innerHTML='<div class="card">Loading...</div>';
+  try{
+    const { summary } = await igramApi('GET','/api/dashboard/summary');
+    const by = summary.by_status.map(s=>`<tr><td>${stPill(s.status)}</td><td style="text-align:right;font-weight:600;">${s.c}</td></tr>`).join('');
+    C().innerHTML = `
+      <div class="kgrid">
+        <div class="kpi"><div class="v">${summary.total_customers}</div><div class="l">Customers</div></div>
+        <div class="kpi"><div class="v">${summary.total_requests}</div><div class="l">Total Requests</div></div>
+        <div class="kpi"><div class="v">${summary.open_requests}</div><div class="l">Open</div></div>
+        <div class="kpi"><div class="v">${summary.completed}</div><div class="l">Completed</div></div>
+        <div class="kpi"><div class="v">₹${(summary.revenue||0).toLocaleString('en-IN')}</div><div class="l">Revenue</div></div>
+      </div>
+      <div class="card" style="margin-top:16px;"><h3 style="margin:0 0 10px;font-family:Syne,sans-serif;font-size:.95rem;">Requests by status</h3>
+      <table><thead><tr><th>Status</th><th style="text-align:right;">Count</th></tr></thead><tbody>${by||'<tr><td colspan=2>No requests yet</td></tr>'}</tbody></table></div>
+      <div class="card"><h3 style="margin:0 0 8px;font-family:Syne,sans-serif;font-size:.95rem;">Quick actions</h3>
+        <button class="btn bp" onclick="go('newservice')">🧭 New Service Request</button>
+        <button class="btn bgo" onclick="openNewCustomer()" style="margin-left:8px;">➕ Register Customer</button>
+      </div>`;
+  }catch(e){ C().innerHTML='<div class="card">'+e.message+'</div>'; }
+},
+
+async customers(){
+  T('Customer 360');
+  C().innerHTML = `<div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input class="fc" id="custQ" placeholder="Search name / phone / CUST-ID / village" style="flex:1;">
+      <button class="btn bp" onclick="loadCustomers()">Search</button>
+      <button class="btn bgo" onclick="openNewCustomer()">➕ New Customer</button>
+    </div>
+    <div id="custTable">Loading...</div></div>`;
+  loadCustomers();
+},
+
+async newservice(){
+  T('New Service — pick a service');
+  if(!SERVICES.length){ const r = await igramApi('GET','/api/services'); SERVICES=r.services; }
+  const cats = {};
+  SERVICES.forEach(s=>{ (cats[s.category]=cats[s.category]||[]).push(s); });
+  C().innerHTML = Object.keys(cats).map(cat=>`
+    <div class="catcap">${cat}</div>
+    <div class="svc-grid">${cats[cat].map(s=>`
+      <div class="svc-btn" onclick="openRequest('${s.service_code}')">
+        <div class="code">${s.service_code}</div><div class="nm">${s.name}</div>
+      </div>`).join('')}</div>`).join('');
+},
+
+async requests(){
+  T('Service Requests');
+  C().innerHTML='<div class="card" id="reqList">Loading...</div>';
+  try{
+    const { requests, lifecycle } = await igramApi('GET','/api/service-requests');
+    window._LIFE = lifecycle;
+    document.getElementById('reqList').innerHTML = requests.length ? `<table><thead><tr>
+      <th>Request</th><th>Service</th><th>Customer</th><th>District</th><th>Status</th><th>₹</th><th>Actions</th></tr></thead><tbody>
+      ${requests.map(r=>`<tr>
+        <td><code style="font-size:.72rem;">${r.Request_ID}</code></td>
+        <td>${r.title||r.service_code}</td>
+        <td>${r.customer_name}<br><span style="font-size:.72rem;color:#888;">${r.customer_phone}</span></td>
+        <td>${r.district||'-'}</td>
+        <td>${stPill(r.status)}</td>
+        <td>₹${r.amount||0}</td>
+        <td><div style="display:flex;gap:4px;flex-wrap:wrap;">
+          <select class="fc" style="width:150px;padding:5px;" id="st-${r.Request_ID}">${lifecycle.map(s=>`<option ${s===r.status?'selected':''}>${s}</option>`).join('')}</select>
+          <button class="btn bg sm" onclick="updStatus('${r.Request_ID}')">Update</button>
+          <button class="btn bgo sm" onclick="collectPay('${r.Request_ID}','${r.Customer_ID}',${r.amount||0})">💰 Collect</button>
+        </div></td></tr>`).join('')}</tbody></table>` : 'No requests yet. Use New Service to create one.';
+  }catch(e){ document.getElementById('reqList').textContent=e.message; }
+},
+
+async payments(){
+  T('Payments');
+  C().innerHTML='<div class="card">Use 💰 Collect on any request row to record a payment. Recent revenue shows on the Dashboard.</div>';
+  go('requests'); T('Payments — collect from Requests');
+},
+
+async hub(){
+  T('Hub Overview');
+  C().innerHTML='<div class="card">Loading...</div>';
+  try{
+    const o = await igramApi('GET','/api/hub/overview');
+    document.getElementById('hubTag').style.display=''; document.getElementById('hubTag').textContent='Hub: '+(o.hub_district||'All districts');
+    C().innerHTML = `
+      <div class="kgrid">
+        <div class="kpi"><div class="v">${o.team.filter(t=>t.role==='mitra').length}</div><div class="l">Mitras</div></div>
+        <div class="kpi"><div class="v">${o.team.filter(t=>t.role==='provider').length}</div><div class="l">Providers</div></div>
+        <div class="kpi"><div class="v">₹${(o.revenue||0).toLocaleString('en-IN')}</div><div class="l">Hub Revenue</div></div>
+      </div>
+      <div class="card" style="margin-top:16px;"><h3 style="margin:0 0 10px;font-family:Syne,sans-serif;font-size:.95rem;">Team</h3>
+      <table><thead><tr><th>Name</th><th>Role</th><th>Phone</th><th>Village</th><th>Status</th></tr></thead><tbody>
+      ${o.team.map(t=>`<tr><td>${t.name}</td><td>${t.role}</td><td>${t.phone}</td><td>${t.village||'-'}</td><td>${t.is_active?'<span class="pill st-done">Active</span>':'<span class="pill st-bad">Disabled</span>'}</td></tr>`).join('')||'<tr><td colspan=5>No team members yet</td></tr>'}</tbody></table></div>`;
+  }catch(e){ C().innerHTML='<div class="card">'+e.message+'</div>'; }
+},
+
+async approvals(){
+  T('Approvals — Hub decisions');
+  C().innerHTML='<div class="card" id="apprList">Loading...</div>';
+  try{
+    const { requests } = await igramApi('GET','/api/service-requests?status=SUBMITTED');
+    document.getElementById('apprList').innerHTML = requests.length ? `<table><thead><tr>
+      <th>Request</th><th>Service</th><th>Customer</th><th>Decision</th></tr></thead><tbody>
+      ${requests.map(r=>`<tr><td><code style="font-size:.72rem;">${r.Request_ID}</code></td><td>${r.title}</td><td>${r.customer_name}</td>
+      <td><div style="display:flex;gap:5px;">
+        <button class="btn bg sm" onclick="hubDecide('${r.Request_ID}','APPROVED')">Approve</button>
+        <button class="btn br sm" onclick="hubDecide('${r.Request_ID}','REJECTED')">Reject</button>
+        <button class="btn bo sm" onclick="hubDecide('${r.Request_ID}','ESCALATED')">Escalate</button>
+      </div></td></tr>`).join('')}</tbody></table>` : 'No requests awaiting approval (status SUBMITTED).';
+  }catch(e){ document.getElementById('apprList').textContent=e.message; }
+},
+
+async webhooks(){
+  T('AI Agent / n8n Webhooks');
+  C().innerHTML='<div class="card" id="whBox">Loading...</div>';
+  try{
+    const { webhooks, events } = await igramApi('GET','/api/admin/webhooks');
+    document.getElementById('whBox').innerHTML = `
+      <p style="font-size:.85rem;color:#666;margin-top:0;">Paste your n8n Webhook trigger URLs here. iGram will POST JSON to them on each event. Use <b>*</b> to receive all events.</p>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+        <select class="fc" id="whEvent" style="width:210px;">${events.map(e=>`<option>${e}</option>`).join('')}</select>
+        <input class="fc" id="whUrl" placeholder="https://your-n8n.app/webhook/xxxx" style="flex:1;min-width:220px;">
+        <button class="btn bp" onclick="addWebhook()">Add</button>
+        <button class="btn bo" onclick="testWebhook()">🔔 Test fire</button>
+      </div>
+      <table><thead><tr><th>Event</th><th>URL</th><th>Active</th><th></th></tr></thead><tbody>
+      ${webhooks.map(w=>`<tr><td><code>${w.event_code}</code></td><td style="word-break:break-all;font-size:.78rem;">${w.url}</td>
+        <td>${w.is_active?'<span class="pill st-done">On</span>':'<span class="pill st-bad">Off</span>'}</td>
+        <td><div style="display:flex;gap:4px;">
+          <button class="btn bo sm" onclick="toggleWebhook(${w.id},${w.is_active?0:1})">${w.is_active?'Disable':'Enable'}</button>
+          <button class="btn br sm" onclick="delWebhook(${w.id})">Delete</button>
+        </div></td></tr>`).join('')||'<tr><td colspan=4>No webhooks yet — add your n8n trigger link above.</td></tr>'}</tbody></table>
+      <div style="margin-top:14px;font-size:.78rem;color:#666;">
+        <b>Events fired:</b> CUSTOMER_CREATED · REQUEST_CREATED · STATUS_CHANGED · PAYMENT_COLLECTED · HUB_DECISION<br>
+        <b>Payload:</b> <code>{ "event": "...", "at": "ISO time", "data": { ... } }</code></div>`;
+  }catch(e){ document.getElementById('whBox').textContent=e.message; }
+},
+
+async audit(){
+  T('System Audit Log');
+  C().innerHTML='<div class="card" id="audBox">Loading...</div>';
+  try{
+    const { audit } = await igramApi('GET','/api/admin/audit');
+    document.getElementById('audBox').innerHTML = `<table><thead><tr><th>#</th><th>Event</th><th>Role</th><th>Entity</th><th>Detail</th><th>Time</th></tr></thead><tbody>
+      ${audit.map(a=>`<tr><td>${a.Audit_ID}</td><td><code>${a.event_code}</code></td><td>${a.actor_role||'-'}</td><td>${a.entity} ${a.entity_id}</td><td>${a.detail}</td><td style="font-size:.75rem;">${a.created_at}</td></tr>`).join('')||'<tr><td colspan=6>Empty</td></tr>'}</tbody></table>`;
+  }catch(e){ document.getElementById('audBox').textContent=e.message; }
+}
+};
+
+// ═══ Actions ═══
+async function loadCustomers(){
+  const q = document.getElementById('custQ') ? document.getElementById('custQ').value : '';
+  try{
+    const { customers } = await igramApi('GET','/api/customers'+(q?('?query='+encodeURIComponent(q)):''));
+    document.getElementById('custTable').innerHTML = customers.length ? `<table><thead><tr>
+      <th>Customer ID</th><th>Name</th><th>Phone</th><th>Location</th><th></th></tr></thead><tbody>
+      ${customers.map(c=>`<tr><td><code style="font-size:.72rem;">${c.Customer_ID}</code></td><td>${c.name}</td><td>${c.phone}</td>
+      <td>${c.village||''} ${c.district||''}</td>
+      <td><button class="btn bp sm" onclick="startReqFor('${c.Customer_ID}','${c.name.replace(/'/g,'')}')">+ Service</button></td></tr>`).join('')}</tbody></table>` : 'No customers found. Register one.';
+  }catch(e){ document.getElementById('custTable').textContent=e.message; }
+}
+
+async function openNewCustomer(){
+  show('custModal');
+  await igramSetupCascade('ncState','ncDistrict','ncTaluka');
+}
+async function createCustomer(){
+  const b={name:ncName.value,phone:ncPhone.value,state:ncState.value,district:ncDistrict.value,taluka:ncTaluka.value,village:ncVillage.value};
+  if(!b.name||!b.phone) return toast('Name and phone required',1);
+  try{
+    const r=await igramApi('POST','/api/customers',b);
+    toast(r.message); hide('custModal');
+    if(document.getElementById('custTable')) loadCustomers();
+  }catch(e){ toast(e.message,1); }
+}
+
+function startReqFor(cid,name){
+  go('newservice');
+  window._preCust = {cid,name};
+  toast('Now pick a service for '+name);
+}
+
+async function openRequest(code){
+  curService = SERVICES.find(s=>s.service_code===code);
+  document.getElementById('reqTitle').textContent = code+' — '+curService.name;
+  // build service-specific fields
+  const defs = SVC_FIELDS[code]||[['details','Details','text']];
+  document.getElementById('rqFields').innerHTML = defs.map(d=>{
+    if(d[2]==='select') return `<div class="fg"><label class="fl">${d[1]}</label><select class="fc" data-f="${d[0]}">${d[3].map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+    return `<div class="fg"><label class="fl">${d[1]}</label><input class="fc" type="${d[2]}" data-f="${d[0]}"></div>`;
+  }).join('');
+  document.getElementById('rqCustList').innerHTML='';
+  document.getElementById('rqCustSel').style.display='none';
+  document.getElementById('rqCustId').value='';
+  if(window._preCust){ selCust(window._preCust.cid, window._preCust.name); window._preCust=null; }
+  show('reqModal');
+}
+async function searchCustForReq(){
+  const q=document.getElementById('rqCustQ').value;
+  const { customers } = await igramApi('GET','/api/customers?query='+encodeURIComponent(q));
+  document.getElementById('rqCustList').innerHTML = customers.slice(0,5).map(c=>
+    `<div style="padding:7px 10px;border:1px solid #EEE;border-radius:8px;margin-top:5px;cursor:pointer;font-size:.83rem;" onclick="selCust('${c.Customer_ID}','${c.name.replace(/'/g,'')}')">${c.name} · ${c.phone} <code style="font-size:.68rem;">${c.Customer_ID}</code></div>`).join('')||'<p style="font-size:.8rem;color:#888;">No match. <a href="#" onclick="hide(\'reqModal\');openNewCustomer();return false;">Register new customer</a></p>';
+}
+function selCust(cid,name){
+  document.getElementById('rqCustId').value=cid;
+  const p=document.getElementById('rqCustSel'); p.style.display=''; p.textContent='✓ '+name+' ('+cid+')';
+  document.getElementById('rqCustList').innerHTML='';
+}
+async function submitRequest(){
+  const cid=document.getElementById('rqCustId').value;
+  if(!cid) return toast('Select a customer first',1);
+  const detail={};
+  document.querySelectorAll('#rqFields [data-f]').forEach(el=>detail[el.dataset.f]=el.value);
+  const btn=document.getElementById('rqSubmit'); btn.disabled=true; btn.textContent='Submitting...';
+  try{
+    const r=await igramApi('POST','/api/service-requests',{
+      Customer_ID:cid, service_code:curService.service_code, title:curService.name,
+      amount:Number(document.getElementById('rqAmount').value)||0,
+      priority:document.getElementById('rqPriority').value,
+      notes:document.getElementById('rqNotes').value, detail });
+    toast(r.message); hide('reqModal'); go('requests');
+  }catch(e){ toast(e.message,1); }
+  finally{ btn.disabled=false; btn.textContent='Submit Request'; }
+}
+async function updStatus(rid){
+  const status=document.getElementById('st-'+rid).value;
+  try{ await igramApi('PATCH','/api/service-requests/'+rid+'/status',{status}); toast(rid+' → '+status); go('requests'); }
+  catch(e){ toast(e.message,1); }
+}
+async function collectPay(rid,cid,amt){
+  const amount=prompt('Amount to collect (₹):', amt||'');
+  if(!amount) return;
+  try{ const r=await igramApi('POST','/api/payments',{Request_ID:rid,Customer_ID:cid,amount:Number(amount),method:'Cash'}); toast(r.message); go('requests'); }
+  catch(e){ toast(e.message,1); }
+}
+async function hubDecide(rid,decision){
+  try{ await igramApi('PATCH','/api/hub/requests/'+rid+'/decision',{decision}); toast(rid+' — '+decision); go('approvals'); }
+  catch(e){ toast(e.message,1); }
+}
+async function addWebhook(){
+  try{ await igramApi('POST','/api/admin/webhooks',{event_code:whEvent.value,url:whUrl.value}); toast('Webhook added'); go('webhooks'); }
+  catch(e){ toast(e.message,1); }
+}
+async function toggleWebhook(id,on){ try{ await igramApi('PATCH','/api/admin/webhooks/'+id,{is_active:on}); go('webhooks'); }catch(e){ toast(e.message,1);} }
+async function delWebhook(id){ if(!confirm('Delete this webhook?'))return; try{ await igramApi('DELETE','/api/admin/webhooks/'+id); go('webhooks'); }catch(e){ toast(e.message,1);} }
+async function testWebhook(){ try{ await igramApi('POST','/api/admin/webhooks/test',{event_code:whEvent.value}); toast('Test event fired — check n8n'); }catch(e){ toast(e.message,1);} }
+
+// init
+if(ME){
+  document.getElementById('whoami').innerHTML = '<b>'+ME.name+'</b><br>'+({mitra:'iGram Mitra',hub_manager:'Hub Manager',admin:'HQ Admin',provider:'Partner'}[ME.role]||ME.role);
+  renderMenu(); go('dashboard');
+}
+</script>
+</body>
+</html>

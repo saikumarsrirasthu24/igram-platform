@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard — iGram Digital Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="dashboard.css">
+<style>
+.tracker-step { display:flex; align-items:flex-start; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); }
+.tracker-step:last-child { border-bottom:none; }
+.tracker-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:2px; }
+.doc-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.doc-item:last-child { border-bottom:none; }
+.doc-icon { width:38px; height:38px; background:var(--purple-50); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+</style>
+</head>
+<body class="theme-user">
+<script src="auth.js"></script>
+<script src="locations-ui.js"></script>
+<script>
+const IGRAM_ME = igramRequireRole('user');
+document.addEventListener('DOMContentLoaded', () => {
+  if (!IGRAM_ME) return;
+  // Personalise name/avatar where possible
+  document.querySelectorAll('.avatar').forEach(a => {
+    a.textContent = IGRAM_ME.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    a.title = IGRAM_ME.name + ' — click to logout';
+    a.style.cursor = 'pointer';
+    a.onclick = () => { if (confirm('Logout from iGram?')) igramLogout(); };
+  });
+});
+</script>
+
+<div class="dash-layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div style="position:absolute;top:0;bottom:0;left:0;width:3px;background:var(--purple-600);"></div>
+  <div class="sidebar-brand">
+    <div class="brand-icon">📡</div>
+    <div>
+      <span class="brand-name">iGram Digital</span>
+      <span class="brand-role">Public User Portal</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Main</div>
+  <a class="nav-item active" onclick="showPanel('dashboard')">
+    <span class="nav-icon">🏠</span> My Dashboard
+  </a>
+  <a class="nav-item" onclick="showPanel('bookings')">
+    <span class="nav-icon">📋</span> My Bookings
+    <span class="nav-badge" id="bookingBadge">3</span>
+  </a>
+  <a class="nav-item" onclick="showPanel('applications')">
+    <span class="nav-icon">📝</span> Applications
+  </a>
+  <a class="nav-item" onclick="showPanel('tracker')">
+    <span class="nav-icon">🔍</span> Status Tracker
+  </a>
+
+  <div class="sidebar-section">Services</div>
+  <a class="nav-item" href="agriuber.html">
+    <span class="nav-icon">🚜</span> Book Equipment
+  </a>
+  <a class="nav-item" href="igovt.html">
+    <span class="nav-icon">🏛️</span> Govt Services
+  </a>
+  <a class="nav-item" href="services.html">
+    <span class="nav-icon">⚡</span> All Services
+  </a>
+
+  <div class="sidebar-section">Account</div>
+  <a class="nav-item" onclick="showPanel('profile')">
+    <span class="nav-icon">👤</span> My Profile
+  </a>
+  <a class="nav-item" onclick="showPanel('documents')">
+    <span class="nav-icon">📁</span> My Documents
+  </a>
+
+  <div class="sidebar-bottom">
+    <a class="nav-item" href="https://wa.me/918106442080" target="_blank">
+      <span class="nav-icon">📱</span> WhatsApp Support
+    </a>
+    <a class="nav-item" href="index.html">
+      <span class="nav-icon">🔙</span> Back to Website
+    </a>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="dash-main">
+
+  <!-- Top bar -->
+  <div class="dash-topbar">
+    <button onclick="toggleSidebar()" style="display:none;background:none;border:none;cursor:pointer;font-size:20px;" id="menuBtn">☰</button>
+    <span class="topbar-title" id="pageTitle">My Dashboard</span>
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+      <div class="notif-btn" onclick="showPanel('tracker')">🔔<div class="notif-dot"></div></div>
+      <a href="https://wa.me/918106442080" target="_blank" style="background:#25D366;color:#fff;padding:6px 14px;border-radius:var(--radius-full);font-size:.78rem;font-weight:600;font-family:var(--font-display);text-decoration:none;">📱 Help</a>
+      <div class="avatar" style="background:var(--purple-50);color:var(--purple-700);">RK</div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <!-- ══ PANEL: DASHBOARD ══ -->
+    <div class="dash-panel active" id="panel-dashboard">
+      <!-- Welcome -->
+      <div style="background:linear-gradient(135deg,var(--purple-700),var(--purple-900));border-radius:var(--radius-xl);padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;right:-20px;top:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+        <p style="color:var(--purple-100);font-size:.82rem;margin-bottom:4px;">Welcome back 👋</p>
+        <h2 style="color:white;font-family:var(--font-display);margin-bottom:6px;">Ravi Kumar</h2>
+        <p style="color:var(--purple-100);font-size:.85rem;margin-bottom:16px;">📍 Nalgonda, Telangana &nbsp;|&nbsp; Member since Jan 2025</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="agriuber.html" class="btn btn-gold btn-sm">+ Book Equipment</a>
+          <a href="igovt.html" class="btn btn-outline-white btn-sm">Apply for Service</a>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stat-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="stat-row">
+            <div>
+              <p class="stat-label">Total Bookings</p>
+              <p class="stat-value" style="color:var(--purple-700);">6</p>
+            </div>
+            <div class="stat-icon-wrap" style="background:var(--purple-50);">📋</div>
+          </div>
+          <p class="stat-change" style="color:var(--green-600);">↑ 2 this month</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div>
+              <p class="stat-label">Applications</p>
+              <p class="stat-value" style="color:var(--gold-600);">3</p>
+            </div>
+            <div class="stat-icon-wrap" style="background:var(--gold-100);">📝</div>
+          </div>
+          <p class="stat-change" style="color:var(--gold-600);">1 pending review</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div>
+              <p class="stat-label">Completed</p>
+              <p class="stat-value" style="color:var(--green-600);">5</p>
+            </div>
+            <div class="stat-icon-wrap" style="background:var(--green-50);">✅</div>
+          </div>
+          <p class="stat-change" style="color:var(--text-muted);">Services done</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-row">
+            <div>
+              <p class="stat-label">Saved (₹)</p>
+              <p class="stat-value" style="color:var(--teal-600);">₹2,400</p>
+            </div>
+            <div class="stat-icon-wrap" style="background:var(--teal-50);">💰</div>
+          </div>
+          <p class="stat-change" style="color:var(--text-muted);">vs city visit cost</p>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="dash-card" style="margin-bottom:24px;">
+        <div class="dash-card-header"><h3>Quick Actions</h3></div>
+        <div class="dash-card-body">
+          <div class="quick-actions">
+            <a href="agriuber.html" class="qa-btn"><span class="qa-icon">🚜</span><span class="qa-label">Book Tractor</span></a>
+            <a href="igovt.html" class="qa-btn"><span class="qa-icon">📋</span><span class="qa-label">Apply Aadhaar</span></a>
+            <a href="igovt.html" class="qa-btn"><span class="qa-icon">🌾</span><span class="qa-label">PM-Kisan</span></a>
+            <a href="igovt.html" class="qa-btn"><span class="qa-icon">🎓</span><span class="qa-label">Scholarship</span></a>
+            <a href="igovt.html" class="qa-btn"><span class="qa-icon">🏦</span><span class="qa-label">Bank Account</span></a>
+            <a href="igovt.html" class="qa-btn"><span class="qa-icon">💳</span><span class="qa-label">Pay Bills</span></a>
+            <a onclick="showPanel('tracker')" class="qa-btn" style="cursor:pointer;"><span class="qa-icon">🔍</span><span class="qa-label">Track Status</span></a>
+            <a href="https://wa.me/918106442080" target="_blank" class="qa-btn"><span class="qa-icon">📱</span><span class="qa-label">Get Help</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Recent Bookings</h3><a onclick="showPanel('bookings')" style="font-size:.8rem;color:var(--purple-700);cursor:pointer;font-weight:600;">View all →</a></div>
+          <div class="dash-card-body" style="padding:0 18px;">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--gold-400);"></div>
+              <div>
+                <p class="activity-text">Tractor booking — 3 days</p>
+                <p class="activity-time">AgriUber · 14 Jun 2025 · <span class="status status-pending">Pending</span></p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--green-600);"></div>
+              <div>
+                <p class="activity-text">Rotavator — 1 day rental</p>
+                <p class="activity-time">AgriUber · 02 Jun 2025 · <span class="status status-done">Completed</span></p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--green-600);"></div>
+              <div>
+                <p class="activity-text">Drone spray — 2 acres</p>
+                <p class="activity-time">AgriUber · 20 May 2025 · <span class="status status-done">Completed</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header"><h3>Applications</h3><a onclick="showPanel('applications')" style="font-size:.8rem;color:var(--purple-700);cursor:pointer;font-weight:600;">View all →</a></div>
+          <div class="dash-card-body" style="padding:0 18px;">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--blue-600);"></div>
+              <div>
+                <p class="activity-text">PM-Kisan Registration</p>
+                <p class="activity-time">iGovt · 10 Jun 2025 · <span class="status status-review">In Review</span></p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--green-600);"></div>
+              <div>
+                <p class="activity-text">Soil Health Card</p>
+                <p class="activity-time">iGovt · 28 May 2025 · <span class="status status-done">Completed</span></p>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--gold-400);"></div>
+              <div>
+                <p class="activity-text">Crop Insurance (PMFBY)</p>
+                <p class="activity-time">iGovt · 15 May 2025 · <span class="status status-pending">Pending</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: BOOKINGS ══ -->
+    <div class="dash-panel" id="panel-bookings">
+      <div class="table-header">
+        <h3>My Equipment Bookings</h3>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <input type="text" class="table-search" placeholder="🔍 Search bookings..." oninput="filterTable('bookingsTable',this.value)">
+          <button class="btn btn-green btn-sm" onclick="openBookingForm()">+ New Booking</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="bookingsTable">
+          <thead>
+            <tr>
+              <th>Booking ID</th><th>Equipment</th><th>Date</th><th>Village</th><th>Days</th><th>Amount</th><th>Status</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code style="font-size:.78rem;">#AG-2025-014</code></td><td>🚜 Tractor</td><td>14 Jun 2025</td><td>Nalgonda</td><td>3</td><td>₹600</td><td><span class="status status-pending">Pending</span></td><td><button class="btn btn-outline btn-sm" onclick="showToast('Our Mitra will call you within 2 hours.')">Track</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-2025-011</code></td><td>⚙️ Rotavator</td><td>02 Jun 2025</td><td>Nalgonda</td><td>1</td><td>₹200</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-2025-009</code></td><td>🚁 Drone Spray</td><td>20 May 2025</td><td>Nalgonda</td><td>1</td><td>₹200</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-2025-007</code></td><td>💧 Sprayer</td><td>10 May 2025</td><td>Nalgonda</td><td>2</td><td>₹400</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-2025-004</code></td><td>🌾 Thresher</td><td>22 Apr 2025</td><td>Nalgonda</td><td>1</td><td>₹200</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#AG-2025-001</code></td><td>🚜 Tractor</td><td>05 Apr 2025</td><td>Nalgonda</td><td>2</td><td>₹400</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Receipt</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: APPLICATIONS ══ -->
+    <div class="dash-panel" id="panel-applications">
+      <div class="table-header">
+        <h3>My Government Service Applications</h3>
+        <div style="display:flex;gap:8px;">
+          <input type="text" class="table-search" placeholder="🔍 Search..." oninput="filterTable('appsTable',this.value)">
+          <button class="btn btn-gold btn-sm" onclick="openApplicationForm()">+ Apply Now</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="appsTable">
+          <thead>
+            <tr><th>App ID</th><th>Service</th><th>Category</th><th>Applied</th><th>Last Update</th><th>Status</th><th>Track</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code style="font-size:.78rem;">#GV-2025-031</code></td><td>PM-Kisan Registration</td><td><span class="pill pill-green" style="font-size:.72rem;">Farmer</span></td><td>10 Jun</td><td>12 Jun</td><td><span class="status status-review">In Review</span></td><td><button class="btn btn-outline btn-sm" onclick="showPanel('tracker')">Track</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#GV-2025-028</code></td><td>Soil Health Card</td><td><span class="pill pill-green" style="font-size:.72rem;">Farmer</span></td><td>28 May</td><td>05 Jun</td><td><span class="status status-done">Completed</span></td><td><button class="btn btn-outline btn-sm">Download</button></td></tr>
+            <tr><td><code style="font-size:.78rem;">#GV-2025-021</code></td><td>Crop Insurance (PMFBY)</td><td><span class="pill pill-green" style="font-size:.72rem;">Farmer</span></td><td>15 May</td><td>15 May</td><td><span class="status status-pending">Pending</span></td><td><button class="btn btn-outline btn-sm" onclick="showPanel('tracker')">Track</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: STATUS TRACKER ══ -->
+    <div class="dash-panel" id="panel-tracker">
+      <div style="max-width:680px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);color:var(--purple-800);margin-bottom:6px;">Application Status Tracker</h2>
+        <p style="color:var(--text-muted);margin-bottom:24px;">Track any booking or application in real time.</p>
+
+        <!-- Search by ID -->
+        <div class="dash-card" style="margin-bottom:24px;">
+          <div class="dash-card-body">
+            <label style="font-size:.85rem;font-weight:500;color:var(--text-mid);display:block;margin-bottom:8px;">Enter Booking / Application ID</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="trackInput" class="form-control" placeholder="e.g. #AG-2025-014 or #GV-2025-031" style="flex:1;">
+              <button class="btn btn-primary" onclick="trackApplication()">Track →</button>
+            </div>
+            <p style="font-size:.75rem;color:var(--text-muted);margin-top:6px;">Or ask us on <a href="https://wa.me/918106442080" target="_blank" style="color:var(--green-600);font-weight:600;">WhatsApp: 8106442080</a></p>
+          </div>
+        </div>
+
+        <!-- Active tracked item -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>PM-Kisan Registration — <code>#GV-2025-031</code></h3>
+            <span class="status status-review">In Review</span>
+          </div>
+          <div class="dash-card-body">
+            <div class="tracker-step">
+              <div class="tracker-dot" style="background:var(--green-600);">✓</div>
+              <div>
+                <p style="font-weight:600;font-size:.88rem;color:var(--green-700);">Application Submitted</p>
+                <p style="font-size:.78rem;color:var(--text-muted);">10 Jun 2025 · 10:32 AM · Submitted via iGram Digital Hub</p>
+              </div>
+            </div>
+            <div class="tracker-step">
+              <div class="tracker-dot" style="background:var(--green-600);">✓</div>
+              <div>
+                <p style="font-weight:600;font-size:.88rem;color:var(--green-700);">Documents Verified</p>
+                <p style="font-size:.78rem;color:var(--text-muted);">11 Jun 2025 · 2:15 PM · Aadhaar & land records verified by iGram Mitra</p>
+              </div>
+            </div>
+            <div class="tracker-step">
+              <div class="tracker-dot" style="background:var(--blue-600);">⏳</div>
+              <div>
+                <p style="font-weight:600;font-size:.88rem;color:var(--blue-700);">Under Government Review</p>
+                <p style="font-size:.78rem;color:var(--text-muted);">12 Jun 2025 · Submitted to PM-Kisan portal · Awaiting approval</p>
+              </div>
+            </div>
+            <div class="tracker-step">
+              <div class="tracker-dot" style="background:var(--border);color:var(--text-muted);">4</div>
+              <div>
+                <p style="font-weight:500;font-size:.88rem;color:var(--text-muted);">Approval &amp; Registration</p>
+                <p style="font-size:.78rem;color:var(--text-muted);">Expected: 20–25 Jun 2025</p>
+              </div>
+            </div>
+            <div class="tracker-step">
+              <div class="tracker-dot" style="background:var(--border);color:var(--text-muted);">5</div>
+              <div>
+                <p style="font-weight:500;font-size:.88rem;color:var(--text-muted);">Benefit Transfer</p>
+                <p style="font-size:.78rem;color:var(--text-muted);">₹6,000/year credited to your bank account</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: PROFILE ══ -->
+    <div class="dash-panel" id="panel-profile">
+      <div style="max-width:600px;margin:0 auto;">
+        <h2 style="font-family:var(--font-display);color:var(--purple-800);margin-bottom:24px;">My Profile</h2>
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Personal Information</h3>
+            <button class="btn btn-outline btn-sm" onclick="saveProfile()">Save Changes</button>
+          </div>
+          <div class="dash-card-body">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);">
+              <div class="avatar" style="width:64px;height:64px;font-size:1.4rem;background:var(--purple-700);color:white;">RK</div>
+              <div>
+                <p style="font-weight:600;font-size:1rem;">Ravi Kumar</p>
+                <p style="font-size:.83rem;color:var(--text-muted);">Public User · Member since Jan 2025</p>
+                <span class="status status-active" style="margin-top:4px;display:inline-block;">● Verified</span>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group"><label class="form-label">Full name</label><input type="text" class="form-control" id="pfName"></div>
+              <div class="form-group"><label class="form-label">Mobile (locked)</label><input type="tel" class="form-control" id="pfPhone" readonly style="background:var(--gray-50);"></div>
+              <div class="form-group"><label class="form-label">Email address</label><input type="email" class="form-control" id="pfEmail"></div>
+              <div class="form-group"><label class="form-label">Village</label><input type="text" class="form-control" id="pfVillage"></div>
+              <div class="form-group"><label class="form-label">State</label><select class="form-control" id="pfState"></select></div>
+              <div class="form-group"><label class="form-label">District</label><select class="form-control" id="pfDistrict"></select></div>
+              <div class="form-group"><label class="form-label">Taluka</label><select class="form-control" id="pfTaluka"></select></div>
+              <div class="form-group"><label class="form-label">Account type</label><input type="text" class="form-control" value="Public User" readonly style="background:var(--gray-50);"></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: DOCUMENTS ══ -->
+    <div class="dash-panel" id="panel-documents">
+      <div class="table-header">
+        <h3>My Documents</h3>
+        <button class="btn btn-primary btn-sm" onclick="openDocUpload()">+ Upload Document</button>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-body" style="padding:8px 18px;" id="docList">
+          <div class="doc-item" style="display:none;">
+            <div class="doc-icon">🪪</div>
+            <div style="flex:1;"><p style="font-weight:500;font-size:.88rem;">Aadhaar Card</p><p style="font-size:.78rem;color:var(--text-muted);">Uploaded Jan 2025 · PDF</p></div>
+            <span class="status status-active">Verified</span>
+            <button class="btn btn-outline btn-sm" style="margin-left:8px;">View</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon">🌾</div>
+            <div style="flex:1;"><p style="font-weight:500;font-size:.88rem;">Land Record (Pahani)</p><p style="font-size:.78rem;color:var(--text-muted);">Uploaded Feb 2025 · PDF</p></div>
+            <span class="status status-active">Verified</span>
+            <button class="btn btn-outline btn-sm" style="margin-left:8px;">View</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon">🏦</div>
+            <div style="flex:1;"><p style="font-weight:500;font-size:.88rem;">Bank Passbook</p><p style="font-size:.78rem;color:var(--text-muted);">Uploaded Feb 2025 · JPG</p></div>
+            <span class="status status-active">Verified</span>
+            <button class="btn btn-outline btn-sm" style="margin-left:8px;">View</button>
+          </div>
+          <div class="doc-item">
+            <div class="doc-icon">🌱</div>
+            <div style="flex:1;"><p style="font-weight:500;font-size:.88rem;">Soil Health Card</p><p style="font-size:.78rem;color:var(--text-muted);">Received Jun 2025 · PDF</p></div>
+            <span class="status status-done">Downloaded</span>
+            <button class="btn btn-outline btn-sm" style="margin-left:8px;">Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dash-content -->
+</main>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="globalToast">✅ <span id="toastMsg"></span></div>
+
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  const titles = { dashboard:'My Dashboard', bookings:'My Bookings', applications:'My Applications', tracker:'Status Tracker', profile:'My Profile', documents:'My Documents' };
+  document.getElementById('pageTitle').textContent = titles[id] || 'Dashboard';
+  document.querySelector(`.nav-item[onclick="showPanel('${id}')"]`)?.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function filterTable(tableId, q) {
+  const rows = document.querySelectorAll('#' + tableId + ' tbody tr');
+  rows.forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none'; });
+}
+function trackApplication() {
+  const v = document.getElementById('trackInput').value.trim();
+  if (!v) { showToast('Please enter a booking or application ID.', 'error'); return; }
+  showToast('Showing status for ' + v);
+}
+function showToast(msg, type) {
+  const t = document.getElementById('globalToast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.style.background = type === 'error' ? 'var(--red-600)' : 'var(--purple-700)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+}
+</script>
+
+<script>
+// ═══ USER DASHBOARD — live data, in-dashboard actions (no website redirect) ═══
+const ME = (function(){ try { return JSON.parse(localStorage.getItem('igram_user')||'null'); } catch(e){ return null; } })();
+
+function statusClass(s){
+  if (s==='completed'||s==='approved') return 'status-done';
+  if (s==='pending'||s==='submitted') return 'status-pending';
+  if (s==='rejected'||s==='cancelled') return 'status-rejected';
+  return 'status-review';
+}
+function statusLabel(s){
+  const map={pending:'Pending',confirmed:'Confirmed',in_progress:'In Progress',review:'In Review',submitted:'Submitted',approved:'Approved',completed:'Completed',rejected:'Rejected',cancelled:'Cancelled'};
+  return map[s]||s;
+}
+
+async function loadMyBookings(){
+  try{
+    const { bookings } = await igramApi('GET','/api/my/bookings');
+    const tb = document.querySelector('#bookingsTable tbody');
+    if(tb){
+      tb.innerHTML = bookings.length ? bookings.map(b=>`
+        <tr><td><code style="font-size:.78rem;">${b.booking_ref}</code></td>
+        <td>${b.equipment}</td><td>${b.booking_date}</td><td>${b.village||'-'}</td>
+        <td>${b.land_size||'-'}</td><td>\u20B9${b.amount}</td>
+        <td><span class="status ${statusClass(b.status)}">${statusLabel(b.status)}</span>${b.status_note?'<br><span style="font-size:.7rem;color:var(--text-muted);">'+b.status_note+'</span>':''}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="alert('Booking '+'${b.booking_ref}'+' - Status: '+'${statusLabel(b.status)}')">View</button></td></tr>
+      `).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px;">No bookings yet. Click "New Booking" to get started.</td></tr>';
+    }
+    const badge=document.getElementById('bookingBadge'); if(badge) badge.textContent=bookings.length;
+  }catch(e){ console.error(e); }
+}
+
+async function loadMyApplications(){
+  try{
+    const { applications } = await igramApi('GET','/api/my/applications');
+    const tb = document.querySelector('#appsTable tbody');
+    if(tb){
+      tb.innerHTML = applications.length ? applications.map(a=>`
+        <tr><td><code style="font-size:.78rem;">${a.app_ref}</code></td>
+        <td>${a.service}</td><td><span class="pill pill-green" style="font-size:.72rem;">Govt</span></td>
+        <td>${(a.created_at||'').split(' ')[0]}</td><td>${(a.updated_at||a.created_at||'').split(' ')[0]}</td>
+        <td><span class="status ${statusClass(a.status)}">${statusLabel(a.status)}</span>${a.status_note?'<br><span style="font-size:.7rem;color:var(--text-muted);">'+a.status_note+'</span>':''}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="alert('Application '+'${a.app_ref}'+' - Status: '+'${statusLabel(a.status)}')">Track</button></td></tr>
+      `).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">No applications yet. Click "Apply Now" to start.</td></tr>';
+    }
+  }catch(e){ console.error(e); }
+}
+
+async function loadMyDocuments(){
+  try{
+    const { documents } = await igramApi('GET','/api/my/documents');
+    const wrap = document.getElementById('docList');
+    if(wrap){
+      wrap.innerHTML = documents.length ? documents.map(d=>`
+        <div class="doc-item">
+          <div class="doc-icon">📄</div>
+          <div style="flex:1;"><p style="font-weight:500;font-size:.88rem;">${d.doc_name}</p><p style="font-size:.78rem;color:var(--text-muted);">${d.doc_type||'Document'} · ${(d.created_at||'').split(' ')[0]}</p></div>
+          <span class="status status-active">${d.status}</span>
+        </div>`).join('') : '<p style="color:var(--text-muted);padding:16px;text-align:center;">No documents uploaded yet.</p>';
+    }
+  }catch(e){ console.error(e); }
+}
+
+// ── In-dashboard NEW BOOKING ──
+async function openBookingForm(){
+  document.getElementById('bookingModal').style.display='flex';
+  await igramFillSelect('bkEquipment','equipment');
+  await igramFillSelect('bkCrop','crops');
+  await igramSetupCascade('bkState','bkDistrict','bkTaluka');
+  document.getElementById('bkDate').min = new Date().toISOString().split('T')[0];
+  // prefill from profile
+  if(ME){ document.getElementById('bkVillage').value = ME.village||''; }
+}
+async function submitBookingModal(){
+  const btn=document.getElementById('bkSubmitBtn'); btn.disabled=true; btn.textContent='Submitting...';
+  const data={ name:ME.name, phone:ME.phone,
+    equipment:document.getElementById('bkEquipment').value,
+    crop:document.getElementById('bkCrop').value,
+    date:document.getElementById('bkDate').value,
+    land:document.getElementById('bkLand').value,
+    state:document.getElementById('bkState').value,
+    district:document.getElementById('bkDistrict').value,
+    taluka:document.getElementById('bkTaluka').value,
+    village:document.getElementById('bkVillage').value,
+    notes:document.getElementById('bkNotes').value, language:'Telugu' };
+  if(!data.equipment||!data.date){ showToast('Equipment and date are required','error'); btn.disabled=false; btn.textContent='Confirm Booking'; return; }
+  try{
+    const r=await igramApi('POST','/api/bookings',data);
+    showToast('Booking '+r.booking_ref+' created!');
+    closeModal('bookingModal'); loadMyBookings(); showPanel('bookings');
+  }catch(e){ showToast(e.message,'error'); }
+  finally{ btn.disabled=false; btn.textContent='Confirm Booking'; }
+}
+
+// ── In-dashboard NEW APPLICATION ──
+async function openApplicationForm(){
+  document.getElementById('appModal').style.display='flex';
+  await igramFillSelect('apService','services');
+  await igramSetupCascade('apState','apDistrict','apTaluka');
+  if(ME){ document.getElementById('apVillage').value = ME.village||''; }
+}
+async function submitApplicationModal(){
+  const btn=document.getElementById('apSubmitBtn'); btn.disabled=true; btn.textContent='Submitting...';
+  const data={ name:ME.name, phone:ME.phone,
+    service:document.getElementById('apService').value,
+    state:document.getElementById('apState').value,
+    district:document.getElementById('apDistrict').value,
+    taluka:document.getElementById('apTaluka').value,
+    village:document.getElementById('apVillage').value,
+    details:document.getElementById('apDetails').value };
+  if(!data.service){ showToast('Please select a service','error'); btn.disabled=false; btn.textContent='Submit Application'; return; }
+  try{
+    const r=await igramApi('POST','/api/applications',data);
+    showToast('Application '+r.app_ref+' submitted!');
+    closeModal('appModal'); loadMyApplications(); showPanel('applications');
+  }catch(e){ showToast(e.message,'error'); }
+  finally{ btn.disabled=false; btn.textContent='Submit Application'; }
+}
+function closeModal(id){ document.getElementById(id).style.display='none'; }
+
+// ── Document upload (inside dashboard) ──
+function openDocUpload(){
+  const input = document.createElement('input');
+  input.type='file';
+  input.accept='image/*,application/pdf';
+  input.onchange = async function(){
+    const file = input.files[0];
+    if(!file) return;
+    if(file.size > 2*1024*1024){ showToast('File too large (max 2MB)','error'); return; }
+    const reader = new FileReader();
+    reader.onload = async function(){
+      try{
+        await igramApi('POST','/api/my/documents',{ doc_name:file.name, doc_type:file.type, file_data:reader.result });
+        showToast('Document uploaded: '+file.name);
+        loadMyDocuments();
+      }catch(e){ showToast(e.message,'error'); }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+// Hook panel switching to load live data
+const _userOrigShowPanel = window.showPanel;
+window.showPanel = function(id){
+  if(_userOrigShowPanel) _userOrigShowPanel(id);
+  if(id==='profile') loadProfile();
+  if(id==='bookings') loadMyBookings();
+  if(id==='applications') loadMyApplications();
+  if(id==='documents') loadMyDocuments();
+};
+
+
+// ── PROFILE (full details, editable) ──
+async function loadProfile(){
+  try{
+    const { user } = await igramApi('GET','/api/auth/me');
+    const set=(id,v)=>{ const el=document.getElementById(id); if(el) el.value=v||''; };
+    set('pfName', user.name); set('pfPhone', user.phone); set('pfEmail', user.email);
+    set('pfVillage', user.village); set('pfState', user.state);
+    // setup cascade then set district/taluka
+    if(typeof igramSetupCascade==='function'){
+      await igramSetupCascade('pfState','pfDistrict','pfTaluka');
+      if(user.state){ document.getElementById('pfState').value=user.state; document.getElementById('pfState').onchange(); }
+      setTimeout(()=>{ if(user.district){ document.getElementById('pfDistrict').value=user.district; document.getElementById('pfDistrict').onchange&&document.getElementById('pfDistrict').onchange(); } setTimeout(()=>{ if(user.taluka) document.getElementById('pfTaluka').value=user.taluka; },100); },100);
+    }
+    // update header avatar/name
+    document.querySelectorAll('[data-user-name]').forEach(el=>el.textContent=user.name);
+  }catch(e){ console.error(e); }
+}
+async function saveProfile(){
+  const data={
+    name:document.getElementById('pfName').value,
+    email:document.getElementById('pfEmail').value,
+    village:document.getElementById('pfVillage').value,
+    state:document.getElementById('pfState').value,
+    district:document.getElementById('pfDistrict').value,
+    taluka:document.getElementById('pfTaluka').value
+  };
+  try{
+    const r=await igramApi('PATCH','/api/my/profile',data);
+    localStorage.setItem('igram_user', JSON.stringify(r.user));
+    showToast('Profile saved!');
+  }catch(e){ showToast(e.message,'error'); }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Personalise greeting
+  if(ME){
+    document.querySelectorAll('[data-user-name]').forEach(el=>el.textContent=ME.name);
+  }
+  loadMyBookings();
+  loadMyApplications();
+  loadMyDocuments();
+});
+</script>
+
+
+<!-- ══ IN-DASHBOARD MODALS ══ -->
+<div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;">
+    <div style="background:var(--purple-700);padding:18px 24px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="color:#fff;font-family:var(--font-display);margin:0;">🚜 Book Equipment</h3>
+      <button onclick="closeModal('bookingModal')" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group"><label class="form-label">Equipment needed *</label><select class="form-control" id="bkEquipment"></select></div>
+        <div class="form-group"><label class="form-label">Crop type</label><select class="form-control" id="bkCrop"></select></div>
+        <div class="form-group"><label class="form-label">Booking date *</label><input type="date" class="form-control" id="bkDate"></div>
+        <div class="form-group"><label class="form-label">Land size</label><input type="text" class="form-control" id="bkLand" placeholder="e.g. 5 acres"></div>
+        <div class="form-group"><label class="form-label">State *</label><select class="form-control" id="bkState"></select></div>
+        <div class="form-group"><label class="form-label">District *</label><select class="form-control" id="bkDistrict"></select></div>
+        <div class="form-group"><label class="form-label">Taluka</label><select class="form-control" id="bkTaluka"></select></div>
+        <div class="form-group"><label class="form-label">Village</label><input type="text" class="form-control" id="bkVillage" placeholder="Village"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" id="bkNotes" style="height:60px;" placeholder="Any details..."></textarea></div>
+      <button class="btn btn-green btn-lg" style="width:100%;justify-content:center;" id="bkSubmitBtn" onclick="submitBookingModal()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<div id="appModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;">
+    <div style="background:var(--gold-600);padding:18px 24px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="color:#fff;font-family:var(--font-display);margin:0;">🏛️ Apply for Service</h3>
+      <button onclick="closeModal('appModal')" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div class="form-group"><label class="form-label">Government service *</label><select class="form-control" id="apService"></select></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group"><label class="form-label">State *</label><select class="form-control" id="apState"></select></div>
+        <div class="form-group"><label class="form-label">District *</label><select class="form-control" id="apDistrict"></select></div>
+        <div class="form-group"><label class="form-label">Taluka</label><select class="form-control" id="apTaluka"></select></div>
+        <div class="form-group"><label class="form-label">Village</label><input type="text" class="form-control" id="apVillage" placeholder="Village"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Details</label><textarea class="form-control" id="apDetails" style="height:60px;" placeholder="Any details about your application..."></textarea></div>
+      <button class="btn btn-gold btn-lg" style="width:100%;justify-content:center;" id="apSubmitBtn" onclick="submitApplicationModal()">Submit Application</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
